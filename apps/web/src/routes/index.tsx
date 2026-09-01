@@ -336,21 +336,32 @@ function HomeComponent() {
 	return (
 		<div className="container mx-auto max-w-3xl px-4 py-6">
 			<header className="mb-6">
-				<h1 className="font-semibold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
-					Agenda de Eventos
-				</h1>
-				{stats.data && (
-					<p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-						<span className="font-medium text-zinc-700 dark:text-zinc-200">
-							{stats.data.totalEvents}
-						</span>{" "}
-						eventos ·{" "}
-						<span className="font-medium text-zinc-700 dark:text-zinc-200">
-							{stats.data.totalVenues}
-						</span>{" "}
-						locais
-					</p>
-				)}
+				<div className="flex items-start justify-between gap-4">
+					<div>
+						<h1 className="font-semibold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
+							Agenda de Eventos
+						</h1>
+						{stats.data && (
+							<p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+								<span className="font-medium text-zinc-700 dark:text-zinc-200">
+									{stats.data.totalEvents}
+								</span>{" "}
+								eventos ·{" "}
+								<span className="font-medium text-zinc-700 dark:text-zinc-200">
+									{stats.data.totalVenues}
+								</span>{" "}
+								locais
+							</p>
+						)}
+					</div>
+					<a
+						href="http://localhost:3301/events.ics"
+						title="Calendário (ICS)"
+						className="shrink-0 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
+					>
+						Subscrever
+					</a>
+				</div>
 			</header>
 
 			<FilterBar
