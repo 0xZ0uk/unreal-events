@@ -1,1 +1,12 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "@events-tracker/ui/globals.css";
+
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "./**/*.{ts,tsx}";
+
+/* Porta443: dark is the DEFAULT canvas; the theme toggle adds `.light`
+   (mapped in globals.css). No .dark variant needed — all `dark:*` utility
+   usage is being removed from routes in this redesign. */
+@custom-variant light (&:is(.light *));
