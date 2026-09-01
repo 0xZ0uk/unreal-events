@@ -1,0 +1,3 @@
+{
+  "extends": "@events-tracker/config/tsconfig.base.json"
+}
