@@ -8,6 +8,117 @@ cm-leiria RSS (30, stale-since-2023 feed — kept for when it revives), BOL
 (0 today — district listings work, concelho yield is seasonal), Eventbrite
 (Leiria-city scope). 191 events, 35 venues (16 geocoded via Nominatim).
 
+## Setup guide
+
+### 1. Prerequisites
+
+- **Node 20+** and **pnpm 10+** (`corepack enable` works — the repo pins
+  `pnpm@10.34.4`)
+- **Bun 1.4+** (`curl -fsSL https://bun.sh/install | bash` — the server,
+  scrapers and CLI all run on Bun)
+
+### 2. Install & env
+
+```bash
+git clone git@github.com:0xZ0uk/unreal-events.git
+cd unreal-events
+pnpm install
+```
+
+Create the two env files (gitignored):
+
+```bash
+# apps/server/.env — server config
+CORS_ORIGIN=http://localhost:3300
+DATABASE_URL=file:../../local.db
+PORT=3301
+# optional: keyword watchlist for the digest CLI
+# DIGEST_KEYWORDS=tattoo,jazz,fado,rock
+
+# apps/web/.env — web app points at the API
+VITE_SERVER_URL=http://localhost:3301
+```
+
+Optional: if your machine's dev ports collide (3000/3001 are commonly taken),
+change `PORT` in `apps/server/.env`, the matching `CORS_ORIGIN`, and both the
+`port` in `apps/web/vite.config.ts` and `VITE_SERVER_URL` accordingly.
+
+### 3. Database
+
+SQLite at the repo root — migrations are committed, so after install:
+
+```bash
+cd packages/db && bun run db:migrate:deploy && bun run db:seed && cd ../..
+```
+
+That creates `local.db` with the 4 tables (`venues`, `events`,
+`event_sources`, `scrape_runs`) plus 10 seed venues. Schema changes later:
+`bun run db:generate` (new migration) + `bun run db:push`.
+
+### 4. Run
+
+```bash
+pnpm dev        # web :3300 + server :3301 (turbo)
+```
+
+Open http://localhost:3300 — first visit shows an empty agenda until the
+first scrape.
+
+### 5. First scrape
+
+```bash
+pnpm --filter server scrape            # all four sources sequentially
+# or one at a time:
+pnpm --filter server scrape:leiriagenda
+```
+
+Each source prints `{found, new, updated, failed, error}` and writes a
+`scrape_runs` row. Run it twice — the second must report `new: 0`
+(idempotency invariant). Note: **Eventbrite rate-limits hard**; if a run
+dies with HTTP 429 wait a few minutes before retrying — the run is recorded
+and the next scheduled run self-heals.
+
+Optional, one-time: geocode the venues for map work later:
+
+```bash
+pnpm --filter server geocode:venues   # Nominatim, 1 req/s, idempotent
+```
+
+### 6. Digest & calendar
+
+```bash
+pnpm --filter server digest                # plaintext digest of upcoming events
+DIGEST_KEYWORDS=tattoo,jazz pnpm --filter server digest -- --new 24
+```
+
+- `--new N` limits to events ingested in the last N hours
+- `DIGEST_KEYWORDS` ⭐-marks watchlist hits in the output
+- ICS feed: start the server, then
+  http://localhost:3301/events.ics (add `?keyword=a,b` to filter, or
+  `?scope=undated` for undated events as text). Subscribe from any calendar
+  app.
+- Paste-a-link ingest:
+  `pnpm --filter server ingest:url -- https://leiriagenda.cm-leiria.pt/pt/agenda/<slug>`
+
+### 7. Cron automation (Hermes-specific)
+
+The daily scrape + Discord digest are Hermes Agent cron jobs (see
+`/.plans/SLICE_EVENTS_TRACKER.md`): scrape all sources daily at 07:00, digest
+to Discord at 09:00. To replicate elsewhere, cron these two commands:
+
+```bash
+cd apps/server && bun run src/scraper/run.ts leiriagenda && bun run src/scraper/run.ts cmleiriarss && bun run src/scraper/run.ts bol && bun run src/scraper/run.ts eventbrite
+DIGEST_KEYWORDS="..." bun run src/digest-cli.ts --new 24   # pipe to your notifier
+```
+
+### 8. Tests & checks
+
+```bash
+pnpm check-types              # tsc across the monorepo
+cd apps/server && bun test    # 52 offline tests (fixtures, no network)
+bunx biome check .            # lint/format
+```
+
 ## Stack
 
 better-t-stack monorepo · pnpm + Bun · Hono (server, :3301) · React + TanStack
