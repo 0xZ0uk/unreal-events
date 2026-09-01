@@ -12,7 +12,8 @@
     "geocode:venues": "bun run src/scraper/geocode.ts",
     "test": "bun test",
     "digest": "bun run src/digest-cli.ts",
-    "scrape": "bun run src/scraper/run.ts"
+    "scrape": "bun run src/scraper/run.ts",
+    "ingest:url": "bun run src/ingest-url.ts"
   },
   "dependencies": {
     "@events-tracker/api": "workspace:*",
