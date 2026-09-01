@@ -1,7 +1,7 @@
 import { db, schema } from "@events-tracker/db";
 import { eq } from "drizzle-orm";
 
-import { fingerprint } from "./fingerprint";
+import { fingerprint, fingerprintUndated } from "./fingerprint";
 import { normalizeVenueName, slugify } from "./normalize";
 import type { RawEvent } from "./types";
 
@@ -50,8 +50,13 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	const venueId = await resolveOrCreateVenue(raw.venueName, raw.city);
 	// Deterministic venue ref independent of DB state → stable across scrapes.
 	const venueRef = slugify(normalizeVenueName(raw.venueName));
-	const fp = fingerprint(raw.title, venueRef, raw.startAt);
 	const now = Math.floor(Date.now() / 1000);
+	// Undated raws hash a literal UNDATED marker so re-scrapes dedupe instead
+	// of minting a new fingerprint per ingestion timestamp.
+	const fp =
+		raw.startAt != null
+			? fingerprint(raw.title, venueRef, raw.startAt)
+			: fingerprintUndated(raw.title, venueRef);
 
 	const existing = await db.query.events.findFirst({
 		where: eq(schema.events.fingerprint, fp),
@@ -106,12 +111,15 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 			title: raw.title,
 			slug: insertedSlug,
 			description: raw.description,
-			start_at: raw.startAt,
+			// Undated raws get the ingestion epoch as a calendar placeholder;
+			// date_text marks them so views can exclude/flag them.
+			start_at: raw.startAt ?? now,
 			end_at: raw.endAt,
 			venue_id: venueId,
 			image_url: raw.imageUrl,
 			url: raw.url,
 			categories: raw.categories,
+			date_text: raw.dateText,
 			fingerprint: fp,
 			created_at: now,
 			updated_at: now,
@@ -123,6 +131,19 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	if (!eventId) {
 		// Concurrent insert won the race — treat as pre-existing.
 		return { action: "unchanged" };
+	}
+	if (raw.startAt != null) {
+		// Ghost cleanup: an UNDATED twin of this event (same normalized
+		// title + venue) is now superseded by the dated row. event_sources
+		// rows cascade with it.
+		await db
+			.delete(schema.events)
+			.where(
+				eq(
+					schema.events.fingerprint,
+					fingerprintUndated(raw.title, venueRef),
+				),
+			);
 	}
 	await db
 		.insert(schema.eventSources)

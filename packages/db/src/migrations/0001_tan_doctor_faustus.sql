@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `date_text` text;

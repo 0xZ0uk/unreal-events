@@ -195,6 +195,7 @@ export function parseDetail(html: string, url: string): RawEvent {
 		endAt: end
 			? toEpochInLisbon(end.year, end.month, end.day, end.hour, end.minute)
 			: null,
+		dateText: null,
 		venueName: scope.find(".local").first().text().trim(),
 		city: scope.find(".localidade").first().text().trim() || null,
 		categories: collectCategories($, scope),
@@ -214,6 +215,7 @@ export function mergeCardWithDetail(
 		description: detail.description,
 		startAt: detail.startAt,
 		endAt: detail.endAt,
+		dateText: detail.dateText,
 		venueName: detail.venueName || card.venueName,
 		city: detail.city ?? card.city,
 		categories:

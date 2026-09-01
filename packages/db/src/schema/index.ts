@@ -43,6 +43,13 @@ export const events = sqliteTable(
     url: text("url"),
     /** JSON-encoded string array of category names. */
     categories: text("categories", { mode: "json" }).$type<string[]>(),
+    /**
+     * Raw date string from the source when no machine-readable date was
+     * parseable (e.g. RSS description text). Non-null ⇒ undated event:
+     * start_at holds the ingestion epoch as a placeholder and calendar
+     * views exclude the row.
+     */
+    date_text: text("date_text"),
     /** Deduplication fingerprint (e.g. hash of source + source event id). */
     fingerprint: text("fingerprint").notNull().unique(),
     /** Epoch seconds (UTC). */

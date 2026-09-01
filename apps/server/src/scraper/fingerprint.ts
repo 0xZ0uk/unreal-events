@@ -64,3 +64,18 @@ export function fingerprint(
 		)
 		.digest("hex");
 }
+
+/**
+ * Fingerprint for events WITHOUT a machine-readable date. Uses the literal
+ * `UNDATED` marker instead of a timestamp so re-scraping the same item never
+ * mints a new fingerprint (an ingestion-time date would rotate daily).
+ * Promotion to dated (same normalized title + venue gains a date) naturally
+ * yields a different fingerprint — ingest links the two via event_sources.
+ */
+export function fingerprintUndated(title: string, venueRef: string): string {
+	return createHash("sha1")
+		.update(
+			`${normalizeTitle(title)}|${slugify(normalizeVenueName(venueRef))}|UNDATED`,
+		)
+		.digest("hex");
+}
