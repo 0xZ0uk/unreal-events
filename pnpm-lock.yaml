@@ -121,6 +121,9 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.4.0
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(@libsql/client@0.17.4)(bun-types@1.4.0)
       tsdown:
         specifier: ^0.22.14
         version: 0.22.14(tsx@4.23.13)(typescript@6.0.3)

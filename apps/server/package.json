@@ -23,6 +23,7 @@
   "devDependencies": {
     "@events-tracker/config": "workspace:*",
     "@types/bun": "catalog:",
+    "drizzle-orm": "^0.45.2",
     "tsdown": "^0.22.14",
     "typescript": "catalog:"
   }
