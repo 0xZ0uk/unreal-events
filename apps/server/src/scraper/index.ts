@@ -5,12 +5,14 @@
  */
 import { scrape as scrapeBol } from "./bol";
 import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
+import { scrape as scrapeEventbrite } from "./eventbrite";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
 
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
 	bol: scrapeBol,
+	eventbrite: scrapeEventbrite,
 } as const;
 
 export type SourceId = keyof typeof sources;
