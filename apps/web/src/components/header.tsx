@@ -1,6 +1,5 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-
 import { Separator } from "@events-tracker/ui/components/separator";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 import { ModeToggle } from "./mode-toggle";
 
@@ -17,9 +16,9 @@ export default function Header() {
 		to === "/" ? pathname === "/" : pathname.startsWith(to);
 
 	return (
-		<header className="sticky top-0 z-40 w-full border-b border-[var(--p443-hairline)] bg-[var(--p443-canvas)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--p443-canvas)]/80">
+		<header className="sticky top-0 z-40 w-full border-[var(--p443-hairline)] border-b bg-[var(--p443-canvas)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--p443-canvas)]/80">
 			{/* Eyebrow strap — mono meta line */}
-			<div className="hidden border-b border-[var(--p443-hairline)] lg:block">
+			<div className="hidden border-[var(--p443-hairline)] border-b lg:block">
 				<div className="mx-auto flex max-w-[1100px] items-center justify-between px-6 py-1.5">
 					<span className="p443-eyebrow text-[11px]">
 						Leiria · Portugal — Agenda de eventos diários
@@ -38,10 +37,7 @@ export default function Header() {
 					search={{ date: undefined }}
 					className="group flex items-center gap-3 px-1 py-1"
 				>
-					<div
-						aria-hidden="true"
-						className="p443-doorway size-9"
-					/>
+					<div aria-hidden="true" className="p443-doorway size-9" />
 					<div className="flex flex-col items-start leading-none">
 						<span className="p443-wordmark text-[18px]">
 							UNREAL<span className="text-[var(--p443-primary)]">443</span>
@@ -80,7 +76,7 @@ export default function Header() {
 				</nav>
 
 				{/* Mobile nav */}
-				<nav className="flex items-center gap-1 md:hidden">
+				<nav className="flex items-center gap-0.5 overflow-x-auto md:hidden">
 					{links.map(({ to, label }) => {
 						const active = isActive(to);
 						return (
@@ -94,9 +90,9 @@ export default function Header() {
 											? { date: undefined }
 											: (undefined as never)
 								}
-								className={`p443-btn px-2.5 py-1.5 text-[12px] uppercase tracking-[0.08em] ${
+								className={`p443-btn px-2 py-1.5 text-[11px] uppercase tracking-[0.04em] whitespace-nowrap ${
 									active
-										? "border-b-2 border-[var(--p443-primary)] text-[var(--p443-ink)]"
+										? "border-[var(--p443-primary)] border-b-2 text-[var(--p443-ink)]"
 										: "text-[var(--p443-ink-muted)]"
 								}`}
 							>
@@ -114,7 +110,7 @@ export default function Header() {
 						rel="noreferrer"
 						className="hidden sm:inline-flex"
 					>
-						<span className="p443-btn border border-[var(--p443-hairline)] px-3 py-2 text-[11px] uppercase tracking-[0.08em] text-[var(--p443-ink-muted)] transition-colors hover:border-[var(--p443-ink-muted)] hover:text-[var(--p443-ink)]">
+						<span className="p443-btn border border-[var(--p443-hairline)] px-3 py-2 text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.08em] transition-colors hover:border-[var(--p443-ink-muted)] hover:text-[var(--p443-ink)]">
 							Subscrever ICS
 						</span>
 					</a>
