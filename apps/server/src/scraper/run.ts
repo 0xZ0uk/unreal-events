@@ -14,8 +14,12 @@ if (!(requested in sources)) {
 const scrape = sources[requested as SourceId];
 
 const startedAt = Date.now();
-const rawEvents = await scrape();
-const result = await ingest(rawEvents, requested);
+const { events, failures, firstError } = await scrape();
+const result = await ingest(events, requested, {
+	found: events.length + failures,
+	failures,
+	firstError,
+});
 const elapsedMs = Date.now() - startedAt;
 
 console.log(

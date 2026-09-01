@@ -236,12 +236,45 @@ export interface ScrapeDeps {
 	sleep: (ms: number) => Promise<void>;
 }
 
+const FETCH_TIMEOUT_MS = 15000;
+const FETCH_RETRIES = 2;
+const RETRY_BACKOFF_MS = 800;
+
+/**
+ * Fetch with a hard timeout and bounded retries. 4xx responses are terminal;
+ * network errors, timeouts and 5xx are retried.
+ */
 async function defaultFetchText(url: string): Promise<string> {
-	const res = await fetch(url);
-	if (!res.ok) {
-		throw new Error(`GET ${url} -> HTTP ${res.status}`);
+	let lastError: unknown;
+	for (let attempt = 0; attempt <= FETCH_RETRIES; attempt++) {
+		if (attempt > 0) {
+			await new Promise((r) => setTimeout(r, RETRY_BACKOFF_MS * attempt));
+		}
+		try {
+			const res = await fetch(url, {
+				signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+			});
+			if (!res.ok) {
+				const err = new Error(`GET ${url} -> HTTP ${res.status}`);
+				if (res.status < 500) {
+					throw Object.assign(err, { retryable: false });
+				}
+				throw Object.assign(err, { retryable: true });
+			}
+			return res.text();
+		} catch (err) {
+			lastError = err;
+			if (
+				err &&
+				typeof err === "object" &&
+				"retryable" in err &&
+				err.retryable === false
+			) {
+				throw err;
+			}
+		}
 	}
-	return res.text();
+	throw lastError;
 }
 
 const defaultSleep = (ms: number) =>
@@ -250,20 +283,39 @@ const defaultSleep = (ms: number) =>
 const randomDelay = () =>
 	MIN_DELAY_MS + Math.floor(Math.random() * (MAX_DELAY_MS - MIN_DELAY_MS + 1));
 
+export interface ScrapeResult {
+	events: RawEvent[];
+	/** Cards that could not be fetched/parsed; run continues without them. */
+	failures: number;
+	/** First failure message, for the scrape_runs error column. */
+	firstError: string | null;
+}
+
 /**
  * Scrape Leiriagenda: fetch listing pages, then each event detail page, and
- * return merged RawEvents. Overridable deps keep offline tests real.
+ * return merged RawEvents. Per-card failures are counted, not fatal — a
+ * partial run beats no run. Overridable deps keep offline tests real.
  */
 export async function scrape(
 	deps: ScrapeDeps = { fetchText: defaultFetchText, sleep: defaultSleep },
-): Promise<RawEvent[]> {
+): Promise<ScrapeResult> {
 	let requests = 0;
-	const guard = () => requests >= MAX_REQUESTS;
-
-	const fetchPage = async (url: string): Promise<string> => {
-		await deps.sleep(guard() ? 0 : randomDelay());
-		requests++;
-		return deps.fetchText(url);
+	// Serial fetch gate: increment + fetch are mutually exclusive, so the
+	// request cap is exact even with concurrent workers.
+	let chain: Promise<unknown> = Promise.resolve();
+	const fetchPage = (url: string): Promise<string> => {
+		const next = chain.then(async () => {
+			if (requests >= MAX_REQUESTS) {
+				throw new Error(`request cap ${MAX_REQUESTS} reached`);
+			}
+			requests++;
+			await deps.sleep(randomDelay());
+			return deps.fetchText(url);
+		});
+		// Swallow to keep the chain alive for queued callers; their own await
+		// still sees the original error.
+		chain = next.catch(() => {});
+		return next;
 	};
 
 	const firstHtml = await fetchPage(LISTING_URL);
@@ -273,30 +325,47 @@ export async function scrape(
 	for (const card of parseListing(firstHtml)) {
 		cardsBySlug.set(card.slug, card);
 	}
-	for (let page = 2; page <= maxPage && !guard(); page++) {
-		const html = await fetchPage(`${LISTING_URL}?page=${page}`);
-		for (const card of parseListing(html)) {
-			cardsBySlug.set(card.slug, card);
+	for (let page = 2; page <= maxPage; page++) {
+		if (requests >= MAX_REQUESTS) break;
+		try {
+			const html = await fetchPage(`${LISTING_URL}?page=${page}`);
+			for (const card of parseListing(html)) {
+				cardsBySlug.set(card.slug, card);
+			}
+		} catch (err) {
+			// Pagination is best-effort: stop paging, keep what we have.
+			console.error(`listing page ${page} failed: ${err}`);
+			break;
 		}
 	}
 
 	const slugs = [...cardsBySlug.keys()];
 	const events: RawEvent[] = [];
+	let failures = 0;
+	let firstError: string | null = null;
 	let cursor = 0;
 	const worker = async () => {
 		while (cursor < slugs.length) {
 			const slug = slugs[cursor];
 			cursor++;
 			const card = slug ? cardsBySlug.get(slug) : undefined;
-			if (!card || guard()) {
+			if (!card) {
 				continue;
 			}
-			const html = await fetchPage(card.url);
-			const detail = parseDetail(html, card.url);
-			events.push(mergeCardWithDetail(card, detail));
+			try {
+				const html = await fetchPage(card.url);
+				const detail = parseDetail(html, card.url);
+				events.push(mergeCardWithDetail(card, detail));
+			} catch (err) {
+				// A dead detail page must not kill the run — count and move on.
+				failures++;
+				if (!firstError) {
+					firstError = err instanceof Error ? err.message : String(err);
+				}
+			}
 		}
 	};
 	await Promise.all(Array.from({ length: DETAIL_CONCURRENCY }, worker));
 
-	return events;
+	return { events, failures, firstError };
 }

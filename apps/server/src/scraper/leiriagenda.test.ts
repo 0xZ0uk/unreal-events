@@ -8,6 +8,7 @@ import {
 	mergeCardWithDetail,
 	parseDetail,
 	parseListing,
+	scrape,
 } from "./leiriagenda";
 import { normalizeVenueName, slugify } from "./normalize";
 
@@ -85,5 +86,22 @@ describe("parseDetail (offline fixture)", () => {
 describe("pagination discovery", () => {
 	test("reads the last page number from listing html", () => {
 		expect(maxPageFromHtml(listingHtml)).toBe(6);
+	});
+});
+
+describe("scrape resilience (mock deps, offline)", () => {
+	test("a dead detail page is counted, not fatal", async () => {
+		const deadUrl = `${LISTING_URL.replace("/proximos-eventos", "")}/tattoo-artes`;
+		const fetchText = async (url: string) => {
+			if (url === LISTING_URL) return listingHtml;
+			if (url === deadUrl) throw new Error(`GET ${url} -> HTTP 500`);
+			return detailHtml;
+		};
+		const result = await scrape({ fetchText, sleep: async () => {} });
+		expect(result.failures).toBe(1);
+		expect(result.firstError).toContain("HTTP 500");
+		expect(result.events.length).toBeGreaterThan(0);
+		// The dead card's event is absent, everything else made it.
+		expect(result.events.some((e) => e.url === deadUrl)).toBe(false);
 	});
 });

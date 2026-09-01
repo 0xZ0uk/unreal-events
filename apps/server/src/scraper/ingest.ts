@@ -80,6 +80,9 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 				})
 				.where(eq(schema.events.id, existing.id));
 		}
+		// Always attempt the source-attribution insert: onConflictDoNothing is
+		// the existence check. Skipping on `unchanged` would break cross-source
+		// attribution (source B matching a pre-existing event from source A).
 		await db
 			.insert(schema.eventSources)
 			.values({
@@ -95,8 +98,8 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 		return { action: changed ? "updated" : "unchanged" };
 	}
 
-	const fp8 = fp.slice(0, 8);
-	const insertedSlug = `${slugify(raw.title) || "evento"}-${fp8}`;
+	const fp12 = fp.slice(0, 12);
+	const insertedSlug = `${slugify(raw.title) || "evento"}-${fp12}`;
 	const inserted = await db
 		.insert(schema.events)
 		.values({
@@ -121,13 +124,18 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 		// Concurrent insert won the race — treat as pre-existing.
 		return { action: "unchanged" };
 	}
-	await db.insert(schema.eventSources).values({
-		event_id: eventId,
-		source,
-		source_event_id: raw.slug,
-		source_url: raw.url,
-		first_seen_at: now,
-	});
+	await db
+		.insert(schema.eventSources)
+		.values({
+			event_id: eventId,
+			source,
+			source_event_id: raw.slug,
+			source_url: raw.url,
+			first_seen_at: now,
+		})
+		.onConflictDoNothing({
+			target: [schema.eventSources.event_id, schema.eventSources.source],
+		});
 	return { action: "inserted" };
 }
 
@@ -140,16 +148,26 @@ export interface IngestResult {
 	runId: number | null;
 }
 
+export interface ScrapeMeta {
+	/** Raw items the scraper saw, including ones it failed to parse/fetch. */
+	found: number;
+	/** Items dropped before ingest (fetch/parse failures). */
+	failures: number;
+	/** First scrape-stage error, recorded even if ingest itself succeeded. */
+	firstError: string | null;
+}
+
 /** Upsert all raw events and record a scrape_runs row. */
 export async function ingest(
 	rawEvents: RawEvent[],
 	source: string,
+	meta: ScrapeMeta = { found: rawEvents.length, failures: 0, firstError: null },
 ): Promise<IngestResult> {
 	const startedAt = Math.floor(Date.now() / 1000);
 	let itemsNew = 0;
 	let itemsUpdated = 0;
-	let itemsFailed = 0;
-	let error: string | null = null;
+	let itemsFailed = meta.failures;
+	let error = meta.firstError;
 
 	for (const raw of rawEvents) {
 		try {
@@ -174,7 +192,7 @@ export async function ingest(
 			source,
 			started_at: startedAt,
 			finished_at: finishedAt,
-			items_found: rawEvents.length,
+			items_found: meta.found,
 			items_new: itemsNew,
 			items_failed: itemsFailed,
 			error,
@@ -182,7 +200,7 @@ export async function ingest(
 		.returning({ id: schema.scrapeRuns.id });
 
 	return {
-		itemsFound: rawEvents.length,
+		itemsFound: meta.found,
 		itemsNew,
 		itemsUpdated,
 		itemsFailed,
