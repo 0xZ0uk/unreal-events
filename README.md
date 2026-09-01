@@ -25,18 +25,12 @@ cd unreal-events
 pnpm install
 ```
 
-Create the two env files (gitignored):
+Create the two env files (gitignored, templates committed as
+`apps/*/.env.example`):
 
 ```bash
-# apps/server/.env — server config
-CORS_ORIGIN=http://localhost:3300
-DATABASE_URL=file:../../local.db
-PORT=3301
-# optional: keyword watchlist for the digest CLI
-# DIGEST_KEYWORDS=tattoo,jazz,fado,rock
-
-# apps/web/.env — web app points at the API
-VITE_SERVER_URL=http://localhost:3301
+cp apps/server/.env.example apps/server/.env
+cp apps/web/.env.example apps/web/.env
 ```
 
 Optional: if your machine's dev ports collide (3000/3001 are commonly taken),
