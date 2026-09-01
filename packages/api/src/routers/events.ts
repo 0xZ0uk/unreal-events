@@ -1,5 +1,5 @@
 import { db, schema } from "@events-tracker/db";
-import { desc, eq, gte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { publicProcedure, router } from "../index";
@@ -15,6 +15,7 @@ const eventSelect = {
 	image_url: schema.events.image_url,
 	url: schema.events.url,
 	categories: schema.events.categories,
+	date_text: schema.events.date_text,
 	venueName: schema.venues.name,
 	venueCity: schema.venues.city,
 	venueSlug: schema.venues.slug,
@@ -31,6 +32,7 @@ type EventRow = {
 	image_url: string | null;
 	url: string | null;
 	categories: string[] | null;
+	date_text: string | null;
 	venueName: string | null;
 	venueCity: string | null;
 	venueSlug: string | null;
@@ -51,28 +53,56 @@ function toPublicEvent(row: EventRow) {
 		imageUrl: row.image_url,
 		url: row.url,
 		categories: row.categories ?? [],
+		dateText: row.date_text,
 	};
 }
 
-export const eventsRouter = router({
-	list: publicProcedure
-		.input(
-			z.object({
-				limit: z.number().int().min(1).max(500).default(200),
-				offset: z.number().int().min(0).default(0),
-			}),
-		)
-		.query(async ({ input }) => {
-			const rows = await db
-				.select(eventSelect)
-				.from(schema.events)
-				.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
-				.orderBy(schema.events.start_at)
-				.limit(input.limit)
-				.offset(input.offset);
+const listInput = z.object({
+	limit: z.number().int().min(1).max(500).default(500),
+	offset: z.number().int().min(0).default(0),
+	venueSlug: z.string().optional(),
+	category: z.string().optional(),
+	dateFrom: z.number().int().optional(),
+	dateTo: z.number().int().optional(),
+	city: z.string().optional(),
+	includeUndated: z.boolean().default(false),
+});
 
-			return rows.map(toPublicEvent);
-		}),
+export const eventsRouter = router({
+	list: publicProcedure.input(listInput).query(async ({ input }) => {
+		const conditions = [];
+		if (!input.includeUndated) {
+			conditions.push(isNull(schema.events.date_text));
+		}
+		if (input.venueSlug) {
+			conditions.push(eq(schema.venues.slug, input.venueSlug));
+		}
+		if (input.category) {
+			conditions.push(
+				sql`${schema.events.categories} like ${`%"${input.category}"%`}`,
+			);
+		}
+		if (input.dateFrom !== undefined) {
+			conditions.push(gte(schema.events.start_at, input.dateFrom));
+		}
+		if (input.dateTo !== undefined) {
+			conditions.push(lte(schema.events.start_at, input.dateTo));
+		}
+		if (input.city) {
+			conditions.push(eq(schema.venues.city, input.city));
+		}
+
+		const rows = await db
+			.select(eventSelect)
+			.from(schema.events)
+			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+			.where(conditions.length > 0 ? and(...conditions) : undefined)
+			.orderBy(schema.events.start_at)
+			.limit(input.limit)
+			.offset(input.offset);
+
+		return rows.map(toPublicEvent);
+	}),
 
 	byDay: publicProcedure.query(async () => {
 		const now = Math.floor(Date.now() / 1000);
@@ -81,10 +111,37 @@ export const eventsRouter = router({
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
-			.where(gte(schema.events.start_at, now))
+			.where(
+				and(gte(schema.events.start_at, now), isNull(schema.events.date_text)),
+			)
 			.orderBy(schema.events.start_at);
 
 		return rows.map(toPublicEvent);
+	}),
+
+	undated: publicProcedure.query(async () => {
+		const rows = await db
+			.select(eventSelect)
+			.from(schema.events)
+			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+			.where(sql`${schema.events.date_text} is not null`)
+			.orderBy(desc(schema.events.id));
+
+		return rows.map(toPublicEvent);
+	}),
+
+	venues: publicProcedure.query(async () => {
+		const rows = await db
+			.select({
+				id: schema.venues.id,
+				name: schema.venues.name,
+				slug: schema.venues.slug,
+				city: schema.venues.city,
+			})
+			.from(schema.venues)
+			.orderBy(schema.venues.name);
+
+		return rows;
 	}),
 
 	stats: publicProcedure.query(async () => {
