@@ -141,8 +141,34 @@ export function extractDate(
 	const matches: DateMatch[] = [];
 	let order = 0;
 
+	// Explicit year first: "12 de março de 2026 [às 21h30]" — the most
+	// specific form wins outright, so the infer-year branch never sees it.
+	for (const m of norm.matchAll(
+		new RegExp(
+			`\\b(\\d{1,2})(?:\\s+de)?\\s+(${MONTH_ALT})\\s+de?\\s*(\\d{4})\\b(?:\\s+as?\\s*(\\d{1,2})h(\\d{2})?)?`,
+			"g",
+		),
+	)) {
+		const month = PT_MONTHS[m[2] ?? ""];
+		if (month == null) {
+			continue;
+		}
+		const hh = m[4] != null ? Number.parseInt(m[4], 10) : null;
+		const mm = m[5] != null ? Number.parseInt(m[5], 10) : null;
+		pushMatch(
+			matches,
+			order++,
+			{
+				year: Number.parseInt(m[3] ?? "0", 10),
+				month,
+				day: Number.parseInt(m[1] ?? "0", 10),
+			},
+			hh != null && mm != null ? { hour: hh, minute: mm } : null,
+		);
+	}
+
 	const dayMonthRe = new RegExp(
-		`(\\d{1,2}(?:\\s*[,e]+\\s*\\d{1,2})*)\\s*(?:de\\s+)?(${MONTH_ALT})(?!\\s*(?:de\\s*)?\\d{4})`,
+		`(\\d{1,2}(?:\\s*[,e]+\\s*\\d{1,2})*)\\s*(?:de\\s+)?(${MONTH_ALT})(?![\\p{L}\\u00C0-\\u024F])(?!\\s*(?:de\\s*)?\\d{4})`,
 		"g",
 	);
 	for (const m of norm.matchAll(dayMonthRe)) {
@@ -178,15 +204,16 @@ export function extractDate(
 				month: Number.parseInt(m[2] ?? "0", 10),
 				day: Number.parseInt(m[1] ?? "0", 10),
 			},
-			null,
+			// A trailing time ("12/03/2026 às 20h00") belongs to the date.
+			timeAfter(norm, (m.index ?? 0) + (m[0]?.length ?? 0)),
 		);
 	}
 
-	const shortRe = new RegExp(
-		`\\b(\\d{1,2})\\s+(${MONTH_ALT})\\s+(\\d{4})\\b`,
-		"g",
-	);
-	for (const m of norm.matchAll(shortRe)) {
+	// Explicit-year short form (and the reviewer's explicit-year test case);
+	// also reads a trailing time token when present.
+	for (const m of norm.matchAll(
+		new RegExp(`\\b(\\d{1,2})\\s+(${MONTH_ALT})\\s+(\\d{4})\\b`, "g"),
+	)) {
 		const month = PT_MONTHS[m[2] ?? ""];
 		if (month == null) {
 			continue;
@@ -199,16 +226,25 @@ export function extractDate(
 				month,
 				day: Number.parseInt(m[1] ?? "0", 10),
 			},
-			null,
+			timeAfter(norm, (m.index ?? 0) + (m[0]?.length ?? 0)),
 		);
 	}
 
 	if (matches.length === 0) {
 		return null;
 	}
-	const timed = matches.find((c) => c.followsTime && c.hasTime);
+	// Preference order: (1) a date with a trailing time, (2) an explicit
+	// full-year date (unambiguous), (3) first structural match.
+	const timed = matches.find((c) => c.hasTime);
+	const explicitYear = matches.find((c) =>
+		/\d{4}/.test(String(c.year)) === false
+			? false
+			: c.year >= 2020 && c.year <= 2100,
+	);
 	const chosen =
-		timed ?? matches.reduce((a, b) => (a.order <= b.order ? a : b));
+		timed ??
+		explicitYear ??
+		matches.reduce((a, b) => (a.order <= b.order ? a : b));
 	return {
 		year: chosen.year,
 		month: chosen.month,
@@ -407,10 +443,7 @@ export function parseEvent(item: ParsedItem): RawEvent | null {
 		.replace(/<[^>]+>/g, " ")
 		.replace(/\s+/g, " ")
 		.trim();
-	const date = extractDate(
-		stripped,
-		item.pubDateMs ?? Date.now(),
-	);
+	const date = extractDate(stripped, item.pubDateMs ?? Date.now());
 	const img =
 		item.descriptionHtml.match(/<img[^>]*\ssrc="([^"]+)"/i)?.[1] ?? null;
 
