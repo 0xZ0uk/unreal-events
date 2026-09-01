@@ -33,11 +33,12 @@ const dayFmt = (t: number) =>
 		timeZone: "Europe/Lisbon",
 	}).format(new Date(t * 1000));
 
-const dayKey = (t: number) => {
-	const d = new Date(t * 1000);
-	const local = new Date(d.getTime() + 60 * d.getTimezoneOffset() * 1000);
-	return local.toISOString().slice(0, 10);
-};
+const dayKey = (t: number) =>
+	// Authoritative Europe/Lisbon date key (en-CA renders YYYY-MM-DD),
+	// independent of the viewer's timezone.
+	new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Lisbon" }).format(
+		new Date(t * 1000),
+	);
 
 function fmtTime(t: number) {
 	const hour = new Date(t * 1000).toLocaleString("en-GB", {

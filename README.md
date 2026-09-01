@@ -1,109 +1,67 @@
 # events-tracker
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Hono, TRPC, and more.
+Personal events tracker for Leiria, Portugal. Scrapes local event sources into
+one deduplicated calendar with a fast web UI.
 
-## Features
+**Status:** SLICE_1 — Leiriagenda source live (160 events ingested, idempotent),
+API + web UI.
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Router** - File-based routing with full type safety
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **Shared UI package** - shadcn/ui primitives live in `packages/ui`
-- **Hono** - Lightweight, performant server framework
-- **tRPC** - End-to-end type-safe APIs
-- **Bun** - Runtime environment
-- **Drizzle** - TypeScript-first ORM
-- **SQLite/Turso** - Database engine
-- **Turborepo** - Optimized monorepo build system
-- **Biome** - Linting and formatting
+## Stack
 
-## Getting Started
+better-t-stack monorepo · pnpm + Bun · Hono (server, :3301) · React + TanStack
+Router (web, :3300) · tRPC · Drizzle + SQLite (libsql, `local.db` at repo root)
+· Turborepo + Biome.
 
-First, install the dependencies:
+```
+apps/server/     Hono API + scraper (src/scraper/)
+apps/web/        TanStack Router UI
+packages/api/    tRPC routers
+packages/db/     Drizzle schema, migrations, seeds
+```
+
+## Commands
 
 ```bash
 pnpm install
+pnpm check-types            # typecheck everything
+pnpm --filter @events-tracker/server scrape:leiriagenda   # run the scraper
+pnpm dev                    # turbo dev (web :3300, server :3301)
 ```
 
-## Database Setup
+Scraper runs standalone: `cd apps/server && bun run src/scraper/run.ts
+[leiriagenda]`.
 
-This project uses SQLite with Drizzle ORM.
+## How it works
 
-1. Start the local SQLite database (optional):
+1. **Scrape** — `apps/server/src/scraper/leiriagenda.ts` fetches the
+   Leiriagenda listing (`?page=N` pagination) + every event detail page.
+   Per-card failures are counted, never fatal; fetches carry a 15s timeout + 2
+   retries; request cap enforced exactly (400).
+2. **Fingerprint** — `sha1(normalizedTitle | venueSlug | YYYY-MM-DD HH:mm
+   Europe/Lisbon)`. Time-of-day is in the key so same-day twin sessions (e.g.
+   18h30 vs 21h30) stay distinct events.
+3. **Ingest** — venue resolve-or-create, event upsert by fingerprint,
+   `event_sources` attribution rows (cross-source ready), one `scrape_runs`
+   row per run (found/new/failed/error).
+4. **Serve** — tRPC `events.list | events.byDay | events.stats` with venue
+   join; UI groups upcoming events by day.
 
-```bash
-pnpm run db:local
-```
+Second consecutive run inserts 0 new rows — idempotency is a hard invariant.
 
-2. Update your `.env` file in the `apps/server` directory with the appropriate connection details if needed.
+## Data model
 
-3. Apply the schema to your database:
+- `venues` — name, slug, address, lat/lng, city
+- `events` — title, slug, description, start_at/end_at (epoch), venue_id,
+  image_url, url, categories (JSON), fingerprint (unique)
+- `event_sources` — (event_id, source, source_event_id, source_url) —
+  attribution, unique per (event, source)
+- `scrape_runs` — source, started/finished, items_found/new/failed, error
 
-```bash
-pnpm run db:push
-```
+## Next slices
 
-Then, run the development server:
+- SLICE_2: BOL/Ticketline + Visite Leiria + RSS sources; venue geocoding;
+  filters; calendar view
+- SLICE_3: daily Discord digest + keyword watchlist
+- SLICE_4: Eventbrite, ICS export, paste-a-URL ingest
 
-```bash
-pnpm run dev
-```
-
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-The API is running at [http://localhost:3000](http://localhost:3000).
-
-## UI Customization
-
-React web apps in this stack share shadcn/ui primitives through `packages/ui`.
-
-- Change design tokens and global styles in `packages/ui/src/styles/globals.css`
-- Update shared primitives in `packages/ui/src/components/*`
-- Adjust shadcn aliases or style config in `packages/ui/components.json` and `apps/web/components.json`
-
-### Add more shared components
-
-Run this from the project root to add more primitives to the shared UI package:
-
-```bash
-npx shadcn@latest add accordion dialog popover sheet table -c packages/ui
-```
-
-Import shared components like this:
-
-```tsx
-import { Button } from "@events-tracker/ui/components/button";
-```
-
-### Add app-specific blocks
-
-If you want to add app-specific blocks instead of shared primitives, run the shadcn CLI from `apps/web`.
-
-## Git Hooks and Formatting
-
-- Run checks: `pnpm run check`
-
-## Project Structure
-
-```
-events-tracker/
-├── apps/
-│   ├── web/         # Frontend application (React + TanStack Router)
-│   └── server/      # Backend API (Hono, TRPC)
-├── packages/
-│   ├── ui/          # Shared shadcn/ui components and styles
-│   ├── api/         # API layer / business logic
-│   └── db/          # Database schema & queries
-```
-
-## Available Scripts
-
-- `pnpm run dev`: Start all applications in development mode
-- `pnpm run build`: Build all applications
-- `pnpm run dev:web`: Start only the web application
-- `pnpm run dev:server`: Start only the server
-- `pnpm run check-types`: Check TypeScript types across all apps
-- `pnpm run db:push`: Push schema changes to database
-- `pnpm run db:generate`: Generate database client/types
-- `pnpm run db:migrate`: Run database migrations
-- `pnpm run db:studio`: Open database studio UI
-- `pnpm run db:local`: Start the local SQLite database
-- `pnpm run check`: Run Biome formatting and linting
+Plan: `/root/.plans/SLICE_EVENTS_TRACKER.md`
