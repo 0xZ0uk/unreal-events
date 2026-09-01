@@ -1,7 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, ChevronLeft, ChevronRight, Rss } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import {
+	ArrowLeft,
+	ArrowUpRight,
+	CalendarDays,
+	ChevronLeft,
+	ChevronRight,
+	Rss,
+	Sparkles,
+} from "lucide-react";
 
+import { Badge } from "@events-tracker/ui/components/badge";
+import { Button } from "@events-tracker/ui/components/button";
+import { Card } from "@events-tracker/ui/components/card";
+import { Separator } from "@events-tracker/ui/components/separator";
 import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/calendario")({
@@ -30,7 +42,6 @@ function lisbonDayKey(epochSec: number): string {
 	}).format(new Date(epochSec * 1000));
 }
 
-/** Epoch seconds for Lisbon-local midnight of a `YYYY-MM-DD` date string. */
 function lisbonMidnightEpoch(dateStr: string): number {
 	const parts = dateStr.split("-");
 	const base = Math.floor(
@@ -96,7 +107,6 @@ function CalendarComponent() {
 
 	const events = query.data ?? [];
 
-	// Index events by their true Lisbon day (YYYY-MM-DD).
 	const byDay = new Map<string, Event[]>();
 	let monthCount = 0;
 	for (const ev of events) {
@@ -105,17 +115,13 @@ function CalendarComponent() {
 			monthCount += 1;
 		}
 		const bucket = byDay.get(key);
-		if (bucket) {
-			bucket.push(ev);
-		} else {
-			byDay.set(key, [ev]);
-		}
+		if (bucket) bucket.push(ev);
+		else byDay.set(key, [ev]);
 	}
 
-	// Build the Monday-first grid with 6 weeks worth of cells.
 	const firstEpoch = lisbonMidnightEpoch(`${year}-${pad(month)}-01`);
-	const firstWeekday = new Date(firstEpoch * 1000).getDay(); // 0 = Sun
-	const offset = (firstWeekday + 6) % 7; // days before Mon-1st
+	const firstWeekday = new Date(firstEpoch * 1000).getDay();
+	const offset = (firstWeekday + 6) % 7;
 	const CELLS = 42;
 	const gridEpochs = Array.from(
 		{ length: CELLS },
@@ -145,136 +151,221 @@ function CalendarComponent() {
 		monthCount === 1 ? "1 evento" : `${monthCount} eventos`;
 
 	return (
-		<div className="container mx-auto max-w-5xl px-4 py-6">
-			<header className="mb-6">
-				<div className="flex items-start justify-between gap-4">
+		<div className="min-h-[calc(100vh-64px)] bg-[var(--arc-canvas)] dark:bg-zinc-950">
+			{/* Hero - cream */}
+			<div className="mx-auto max-w-[1280px] px-4 pt-8 pb-6 sm:px-8 sm:pt-10">
+				<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 					<div>
-						<h1 className="font-semibold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
+						<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[var(--arc-ink)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-canvas)] dark:bg-white dark:text-black">
+							<CalendarDays className="size-3.5" />
+							Vista mensal
+						</div>
+						<h1
+							className="text-[40px] font-bold leading-[0.95] tracking-[-1.6px] text-[var(--arc-ink)] dark:text-white sm:text-[40px]"
+							style={{ fontFamily: "var(--font-display)" }}
+						>
 							Calendário
 						</h1>
-						<p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+						<p
+							className="mt-2 flex items-center gap-2 text-sm text-[var(--arc-ink-muted)] dark:text-zinc-400"
+							style={{ fontFamily: "var(--font-dek)" }}
+						>
 							<span
 								data-testid="calendar-month"
-								className="font-medium text-zinc-700 dark:text-zinc-200"
+								className="rounded-full bg-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-wide text-[var(--arc-ink)] shadow-sm ring-1 ring-foreground/10 dark:bg-zinc-900 dark:text-white dark:ring-white/10"
+								style={{ fontFamily: "var(--font-mono)" }}
 							>
 								{monthName(year, month)} {year}
 							</span>
-							{" · "}
-							<span data-testid="calendar-count">{monthEventsLabel}</span>
+							<span
+								data-testid="calendar-count"
+								className="font-mono text-xs font-medium uppercase tracking-wide dark:text-zinc-400"
+								style={{ fontFamily: "var(--font-mono)" }}
+							>
+								· {monthEventsLabel}
+							</span>
 						</p>
 					</div>
+
 					<div className="flex shrink-0 items-center gap-2">
-						<a
-							href="/"
-							className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
+						<Link
+							to="/"
+							search={{ date: undefined }}
+							className="inline-flex items-center gap-1.5 rounded-full border border-[var(--arc-ink)]/15 bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink)] shadow-sm transition-colors hover:border-[var(--arc-ink)] hover:bg-[var(--arc-ink)] hover:text-[var(--arc-canvas)] dark:border-white/15 dark:bg-zinc-900 dark:text-white dark:hover:bg-white dark:hover:text-black"
 						>
-							<ArrowLeft className="h-4 w-4" />
+							<ArrowLeft className="size-3.5" />
 							Agenda
-						</a>
+						</Link>
 						<a
 							href="http://localhost:3301/events.ics"
-							title="Subscrever ICS"
-							className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
+							target="_blank"
+							rel="noreferrer"
+							className="inline-flex items-center gap-1.5 rounded-full bg-[var(--arc-primary)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-white shadow-sm transition-colors hover:bg-[var(--arc-primary-deep)]"
 						>
-							<Rss className="h-4 w-4" />
+							<Rss className="size-3.5" />
 							Subscrever ICS
+							<ArrowUpRight className="size-3" />
 						</a>
 					</div>
 				</div>
-			</header>
-
-			<div className="mb-4 flex items-center justify-between">
-				<button
-					type="button"
-					onClick={() => goMonth(-1)}
-					data-testid="cal-prev"
-					aria-label="Mês anterior"
-					className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-2.5 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
-				>
-					<ChevronLeft className="h-4 w-4" />
-				</button>
-				<span className="font-medium text-zinc-800 dark:text-zinc-100">
-					{monthName(year, month)} {year}
-				</span>
-				<button
-					type="button"
-					onClick={() => goMonth(1)}
-					data-testid="cal-next"
-					aria-label="Mês seguinte"
-					className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-2.5 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
-				>
-					<ChevronRight className="h-4 w-4" />
-				</button>
 			</div>
 
-			<div className="rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-				<div className="grid grid-cols-7 border-zinc-200 border-b dark:border-zinc-800">
-					{WEEKDAYS.map((w) => (
-						<div
-							key={w}
-							className="px-2 py-2 text-center font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400"
-						>
-							{w}
+			{/* Blue voltage month control bar - single per page? We use blue band here as control header */}
+			<div className="w-full bg-[var(--arc-primary)] px-4 py-4 sm:px-8">
+				<div className="mx-auto flex max-w-[1280px] items-center justify-between">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => goMonth(-1)}
+						data-testid="cal-prev"
+						aria-label="Mês anterior"
+						className="size-9 rounded-full border-white/20 bg-white/10 p-0 text-white backdrop-blur hover:bg-white hover:text-[var(--arc-primary)]"
+					>
+						<ChevronLeft className="size-4" />
+					</Button>
+
+					<div className="flex items-center gap-3">
+						<div className="hidden size-8 items-center justify-center rounded-full bg-white/15 sm:flex">
+							<Sparkles className="size-4 text-white" />
 						</div>
-					))}
+						<span
+							className="text-[20px] font-bold tracking-tight text-white"
+							style={{
+								fontFamily: "var(--font-display)",
+								letterSpacing: "-0.02em",
+							}}
+						>
+							{monthName(year, month)} {year}
+						</span>
+						<Badge className="hidden bg-white text-[var(--arc-primary)] hover:bg-white sm:inline-flex">
+							{monthEventsLabel}
+						</Badge>
+					</div>
+
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => goMonth(1)}
+						data-testid="cal-next"
+						aria-label="Mês seguinte"
+						className="size-9 rounded-full border-white/20 bg-white/10 p-0 text-white backdrop-blur hover:bg-white hover:text-[var(--arc-primary)]"
+					>
+						<ChevronRight className="size-4" />
+					</Button>
 				</div>
+			</div>
 
-				<div className="grid grid-cols-7">
-					{Array.from({ length: CELLS }, (_, i) => {
-						const epoch = gridEpochs[i];
-						const key = lisbonDayKey(epoch);
-						const inMonth = key.startsWith(monthKeyStart);
-						const dayNum = Number(key.split("-")[2]);
-						const dayEvents = byDay.get(key) ?? [];
-						const isToday = key === todayKey;
-						const renderable = dayEvents.slice(0, 2);
-						const overflow = dayEvents.length - renderable.length;
-
-						return (
-							<button
-								type="button"
-								key={key}
-								onClick={() => navigate({ to: "/", search: { date: key } })}
-								className={`flex min-h-24 flex-col items-stretch gap-1 border-zinc-200 p-1.5 text-left transition-colors hover:bg-blue-50 dark:border-zinc-800 dark:hover:bg-blue-950 ${
-									i % 7 !== 6 ? "border-r" : ""
-								} ${i < CELLS - 7 ? "border-b" : ""} ${
-									inMonth
-										? "bg-white dark:bg-zinc-900"
-										: "bg-zinc-50 dark:bg-zinc-950"
-								}`}
+			{/* Grid */}
+			<div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-8 sm:py-8">
+				<Card className="overflow-hidden rounded-[12px] border border-foreground/10 bg-white p-0 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:border-white/10">
+					{/* Weekday header - mono eyebrow */}
+					<div className="grid grid-cols-7 border-b border-foreground/10 bg-[var(--arc-surface-students)]/50 dark:bg-zinc-800/50 dark:border-white/10">
+						{WEEKDAYS.map((w) => (
+							<div
+								key={w}
+								className="px-2 py-3 text-center font-mono text-[11px] font-bold uppercase tracking-[1.4px] text-[var(--arc-ink-students)] dark:text-zinc-400"
+								style={{ fontFamily: "var(--font-mono)" }}
 							>
-								<span
-									className={`self-start rounded-md px-1.5 py-0.5 font-medium text-sm tabular-nums ${
-										isToday
-											? "bg-blue-600 text-white"
-											: inMonth
-												? "text-zinc-800 dark:text-zinc-100"
-												: "text-zinc-400 dark:text-zinc-500"
+								{w}
+							</div>
+						))}
+					</div>
+
+					<div className="grid grid-cols-7">
+						{Array.from({ length: CELLS }, (_, i) => {
+							const epoch = gridEpochs[i];
+							const key = lisbonDayKey(epoch);
+							const inMonth = key.startsWith(monthKeyStart);
+							const dayNum = Number(key.split("-")[2]);
+							const dayEvents = byDay.get(key) ?? [];
+							const isToday = key === todayKey;
+							const renderable = dayEvents.slice(0, 2);
+							const overflow = dayEvents.length - renderable.length;
+
+							return (
+								<button
+									type="button"
+									key={key}
+									onClick={() => navigate({ to: "/", search: { date: key } })}
+									className={`group flex min-h-[112px] flex-col items-stretch gap-1 p-2 text-left transition-colors hover:bg-[var(--arc-primary)]/[0.04] dark:hover:bg-white/[0.04] ${
+										i % 7 !== 6
+											? "border-r border-foreground/10 dark:border-white/10"
+											: ""
+									} ${i < CELLS - 7 ? "border-b border-foreground/10 dark:border-white/10" : ""} ${
+										inMonth
+											? "bg-white dark:bg-zinc-900"
+											: "bg-[var(--arc-surface-students)]/40 dark:bg-zinc-950"
 									}`}
 								>
-									{dayNum}
-								</span>
-								{renderable.map((ev) => (
 									<span
-										key={ev.id}
-										className="truncate rounded bg-blue-100/70 px-1 py-0.5 text-[11px] text-blue-900 leading-tight dark:bg-blue-900/50 dark:text-blue-100"
+										className={`self-start rounded-full px-2 py-1 font-mono text-xs font-bold tabular-nums transition-colors ${
+											isToday
+												? "bg-[var(--arc-primary)] text-white shadow-sm"
+												: inMonth
+													? "bg-transparent text-[var(--arc-ink)] group-hover:bg-[var(--arc-ink)] group-hover:text-[var(--arc-canvas)] dark:text-white dark:group-hover:bg-white dark:group-hover:text-black"
+													: "text-[var(--arc-ink-students-soft)] dark:text-zinc-500"
+										}`}
+										style={{ fontFamily: "var(--font-mono)" }}
 									>
-										<span className="font-semibold tabular-nums">
-											{fmtTime(ev.startAt)}
-										</span>{" "}
-										{ev.title}
+										{dayNum}
 									</span>
-								))}
-								{overflow > 0 && (
-									<span className="px-1 font-medium text-[11px] text-blue-500 dark:text-blue-400">
-										+{overflow}
-									</span>
-								)}
-							</button>
-						);
-					})}
+									<div className="mt-1 flex flex-col gap-1">
+										{renderable.map((ev) => (
+											<span
+												key={ev.id}
+												className="truncate rounded-[6px] bg-[var(--arc-primary)]/10 px-1.5 py-1 text-[11px] font-medium leading-tight text-[var(--arc-primary-deep)] ring-1 ring-[var(--arc-primary)]/10 group-hover:bg-[var(--arc-primary)] group-hover:text-white group-hover:ring-[var(--arc-primary)] dark:bg-[var(--arc-primary)]/20 dark:text-white dark:ring-white/10"
+											>
+												<span
+													className="font-mono text-[11px] font-bold tabular-nums"
+													style={{ fontFamily: "var(--font-mono)" }}
+												>
+													{fmtTime(ev.startAt)}
+												</span>{" "}
+												<span className="font-medium">{ev.title}</span>
+											</span>
+										))}
+										{overflow > 0 && (
+											<span
+												className="px-1 font-mono text-[11px] font-bold text-[var(--arc-primary)] dark:text-white"
+												style={{ fontFamily: "var(--font-mono)" }}
+											>
+												+{overflow} mais
+											</span>
+										)}
+										{dayEvents.length === 0 && inMonth && (
+											<span className="hidden px-1 font-mono text-[10px] uppercase tracking-wide text-transparent group-hover:text-[var(--arc-ink-muted)] sm:block dark:group-hover:text-zinc-500">
+												Ver dia →
+											</span>
+										)}
+									</div>
+								</button>
+							);
+						})}
+					</div>
+				</Card>
+
+				<div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-500">
+					<span className="inline-flex items-center gap-1.5">
+						<span className="size-2 rounded-full bg-[var(--arc-primary)]" />{" "}
+						Hoje
+					</span>
+					<Separator orientation="vertical" className="h-3" />
+					<span>Clique num dia para filtrar a agenda</span>
 				</div>
 			</div>
+
+			<footer className="border-t border-foreground/10 bg-[var(--arc-canvas)] px-4 py-8 sm:px-8 dark:bg-zinc-950 dark:border-white/10">
+				<div className="mx-auto flex max-w-[1280px] items-center justify-between font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-500">
+					<span>Europe/Lisbon · Segunda a Domingo</span>
+					<Link
+						to="/"
+						search={{ date: undefined }}
+						className="hover:text-[var(--arc-ink)] dark:hover:text-white"
+					>
+						Voltar à agenda →
+					</Link>
+				</div>
+			</footer>
 		</div>
 	);
 }
