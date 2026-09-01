@@ -3,12 +3,14 @@
  * `() => Promise<RawEvent[]>` so future sources slot in here and reuse the
  * shared normalize/fingerprint/ingest pipeline.
  */
+import { scrape as scrapeBol } from "./bol";
 import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
 
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
+	bol: scrapeBol,
 } as const;
 
 export type SourceId = keyof typeof sources;

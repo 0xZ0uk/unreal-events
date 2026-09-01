@@ -5,6 +5,7 @@ import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { digestRoutes } from "./digest";
 
 const app = new Hono();
 
@@ -26,6 +27,8 @@ app.use(
     },
   }),
 );
+
+app.route("/", digestRoutes);
 
 app.get("/", (c) => {
   return c.text("OK");

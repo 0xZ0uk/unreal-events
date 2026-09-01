@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 
 import { toEpochInLisbon } from "./fingerprint";
+import { defaultFetchText } from "./http";
 import type { RawEvent } from "./types";
 
 /**
@@ -19,7 +20,6 @@ export const LEIRIA_VENUE_KEYWORDS = [
 	"sant_ana",
 	"castelo_de_leiria",
 	"mimo",
-	"expo",
 ] as const;
 
 /** BTW candidates are validated against these real non-Leiria slugs. */
@@ -251,4 +251,111 @@ export function buildRawEvents(
 		imageUrl: null,
 		url: card.url,
 	}));
+}
+
+const BOL_SITE = "https://www.bol.pt";
+
+/** BOL district-Leiria search listings (top-level-category IDs verified live). */
+export const LISTING_URLS = [
+	`${BOL_SITE}/Comprar/pesquisa/2-2003-10-0-0-0/musica_e_concertos`,
+	`${BOL_SITE}/Comprar/pesquisa/2-2001-10-0-0-0/musica`,
+	`${BOL_SITE}/Comprar/pesquisa/1-1000-10-0-0-0/teatro`,
+	`${BOL_SITE}/Comprar/pesquisa/1-1003-10-0-0-0/teatro_e_arte`,
+	`${BOL_SITE}/Comprar/pesquisa/1-1001-10-0-0-0/danca`,
+	`${BOL_SITE}/Comprar/pesquisa/3-3000-10-0-0-0/familia_parques_tematicos`,
+];
+
+export interface ScrapeResult {
+	events: RawEvent[];
+	failures: number;
+	firstError: string | null;
+	/** Diagnostic: venue slugs matched by the Leiria pre-filter. */
+	matchedVenueSlugs: string[];
+}
+
+interface ScrapeDeps {
+	fetchText: (url: string) => Promise<string>;
+	sleep: (ms: number) => Promise<void>;
+}
+
+const MAX_REQUESTS = 400;
+const DETAIL_CONCURRENCY = 4;
+
+const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+const randomDelay = () => 300 + Math.floor(Math.random() * 200);
+
+/**
+ * Scrape BOL for Leiria-area events: fetch the 4 category listings, pre-filter
+ * event links by Leiria venue slug, then fetch + parse each matched detail
+ * page. Per-card failures are counted, never fatal.
+ */
+export async function scrape(
+	deps: ScrapeDeps = {
+		fetchText: defaultFetchText,
+		sleep: defaultSleep,
+	},
+): Promise<ScrapeResult> {
+	let requests = 0;
+	let chain: Promise<unknown> = Promise.resolve();
+	const fetchPage = (url: string): Promise<string> => {
+		const next = chain.then(async () => {
+			if (requests >= MAX_REQUESTS) {
+				throw new Error(`request cap ${MAX_REQUESTS} reached`);
+			}
+			requests++;
+			await deps.sleep(randomDelay());
+			return deps.fetchText(url);
+		});
+		chain = next.catch(() => {});
+		return next;
+	};
+
+	const byId = new Map<number, ListingLink>();
+	for (const listing of LISTING_URLS) {
+		try {
+			const html = await fetchPage(listing);
+			for (const link of parseListingLinks(html)) {
+				if (!byId.has(link.id)) {
+					byId.set(link.id, {
+						...link,
+						// Canonicalize relative hrefs to absolute URLs.
+						url: link.url.startsWith("http")
+							? link.url
+							: `${BOL_SITE}${link.url}`,
+					});
+				}
+			}
+		} catch (err) {
+			console.error(`BOL listing ${listing} failed: ${err}`);
+		}
+	}
+
+	const cards = [...byId.values()].filter((c) => isLeiriaVenue(c.venueSlug));
+	const matchedVenueSlugs = [...new Set(cards.map((c) => c.venueSlug))];
+
+	const events: RawEvent[] = [];
+	let failures = 0;
+	let firstError: string | null = null;
+	let cursor = 0;
+	const worker = async () => {
+		while (cursor < cards.length) {
+			const card = cards[cursor];
+			cursor++;
+			if (!card) {
+				continue;
+			}
+			try {
+				const html = await fetchPage(card.url);
+				events.push(...buildRawEvents(card, html));
+			} catch (err) {
+				failures++;
+				if (!firstError) {
+					firstError = err instanceof Error ? err.message : String(err);
+				}
+			}
+		}
+	};
+	await Promise.all(Array.from({ length: DETAIL_CONCURRENCY }, worker));
+
+	return { events, failures, firstError, matchedVenueSlugs };
 }

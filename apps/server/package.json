@@ -10,7 +10,9 @@
     "start": "bun run dist/index.mjs",
     "scrape:leiriagenda": "bun run src/scraper/run.ts leiriagenda",
     "geocode:venues": "bun run src/scraper/geocode.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "digest": "bun run src/digest-cli.ts",
+    "scrape": "bun run src/scraper/run.ts"
   },
   "dependencies": {
     "@events-tracker/api": "workspace:*",
