@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, MapPin } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/")({
+	validateSearch: (search) => ({
+		date: typeof search.date === "string" ? search.date : undefined,
+	}),
 	component: HomeComponent,
 });
 
@@ -286,6 +289,7 @@ function DayGroups({ groups }: { groups: [string, Event[]][] }) {
 }
 
 function HomeComponent() {
+	const search = Route.useSearch();
 	const byDay = useQuery(trpc.events.byDay.queryOptions());
 	const stats = useQuery(trpc.events.stats.queryOptions());
 	const venuesQuery = useQuery(trpc.events.venues.queryOptions());
@@ -293,9 +297,14 @@ function HomeComponent() {
 
 	const [venueSlug, setVenueSlug] = useState("");
 	const [category, setCategory] = useState("");
-	const [dateFrom, setDateFrom] = useState("");
-	const [dateTo, setDateTo] = useState("");
+	const [dateFrom, setDateFrom] = useState(search.date ?? "");
+	const [dateTo, setDateTo] = useState(search.date ?? "");
 	const [city, setCity] = useState("");
+
+	useEffect(() => {
+		setDateFrom(search.date ?? "");
+		setDateTo(search.date ?? "");
+	}, [search.date]);
 
 	const hasFilter =
 		venueSlug !== "" ||
@@ -354,13 +363,6 @@ function HomeComponent() {
 							</p>
 						)}
 					</div>
-					<a
-						href="http://localhost:3301/events.ics"
-						title="Calendário (ICS)"
-						className="shrink-0 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 transition-colors hover:border-blue-500 hover:text-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-blue-400"
-					>
-						Subscrever
-					</a>
 				</div>
 			</header>
 

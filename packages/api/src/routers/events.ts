@@ -68,6 +68,32 @@ const listInput = z.object({
 	includeUndated: z.boolean().default(false),
 });
 
+const pad2 = (n: number) => String(n).padStart(2, "0");
+
+/** Epoch seconds for Lisbon-local midnight of a `YYYY-MM-DD` date string. */
+function lisbonMidnightEpoch(dateStr: string): number {
+	const parts = dateStr.split("-");
+	const y = Number(parts[0]);
+	const m = Number(parts[1]);
+	const d = Number(parts[2]);
+	const target = `${y}-${pad2(m)}-${pad2(d)}`;
+	const base = Math.floor(Date.UTC(y, m - 1, d, 0, 0, 0) / 1000);
+	for (const cand of [base, base - 3600, base + 3600]) {
+		const key = new Intl.DateTimeFormat("en-CA", {
+			timeZone: "Europe/Lisbon",
+		}).format(new Date(cand * 1000));
+		if (key === target) {
+			return cand;
+		}
+	}
+	return base;
+}
+
+const calendarInput = z.object({
+	year: z.number().int().min(1970).max(2200),
+	month: z.number().int().min(1).max(12),
+});
+
 export const eventsRouter = router({
 	list: publicProcedure.input(listInput).query(async ({ input }) => {
 		const conditions = [];
@@ -113,6 +139,35 @@ export const eventsRouter = router({
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
 			.where(
 				and(gte(schema.events.start_at, now), isNull(schema.events.date_text)),
+			)
+			.orderBy(schema.events.start_at);
+
+		return rows.map(toPublicEvent);
+	}),
+
+	calendar: publicProcedure.input(calendarInput).query(async ({ input }) => {
+		const { year, month } = input;
+		// Lisbon-local month boundaries, then spill 7 days either side so the
+		// grid can render cross-month events on their true day.
+		const monthStart = lisbonMidnightEpoch(`${year}-${pad2(month)}-01`);
+		const nextYear = month === 12 ? year + 1 : year;
+		const nextMonth = month === 12 ? 1 : month + 1;
+		const nextMonthStart = lisbonMidnightEpoch(
+			`${nextYear}-${pad2(nextMonth)}-01`,
+		);
+		const from = monthStart - 7 * 86400;
+		const to = nextMonthStart + 7 * 86400 - 1;
+
+		const rows = await db
+			.select(eventSelect)
+			.from(schema.events)
+			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+			.where(
+				and(
+					gte(schema.events.start_at, from),
+					lte(schema.events.start_at, to),
+					isNull(schema.events.date_text),
+				),
 			)
 			.orderBy(schema.events.start_at);
 
