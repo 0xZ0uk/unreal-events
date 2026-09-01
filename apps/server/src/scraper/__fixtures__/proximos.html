@@ -1,0 +1,2014 @@
+<!doctype html>
+<html class="no-js" lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5,viewport-fit=cover" />
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="author" content="Velcrodesign">
+
+    <meta name="X-CSRF-TOKEN" content="aa5a0fce5d17d46d503fbe1529a22272" />
+
+    <title>Agenda - Leiriagenda</title>
+    <meta name="description" content="Esta agenda pretende não só divulgar os grandes eventos que já contam com o reconhecimento do público, como também dar ênfase a atividades inovadoras, destacando a programação dos agentes culturais e desportivos do concelho." />
+    <base href="https://leiriagenda.cm-leiria.pt/" />
+
+    
+
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-D2D655X3C9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-D2D655X3C9');
+        </script>
+    
+    <!-- Add to Home Screen titles -->
+    <meta name="apple-mobile-web-app-title" content="Agenda - Leiriagenda">
+    <meta name="application-name" content="Agenda - Leiriagenda">
+
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="imagens/favicons/apple-touch-icon.png?v=05122022">
+    <link rel="icon" type="image/png" sizes="32x32" href="imagens/favicons/favicon-32x32.png?v=05122022">
+    <link rel="icon" type="image/png" sizes="16x16" href="imagens/favicons/favicon-16x16.png?v=05122022">
+    <link rel="manifest" href="imagens/favicons/site.webmanifest?v=05122022">
+    <link rel="mask-icon" href="imagens/favicons/safari-pinned-tab.svg?v=05122022" color="#e70033">
+    <link rel="shortcut icon" href="imagens/favicons/favicon.ico?v=05122022">
+    <meta name="apple-mobile-web-app-title" content="Leiria Agenda">
+    <meta name="application-name" content="Leiria Agenda">
+    <meta name="msapplication-TileColor" content="#e70033">
+    <meta name="msapplication-config" content="imagens/favicons/browserconfig.xml?v=05122022">
+    <meta name="theme-color" content="#e70033">
+
+
+    <!-- Social OGs -->
+            <meta property="og:title" content="Agenda - Leiriagenda" />
+        <meta property="og:image"
+            content="https://leiriagenda.cm-leiria.pt/uploads/seo/la-share-img.png" />
+        <meta property="og:description" content="Esta agenda pretende não só divulgar os grandes eventos que já contam com o reconhecimento do público, como também dar ênfase a atividades inovadoras, destacando a programação dos agentes culturais e desportivos do concelho." />
+        <meta property="og:image:width" content="1600" />
+        <meta property="og:image:height" content="900" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos" />
+        <meta property="og:site_name" content="Leiriagenda" />
+        <meta property="fb:admins" content="100001751856529" />
+        <meta property="fb:app_id" content="928655147202605" />
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:url" content="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos">
+        <meta name="twitter:title" content="Agenda - Leiriagenda">
+        <meta name="twitter:description" content="Esta agenda pretende não só divulgar os grandes eventos que já contam com o reconhecimento do público, como também dar ênfase a atividades inovadoras, destacando a programação dos agentes culturais e desportivos do concelho.">
+        <meta name="twitter:image"
+            content="https://leiriagenda.cm-leiria.pt/uploads/seo/la-share-img.png">
+    
+    <!-- STYLESHEETS -->
+        <link rel="stylesheet" href="https://use.typekit.net/xzl6wqr.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="js/libs/toastify/toastify.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="js/libs/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="js/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/estilos.css?v=1715089302" type="text/css"
+        media="screen, print" />
+    <link rel="stylesheet" href="css/main.css?v=1715968457" type="text/css"
+        media="screen, print" />
+</head>
+
+<body
+    class="special agenda_proximos ">
+    <div class="loading-container">
+        <div class="content">
+            <img src="imagens/la_logo_short_white.svg">
+        </div>
+    </div>
+    <main>
+        
+        <div class="shade"></div>
+<nav id="menu">
+    <a class="logo-wrapper" href="https://leiriagenda.cm-leiria.pt/pt" title="Home" aria-label="Home">
+        <img id="site-logo" class="site-logo" src="imagens/la_logo_color2.svg" alt="Leiria Agenda">
+        <div class="site-logo-red-white">
+        </div>
+        <div class="site-logo-white"></div>
+    </a>
+    <div class="right-menu">
+        <div class="search">
+            <div class="lupa" id="search-menu"></div>
+            <div class="input-group-search">
+                <form action="https://leiriagenda.cm-leiria.pt/pt/agenda" method="get" accept-charset="utf-8">
+
+                <input type="text" id="searchin" name="search" placeholder="Pesquisa por nome">
+                <button type="submit" class="search-go"></button>
+                </form>
+                <div class="zoom"></div>
+            </div>
+        </div>
+
+                    <div class="btn-container">
+                <a href="https://leiriagenda.cm-leiria.pt/pt/conta/login"
+                    class="btn red hollow" title="Login" aria-label="Login">
+                    Login
+                </a>
+            </div>
+                <div class="toggle-menu" id="toggle-menu" title="menu" aria-label="menu">
+            <span class="icon-menu"></span>
+        </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="responsive-container">
+        <div class="grid-container">
+
+
+            <div
+                class="secondary-menu desktop-30 desktop-push-30 ls-tablet-50 ls-tablet-push-20 pt-tablet-50 pt-tablet-push-15 ls-phone-95 ls-phone-push-5 pt-phone-95 pt-phone-push-5">
+
+                <ul class="nav">
+	<li class="active current first special"><a href="https://leiriagenda.cm-leiria.pt/pt/agenda" title="Agenda"><span>Agenda</span></a></li>
+	<li class="special"><a href="https://leiriagenda.cm-leiria.pt/pt/sobre-a-leiriagenda" title="Sobre a Leiriagenda"><span>Sobre a Leiriagenda</span></a></li>
+	<li class=""><a href="https://leiriagenda.cm-leiria.pt/pt/promotores" title="Promotores"><span>Promotores</span></a></li>
+	<li class=""><a href="https://leiria2022.pt/eventos/?type=clubes&sort=latest" title="Clubes Desportivos" target="_blank"><span>Clubes Desportivos</span></a></li>
+	<li class="last"><a href="https://leiriagenda.cm-leiria.pt/pt/contactos" title="Contactos"><span>Contactos</span></a></li>
+</ul>
+
+
+            </div>
+            <div
+                class="responsive-menu desktop-20 desktop-push-30 ls-tablet-40 ls-tablet-push-20 pt-tablet-40 pt-tablet-push-10 ls-phone-95 ls-phone-push-5 pt-phone-95 pt-phone-push-5">
+
+                <div class="menu">
+                    <div class="little-title">Informações</div>
+
+                    <ul class="sec-nav">
+	<li class="first pp"><a href="https://leiriagenda.cm-leiria.pt/pt/politica-de-privacidade" title="Política de Privacidade"><span>Política de Privacidade</span></a></li>
+	<li class="last cp"><a href="https://leiriagenda.cm-leiria.pt/pt/politica-de-cookies" title="Política de Cookies"><span>Política de Cookies</span></a></li>
+</ul>
+
+                </div>
+
+                <div class="menu-nl">
+                    <div class="little-title">Acompanhe a Leiria Agenda</div>
+
+
+                    <div class="social">
+                        <div class="outer">
+
+                                                                                        <div class="social-inner">
+                                    <h6>Cultura</h6>
+                                    <div class="socials">
+
+                                                                                    <span><a href="https://www.facebook.com/LeiriaCultura" target="_blank"
+                                                    title="Facebook Cultura" rel="noopener"><i
+                                                        class="so so-facebook"></i></a></span>
+                                                                                    <span><a href="https://www.instagram.com/leiria_cultura/" target="_blank"
+                                                    title="Instagram Cultura" rel="noopener"><i
+                                                        class="so so-instagram"></i></a></span>
+                                                                            </div>
+                                </div>
+                                                            <div class="social-inner">
+                                    <h6>Desporto</h6>
+                                    <div class="socials">
+
+                                                                                    <span><a href="https://www.facebook.com/leiriadesporto" target="_blank"
+                                                    title="Facebook Desporto" rel="noopener"><i
+                                                        class="so so-facebook"></i></a></span>
+                                                                                    <span><a href="https://www.instagram.com/leiriadesporto/" target="_blank"
+                                                    title="Instagram Desporto" rel="noopener"><i
+                                                        class="so so-instagram"></i></a></span>
+                                                                            </div>
+                                </div>
+                                                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</nav>
+
+        
+
+    <section class="page-padding top-section">
+        <div class="grid-container">
+            <div class="desktop-90 desktop-push-5">
+                <div class="back-container">
+
+                    <a href="https://leiriagenda.cm-leiria.pt/pt/agenda"
+                        class="back-btn">Agenda de Eventos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="next">
+        <div class="grid-container">
+            <div class="desktop-90 desktop-push-5 ls-tablet-90 ls-tablet-push-5 pt-tablet-90 pt-tablet-push-5 ls-phone-100">
+                <div class="title-section-inner">
+                    <div class="title-flex">
+                        <h1 class="title red">Próximos Eventos</h1>
+                        <div class="total">162</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-container">
+            <div class="desktop-90 desktop-push-5 ls-tablet-90 ls-tablet-push-5 pt-tablet-90 pt-tablet-push-5 ls-phone-100">
+                <div class="filters-section-inner">
+                    <div class="left-components">
+                        <div class="btn-container">
+                            <a href="" class="small-btn red has-filtro"
+                                id="toggle-filters"><span>Filtrar por</span></a>
+                        </div>
+                        <div class="input-container">
+                            <form action="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos" method="get" accept-charset="utf-8">
+
+
+                            <input type="text" id="search" name="search" value=""
+                                placeholder="Pesquisa por nome">
+
+
+
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="right-components">
+                        <div class="grid btn-listagem active"></div>
+                        <div class="list btn-listagem "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-container">
+            <div class="desktop-90 desktop-push-5 ls-tablet-90 ls-tablet-push-5 pt-tablet-90 pt-tablet-push-5 ls-phone-100">
+                <div class="listing-container">
+                    <div class="listing-container-inner ">
+                                                                                    <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/associativismo-cultural-setembro">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/feed11_160x230.png)"
+                                                    alt="Associativismo Cultural | setembro"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">01</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">27</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">Associativismo Cultural | setembro</span>
+                                            <div class="location">
+                                                <span class="local">Concelho de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/a-memoria-do-cheiro-das-coisas">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/a_memoria_do_cheiro_das_coisas_poster_160x230.jpg)"
+                                                    alt="A Memória do Cheiro das Coisas"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">02</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">18h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">A Memória do Cheiro das Coisas</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Cinema</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/a-memoria-do-cheiro-das-coisas-2">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/a_memoria_do_cheiro_das_coisas_poster_160x230.jpg)"
+                                                    alt="A Memória do Cheiro das Coisas"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">02</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">21h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">A Memória do Cheiro das Coisas</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Cinema</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/tattoo-artes">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/658905077_1508141547684258_3664144521050815943_n_160x230.jpg)"
+                                                    alt="Tattoo Artes"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">04</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">06</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">Tattoo Artes</span>
+                                            <div class="location">
+                                                <span class="local">Centro Cultural Mercado de Sant&#039;Ana
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Feira</small>
+                                                                                                            <small>Eventos</small>
+                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/e-depois-da-tempestade">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/tempestada_160x230.jpg)"
+                                                    alt="E depois da Tempestade?"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">04</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">21h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">E depois da Tempestade?</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Teatro</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/festival-fesnatura">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/cartaz-festival-fesnatura_160x230.jpg)"
+                                                    alt="Festival FesNatura"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">05</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">06</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">Festival FesNatura</span>
+                                            <div class="location">
+                                                <span class="local">Centro de Atividades da ABAD - Pisão
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Bajouca
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Workshop</small>
+                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/meditacao-na-biblioteca-20">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/meditacao_dez_2025_160x230.jpg)"
+                                                    alt="Meditação na Biblioteca"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">05</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">15h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Meditação na Biblioteca</span>
+                                            <div class="location">
+                                                <span class="local">Ludoteca Municipal de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Workshop</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/fotografar-palavras-10-anos-2016-2026">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/01b_feed_fotografar_as_palavras_mimo_160x230.png)"
+                                                    alt="FOTOGRAFAR PALAVRAS 10 ANOS. 2016 &gt; 2026"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">05</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">29</span>
+                                                        <span
+                                                            class="mes">nov.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">FOTOGRAFAR PALAVRAS 10 ANOS. 2016 &gt; 2026</span>
+                                            <div class="location">
+                                                <span class="local">m|i|mo - museu da imagem em movimento
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Fotografia</small>
+                                                                                                            <small>Literatura</small>
+                                                                                                            <small>Exposição</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/a-bebe-curiosa">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/setembro_-_lino_guerreiro_compositor_convidado_160x230.jpg)"
+                                                    alt="A Bebé curiosa"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">06</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">10h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">A Bebé curiosa</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/feira-de-artesanato-de-leiria-43">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/17651_feira_de_artesanato_2024_cartazes_02_a4_160x230.jpg)"
+                                                    alt="Feira de Artesanato de Leiria"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">06</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">10h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Feira de Artesanato de Leiria</span>
+                                            <div class="location">
+                                                <span class="local">Mercado de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Eventos</small>
+                                                                                                                                                                                                                                                                                                                <small>Feira</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/oficina-pratica-de-ceramica">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/img_5889_160x230.JPG)"
+                                                    alt="Oficina prática de cerâmica"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">06</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">10h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Oficina prática de cerâmica</span>
+                                            <div class="location">
+                                                <span class="local">Museu de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Workshop</small>
+                                                                                                                                                                                                                                                                                                                <small>Oficina</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/a-bebe-curiosa-2">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/setembro_-_lino_guerreiro_compositor_convidado_160x230.jpg)"
+                                                    alt="A Bebé curiosa"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">06</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">11h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">A Bebé curiosa</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/cartas-amarelas">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/cartas_amarelas_cartaz_160x230.jpg)"
+                                                    alt="Cartas Amarelas"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">09</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">18h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Cartas Amarelas</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Cinema</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/viagens-pela-transparencia-e-integridade">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/viagens_pela_transparencia_e_integridade_10092026_160x230.jpeg)"
+                                                    alt="Viagens pela Transparência e Integridade"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">10</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">09h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Viagens pela Transparência e Integridade</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Fórum</small>
+                                                                                                                                                                                                                                                                                                                <small>Palestra</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/carolina-de-deus-3">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/carolinadedeus_160x230.jpg)"
+                                                    alt="Carolina de Deus "></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">11</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">21h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Carolina de Deus </span>
+                                            <div class="location">
+                                                <span class="local">Teatro José Lúcio da Silva
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/ria-em-leiria--black-friday">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/capturar_160x230.JPG)"
+                                                    alt="Ria em Leiria - Black Friday"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">11</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">21h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Ria em Leiria - Black Friday</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Stand-up Comedy</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/feira-de-antiguidades-e-velharias-de-leiria-42">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/feira_antiguidades_e_velharias_02_160x230.jpg)"
+                                                    alt="Feira de Antiguidades e Velharias de Leiria"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">09h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Feira de Antiguidades e Velharias de Leiria</span>
+                                            <div class="location">
+                                                <span class="local">Percurso Polis junto ao Mercado Municipal
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Eventos</small>
+                                                                                                                                                                                                                                                                                                                <small>Feira</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/calmly-creating--exposicao-de-pintura-de-jorge-ferreira">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/jorge_lopes_160x230.jpg)"
+                                                    alt="«CALMLY CREATING» - Exposição de Pintura de Jorge Ferreira"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">12</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">31</span>
+                                                        <span
+                                                            class="mes">out.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">«CALMLY CREATING» - Exposição de Pintura de Jorge Ferreira</span>
+                                            <div class="location">
+                                                <span class="local">Galeria de Arte da Biblioteca Municipal Afonso Lopes Vieira
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Exposição</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/clube-de-leitura-livros-c-34">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/clube_leitura_2025_160x230.jpg)"
+                                                    alt="Clube de Leitura Livros &amp; C.ª"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">15h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Clube de Leitura Livros &amp; C.ª</span>
+                                            <div class="location">
+                                                <span class="local">Biblioteca Municipal Afonso Lopes Vieira
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Literatura</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/ideias-e-brincadeiras--letra-a-letra">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/ideias_brincadeiras_leiriagenda_v2_160x230.jpg)"
+                                                    alt="Ideias e Brincadeiras - «LETRA A LETRA»"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">15h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Ideias e Brincadeiras - «LETRA A LETRA»</span>
+                                            <div class="location">
+                                                <span class="local">Ludoteca Municipal de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Oficina</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/apresentacao-do-livro-raizes-da-gratidao-de-susana-laranjeiro">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/susana_laranjeiro_2026_160x230.jpg)"
+                                                    alt="Apresentação do livro «Raízes da Gratidão» de Susana Laranjeiro"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">17h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Apresentação do livro «Raízes da Gratidão» de Susana Laranjeiro</span>
+                                            <div class="location">
+                                                <span class="local">Biblioteca Municipal Afonso Lopes Vieira
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Literatura</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/tutti-cantati-todos-a-cantar">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/imagem_iii_tutti_cantati_instagram_1_160x230.png)"
+                                                    alt="Tutti Cantati, Todos a Cantar"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">17h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Tutti Cantati, Todos a Cantar</span>
+                                            <div class="location">
+                                                <span class="local">Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/jogos-companhia">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/jogos_e_companhia_160x230.jpeg)"
+                                                    alt="Jogos &amp; Companhia"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">17h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Jogos &amp; Companhia</span>
+                                            <div class="location">
+                                                <span class="local">Ludoteca Municipal de Leiria
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Oficina</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/concerto-esquerda">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/copia-de-esquerda-capa_160x230.jpg)"
+                                                    alt="Concerto ESQUERDA"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">12</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">21h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Concerto ESQUERDA</span>
+                                            <div class="location">
+                                                <span class="local">BLACK BOX
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Música</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/xvii-aniversario-do-moinho-do-papel">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url()"
+                                                    alt="XVII Aniversário do Moinho do Papel "></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">13</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">03</span>
+                                                        <span
+                                                            class="mes">out.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">XVII Aniversário do Moinho do Papel </span>
+                                            <div class="location">
+                                                <span class="local">Moinho do Papel
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Cultura</small>
+                                                                                                                                                                                                                                                                                                                <small>Evento</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/oficina-de-construcao-de-esculturas-em-papel-habitar-o-moinho">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url()"
+                                                    alt="Oficina de Construção de Esculturas em Papel | Habitar o Moinho"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">13</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">10h30</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Oficina de Construção de Esculturas em Papel | Habitar o Moinho</span>
+                                            <div class="location">
+                                                <span class="local">Moinho do Papel
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Workshop</small>
+                                                                                                                                                                                                                                                                                                                <small>Oficina</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/inovam-shaping-tomorrow">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/inovam_leiria_160x230.png)"
+                                                    alt="INOV.AM Shaping Tomorrow"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <div class="data-inicio">
+
+                                                        <span
+                                                            class="dia">15</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                    <span class="bar">·</span>
+                                                    <div class="data-fim">
+
+                                                        <span
+                                                            class="dia">17</span>
+                                                        <span
+                                                            class="mes">set.</span>
+                                                        <span
+                                                            class="ano">2026</span>
+                                                    </div>
+                                                                                            </div>
+                                            <span class="proximo_title">INOV.AM Shaping Tomorrow</span>
+                                            <div class="location">
+                                                <span class="local">Mercado de Sant&#039;Ana e Teatro Miguel Franco
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Fórum</small>
+                                                                                                                                                                                                                                                                                                                <small>Conferência</small>
+                                                                                                            <small>Exposição</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                            <a
+                                    href="https://leiriagenda.cm-leiria.pt/pt/agenda/clube-de-leitura-senior-de-leiria-5">
+                                    <div class="component">
+                                        <div class="img-wrapper-no-transition">
+                                            <div class="bg-img-small-br">
+
+                                                <div class="imagem7x10"
+                                                    style="background-image: url(https://leiriagenda.cm-leiria.pt/uploads/cache/front/clube_senior_leiria_160x230.jpg)"
+                                                    alt="Clube de Leitura Sénior de Leiria"></div>
+                                            </div>
+                                        </div>
+                                        <div class="component-inner">
+                                            <div class="date">
+                                                                                                                                                    <span
+                                                        class="dia">17</span>
+                                                    <span
+                                                        class="mes">set.</span>
+                                                    <span
+                                                        class="ano">2026</span>
+                                                        <span class="ano">14h00</span>
+                                                                                            </div>
+                                            <span class="proximo_title">Clube de Leitura Sénior de Leiria</span>
+                                            <div class="location">
+                                                <span class="local">Biblioteca Municipal Afonso Lopes Vieira
+                                                </span>
+                                                <span class="dot">·</span>
+                                                <span class="localidade">Leiria
+                                                </span>
+                                            </div>
+                                                                                        <div class="categorias">
+                                                                                                                                                            <small>Biblioteca</small>
+                                                                                                                                                                                                                                                                                                                <small>Literatura</small>
+                                                                                                                                                </div>
+                                                                                    </div>
+                                    </div>
+                                </a>
+                                                                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-container">
+            <div class="desktop-60 desktop-push-20">
+                <div class="pagination-container">
+                    
+<nav aria-label="Navegação de página">
+	<ul class="pagination">
+		
+					<li class="active">
+				<a href="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos?page=1">
+					1				</a>
+			</li>
+		
+					<li class="next-btn">
+				<a href="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos?page=2" aria-label="Próxima página">
+					<span aria-hidden="true">Próxima página</span>
+				</a>
+			</li>
+			<!-- <li>
+				<a href="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos?page=6" aria-label="Última">
+					<span aria-hidden="true">Última</span>
+				</a>
+			</li> -->
+			</ul>
+</nav>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- POPUP FILTROS -->
+<div id="popup-filtros" class="popup">
+    <div class="popup-container">
+        <a href="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos" class="close-filters" title="fechar" aria-label="fechar"></a>
+        <div class="grid-container">
+            <div
+                class="desktop-45 desktop-push-30 ls-tablet-50 ls-tablet-push-25 pt-tablet-80 pt-tablet-push-10 ls-phone-100">
+
+
+
+                <div class="filtros">
+                    <div class="title-flex">
+                        <h3 class="title red">Filtrar Eventos</h3>
+                        <div class="total no-number"></div>
+                    </div>
+                    <form action="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos" method="get" accept-charset="utf-8">
+
+                    <div class="filtros-container">
+                        <div class="select-container">
+                            <label for="cat">Categorias</label>
+                            <select name="cat" id="cat">
+                                <option value="">Todas</option>
+                                
+                                                                            <option
+                                            
+                                            value="25-anos-do-abrigo-do-lagar-velho-e-da-crianca-do-lapedo">25 anos do Abrigo do Lagar Velho e da Criança do Lapedo</option>
+                                                                            <option
+                                            
+                                            value="700-anos-da-morte-do-rei-d-dinis">700 anos da morte do rei D. Dinis</option>
+                                                                            <option
+                                            
+                                            value="acao-social">Ação Social</option>
+                                                                            <option
+                                            
+                                            value="ambiente">Ambiente</option>
+                                                                            <option
+                                            
+                                            value="artistas-na-fabrica">Artistas na Fábrica</option>
+                                                                            <option
+                                            
+                                            value="automobilismo">Automobilismo</option>
+                                                                            <option
+                                            
+                                            value="biblioteca">Biblioteca</option>
+                                                                            <option
+                                            
+                                            value="cinema">Cinema</option>
+                                                                            <option
+                                            
+                                            value="comemoracoes-do-25-de-abril">Comemorações do 25 de abril</option>
+                                                                            <option
+                                            
+                                            value="comemoracoes-dos-50-anos-do-25-de-abril-1974">Comemorações dos 50 Anos do 25 de Abril 1974</option>
+                                                                            <option
+                                            
+                                            value="concerto-2">Concerto</option>
+                                                                            <option
+                                            
+                                            value="cultura">Cultura</option>
+                                                                            <option
+                                            
+                                            value="desporto">Desporto</option>
+                                                                            <option
+                                            
+                                            value="economia">Economia</option>
+                                                                            <option
+                                            
+                                            value="educacao">Educação</option>
+                                                                            <option
+                                            
+                                            value="eventos">Eventos</option>
+                                                                            <option
+                                            
+                                            value="feira">Feira</option>
+                                                                            <option
+                                            
+                                            value="festival">Festival</option>
+                                                                            <option
+                                            
+                                            value="forum">Fórum</option>
+                                                                            <option
+                                            
+                                            value="gastronomia">Gastronomia</option>
+                                                                            <option
+                                            
+                                            value="jornadas-europeias-do-patrimonio">Jornadas Europeias do Património</option>
+                                                                            <option
+                                            
+                                            value="leiria-natal">Leiria Natal</option>
+                                                                            <option
+                                            
+                                            value="plano-local-de-cinema">Plano Local de Cinema</option>
+                                                                            <option
+                                            
+                                            value="religiao">Religião</option>
+                                                                            <option
+                                            
+                                            value="ronda-poetica">Ronda Poética</option>
+                                                                            <option
+                                            
+                                            value="saude">Saúde</option>
+                                                                            <option
+                                            
+                                            value="stand-up-comedy">Stand-up Comedy</option>
+                                                                            <option
+                                            
+                                            value="teatro">Teatro</option>
+                                                                            <option
+                                            
+                                            value="tertulia-literaria">Tertúlia Literária</option>
+                                                                            <option
+                                            
+                                            value="visita-guiada">Visita Guiada</option>
+                                                                            <option
+                                            
+                                            value="workshop">Workshop</option>
+                                                                                                </select>
+                        </div>
+                        <div class="select-container">
+                            <label for="tipo">Atividades</label>
+                            <select name="tipo" id="tipo">
+                                <option value="">Todas</option>
+                                
+                                                                            <option
+                                            
+                                            value="aula">Aula</option>
+                                                                            <option
+                                            
+                                            value="caminhada">Caminhada</option>
+                                                                            <option
+                                            
+                                            value="cinema">Cinema</option>
+                                                                            <option
+                                            
+                                            value="circo">Circo</option>
+                                                                            <option
+                                            
+                                            value="concerto-2">Concerto</option>
+                                                                            <option
+                                            
+                                            value="conferencia">Conferência</option>
+                                                                            <option
+                                            
+                                            value="conversa">Conversa</option>
+                                                                            <option
+                                            
+                                            value="corrida">Corrida</option>
+                                                                            <option
+                                            
+                                            value="danca">Dança</option>
+                                                                            <option
+                                            
+                                            value="entrevista">Entrevista</option>
+                                                                            <option
+                                            
+                                            value="espetaculo">Espetáculo</option>
+                                                                            <option
+                                            
+                                            value="evento">Evento</option>
+                                                                            <option
+                                            
+                                            value="exibicao">Exibição</option>
+                                                                            <option
+                                            
+                                            value="exposicao">Exposição</option>
+                                                                            <option
+                                            
+                                            value="feira">Feira</option>
+                                                                            <option
+                                            
+                                            value="festival">Festival</option>
+                                                                            <option
+                                            
+                                            value="fotografia">Fotografia</option>
+                                                                            <option
+                                            
+                                            value="futebol">Futebol</option>
+                                                                            <option
+                                            
+                                            value="instalacao">Instalação</option>
+                                                                            <option
+                                            
+                                            value="jogos">Jogos</option>
+                                                                            <option
+                                            
+                                            value="literatura">Literatura</option>
+                                                                            <option
+                                            
+                                            value="monumentos">Monumentos</option>
+                                                                            <option
+                                            
+                                            value="mostra">Mostra</option>
+                                                                            <option
+                                            
+                                            value="museus">Museus</option>
+                                                                            <option
+                                            
+                                            value="musica">Música</option>
+                                                                            <option
+                                            
+                                            value="oficina">Oficina</option>
+                                                                            <option
+                                            
+                                            value="palestra">Palestra</option>
+                                                                            <option
+                                            
+                                            value="percurso--roteiro">Percurso / Roteiro</option>
+                                                                            <option
+                                            
+                                            value="performance">Performance</option>
+                                                                            <option
+                                            
+                                            value="recital">Recital</option>
+                                                                            <option
+                                            
+                                            value="stand-up-comedy">Stand-up Comedy</option>
+                                                                            <option
+                                            
+                                            value="teatro">Teatro</option>
+                                                                            <option
+                                            
+                                            value="visita-guiada">Visita guiada</option>
+                                                                            <option
+                                            
+                                            value="voluntariado-ambiental">Voluntariado Ambiental</option>
+                                                                            <option
+                                            
+                                            value="workshop-2">Workshop</option>
+                                                                                                </select>
+                        </div>
+                        <div class="select-container">
+                            <label for="local">freguesia</label>
+                            <select name="local" id="local">
+                                <option value="">Todas</option>
+                                                                                                            <option
+                                            
+                                            value="amor">Amor</option>
+                                                                            <option
+                                            
+                                            value="arrabal">Arrabal</option>
+                                                                            <option
+                                            
+                                            value="azoia">Azóia</option>
+                                                                            <option
+                                            
+                                            value="bajouca">Bajouca</option>
+                                                                            <option
+                                            
+                                            value="barosa">Barosa</option>
+                                                                            <option
+                                            
+                                            value="barreira">Barreira</option>
+                                                                            <option
+                                            
+                                            value="bidoeira-de-cima">Bidoeira de Cima</option>
+                                                                            <option
+                                            
+                                            value="boa-vista">Boa Vista</option>
+                                                                            <option
+                                            
+                                            value="caranguejeira">Caranguejeira</option>
+                                                                            <option
+                                            
+                                            value="carreira">Carreira</option>
+                                                                            <option
+                                            
+                                            value="carvide">Carvide</option>
+                                                                            <option
+                                            
+                                            value="chainca">Chainça</option>
+                                                                            <option
+                                            
+                                            value="coimbrao">Coimbrão</option>
+                                                                            <option
+                                            
+                                            value="colmeias">Colmeias</option>
+                                                                            <option
+                                            
+                                            value="cortes">Cortes</option>
+                                                                            <option
+                                            
+                                            value="leiria">Leiria</option>
+                                                                            <option
+                                            
+                                            value="maceira">Maceira</option>
+                                                                            <option
+                                            
+                                            value="marrazes">Marrazes</option>
+                                                                            <option
+                                            
+                                            value="memoria">Memória</option>
+                                                                            <option
+                                            
+                                            value="milagres">Milagres</option>
+                                                                            <option
+                                            
+                                            value="monte-real">Monte Real</option>
+                                                                            <option
+                                            
+                                            value="monte-redondo">Monte Redondo</option>
+                                                                            <option
+                                            
+                                            value="ortigosa">Ortigosa</option>
+                                                                            <option
+                                            
+                                            value="parceiros">Parceiros</option>
+                                                                            <option
+                                            
+                                            value="pousos">Pousos</option>
+                                                                            <option
+                                            
+                                            value="regueira-de-pontes">Regueira de Pontes</option>
+                                                                            <option
+                                            
+                                            value="santa-catarina-da-serra">Santa Catarina da Serra</option>
+                                                                            <option
+                                            
+                                            value="santa-eufemia">Santa Eufémia</option>
+                                                                            <option
+                                            
+                                            value="souto-da-carpalhosa">Souto da Carpalhosa</option>
+                                                                                                </select>
+                        </div>
+                        <div class="select-container">
+                            <label for="agente">Promotor</label>
+                            <select name="agente" id="agente">
+                                <option value="">Todas</option>
+                                                                                                            <option 
+                                            value="afrl-ae">AFRL-AE</option>
+                                                                            <option 
+                                            value="agromuseu-municipal-dona-julinha">Agromuseu Municipal Dona Julinha</option>
+                                                                            <option 
+                                            value="ajl-associacao-de-jazz-de-leiria">AJL – Associação de Jazz de Leiria</option>
+                                                                            <option 
+                                            value="associacao-filarmonica-bidoeirense-afilbi">Associação Filarmónica Bidoeirense (AFILBI)</option>
+                                                                            <option 
+                                            value="bag--banco-das-artes-galeria">BAG - Banco das Artes Galeria</option>
+                                                                            <option 
+                                            value="biblioteca-municipal-afonso-lopes-vieira">Biblioteca Municipal Afonso Lopes Vieira</option>
+                                                                            <option 
+                                            value="black-box-leiria">Black Box Leiria</option>
+                                                                            <option 
+                                            value="camara-municipal-de-leiria">Câmara Municipal de Leiria</option>
+                                                                            <option 
+                                            value="caosarte">CaosArte</option>
+                                                                            <option 
+                                            value="casa-museu-centro-cultural-joao-soares">Casa-Museu Centro Cultural João Soares</option>
+                                                                            <option 
+                                            value="castelo-de-leiria">Castelo de Leiria</option>
+                                                                            <option 
+                                            value="cdil--centro-de-dialogo-intercultural-de-leiria-e-igreja-da-misericordia">CDIL - Centro de Diálogo Intercultural de Leiria e Igreja da Misericórdia</option>
+                                                                            <option 
+                                            value="centro-cultural-mercado-de-santana">Centro Cultural Mercado de Sant&#039;Ana</option>
+                                                                            <option 
+                                            value="centro-de-artes-villa-portela">Centro de Artes Villa Portela</option>
+                                                                            <option 
+                                            value="cia--centro-de-interpretacao-ambiental-leiria">CIA - Centro de Interpretação Ambiental Leiria</option>
+                                                                            <option 
+                                            value="cialv--centro-de-interpretacao-do-abrigo-do-lagar-velho">CIALV - Centro de Interpretação do Abrigo do Lagar Velho</option>
+                                                                            <option 
+                                            value="cidade-criativa-da-musica">Cidade Criativa da Música</option>
+                                                                            <option 
+                                            value="cine-teatro-de-monte-real">Cine-Teatro de Monte Real</option>
+                                                                            <option 
+                                            value="complexo-municipal-de-piscinas-de-leiria">Complexo Municipal de Piscinas de Leiria</option>
+                                                                            <option 
+                                            value="coro-ninfas-do-lis-serena-harmonia-associacao-musical">Coro Ninfas do Lis (Serena Harmonia – Associação Musical)</option>
+                                                                            <option 
+                                            value="eco--associacao-cultural">ecO - Associação Cultural</option>
+                                                                            <option 
+                                            value="estadio-municipal-de-leiria--dr-magalhaes-pessoa">Estádio Municipal de Leiria - Dr. Magalhães Pessoa</option>
+                                                                            <option 
+                                            value="fade-in-associacao-de-accao-cultural">FADE IN – Associação de Acção Cultural</option>
+                                                                            <option 
+                                            value="filarmonica-de-sao-tiago-de-marrazes">Filarmónica de São Tiago de Marrazes</option>
+                                                                            <option 
+                                            value="filarmonica-senhora-da-piedade-de-monte-redondo">Filarmónica Senhora da Piedade de Monte Redondo</option>
+                                                                            <option 
+                                            value="instituto-jovens-musicos">Instituto Jovens Músicos</option>
+                                                                            <option 
+                                            value="malharia--comunidade-criativa-textil-de-leiria">Malharia - Comunidade Criativa Têxtil de Leiria</option>
+                                                                            <option 
+                                            value="moinho-do-papel">Moinho do Papel</option>
+                                                                            <option 
+                                            value="museu-de-leiria">Museu de Leiria</option>
+                                                                            <option 
+                                            value="museu-escolar-de-marrazes">Museu Escolar de Marrazes</option>
+                                                                            <option 
+                                            value="musicalmente">Musicalmente</option>
+                                                                            <option 
+                                            value="mimo--museu-da-imagem-em-movimento">m|i|mo - Museu da Imagem em Movimento</option>
+                                                                            <option 
+                                            value="o-gato">O GATO</option>
+                                                                            <option 
+                                            value="o-nariz--teatro-de-grupo">O Nariz - Teatro de Grupo</option>
+                                                                            <option 
+                                            value="orfeao-de-leiria--conservatorio-de-artes">Orfeão de Leiria - Conservatório de Artes</option>
+                                                                            <option 
+                                            value="rancho-da-regiao-de-leiria">Rancho da Região de Leiria</option>
+                                                                            <option 
+                                            value="sociedade-artistica-e-musical-20-de-julho-de-santa-margarida-do-arrabal-sama">Sociedade Artística e Musical 20 de Julho de Santa Margarida do Arrabal (SAMA)</option>
+                                                                            <option 
+                                            value="sociedade-artistica-e-musical-cortesense">Sociedade Artística e Musical Cortesense</option>
+                                                                            <option 
+                                            value="sociedade-artistica-musical-dos-pousos--samp">Sociedade Artística Musical dos Pousos - SAMP</option>
+                                                                            <option 
+                                            value="sociedade-filarmonica-senhor-dos-aflitos">Sociedade Filarmónica &quot;Senhor dos Aflitos&quot;</option>
+                                                                            <option 
+                                            value="sociedade-filarmonica-de-sao-cristovao-da-caranguejeira">Sociedade Filarmónica de São Cristóvão da Caranguejeira</option>
+                                                                            <option 
+                                            value="sociedade-filarmonica-do-sagrado-coracao-de-jesus-e-maria-de-chas">Sociedade Filarmónica do Sagrado Coração de Jesus e Maria de Chãs</option>
+                                                                            <option 
+                                            value="sociedade-filarmonica-maceirense-do-concelho-de-leiria">Sociedade Filarmónica Maceirense do Concelho de Leiria</option>
+                                                                            <option 
+                                            value="staylab">StayLab</option>
+                                                                            <option 
+                                            value="te-ato--grupo-teatro-de-leiria">Te-ato - Grupo Teatro de Leiria</option>
+                                                                            <option 
+                                            value="teatro-jose-lucio-da-silva">Teatro José Lúcio da Silva</option>
+                                                                            <option 
+                                            value="teatro-miguel-franco">Teatro Miguel Franco</option>
+                                                                            <option 
+                                            value="vicios-do-campo--companhia-de-arqueiros">Vícios do Campo - Companhia de Arqueiros</option>
+                                                                                                </select>
+                        </div>
+                        <div class="datas">
+                            <label for="data_inicio">Data</label>
+                            <div class="datas-inner">
+
+                                <input value="" type="text"
+                                    class="datapicker" data-toggle="datepicker" placeholder="inicio"
+                                    name="data_inicio" id="data_inicio">
+                                <input value="" type="text"
+                                    class="datapicker" data-toggle="datepicker" placeholder="final"
+                                    name="data_fim" id="data_fim">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="submit">
+                        <button type="submit" class="btn rosa hover-white">Aplicar Filtros</button>
+                        <a href="https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos" class="limpar-filtros"
+                            title="Limpar filtros">Limpar filtros</a>
+                    </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </main>
+    <footer>
+    <div class="shade"></div>
+    <div class="footer-top">
+        <div class="grid-container">
+            <div class="desktop-20 ls-tablet-20 pt-tablet-20 ls-phone-100">
+                <div class="site-logo-inner">
+                    <a class="site-logo image responsive" href="https://leiriagenda.cm-leiria.pt/pt" title="Home" aria-label="Home">
+                        <img src="imagens/la_logo_white.svg" alt="">
+                    </a>
+                </div>
+                <div class="external-links-footer  hide-on-ls-phone hide-on-pt-phone">
+                    <a href="https://www.visiteleiria.pt" class="external-link"
+                        target="_blank">VISITE LEIRIA<span></span></a>
+                    <a href="https://www.cm-leiria.pt " class="external-link "
+                        target="_blank">MUNICÍPIO DE LEIRIA<span></span></a>
+                </div>
+            </div>
+
+            <div
+                class="desktop-20 desktop-push-20 ls-tablet-30 ls-tablet-push-20 pt-tablet-30 pt-tablet-push-20 ls-phone-100">
+                <div class="footer-menu">
+
+                    <ul class="nav">
+	<li class="active current first special"><a href="https://leiriagenda.cm-leiria.pt/pt/agenda" title="Agenda"><span>Agenda</span></a></li>
+	<li class="special"><a href="https://leiriagenda.cm-leiria.pt/pt/sobre-a-leiriagenda" title="Sobre a Leiriagenda"><span>Sobre a Leiriagenda</span></a></li>
+	<li class=""><a href="https://leiriagenda.cm-leiria.pt/pt/promotores" title="Promotores"><span>Promotores</span></a></li>
+	<li class=""><a href="https://leiria2022.pt/eventos/?type=clubes&sort=latest" title="Clubes Desportivos" target="_blank"><span>Clubes Desportivos</span></a></li>
+	<li class="last"><a href="https://leiriagenda.cm-leiria.pt/pt/contactos" title="Contactos"><span>Contactos</span></a></li>
+</ul>
+
+                </div>
+            </div>
+            <div
+                class="desktop-20 desktop-push-30 ls-tablet-20 ls-tablet-push-20 pt-tablet-20 pt-tablet-push-20 ls-phone-100">
+                <div class="footer-menu-nl">
+
+                    <div class="little-title">Acompanhe a Leiria Agenda</div>
+                    <div class="social">
+                        <div class="outer">
+
+                                                                                        <div class="social-inner">
+                                    <h6>Cultura</h6>
+                                    <div class="socials">
+
+                                                                                    <span><a href="https://www.facebook.com/LeiriaCultura" target="_blank"
+                                                    title="Facebook Cultura" rel="noopener"><i
+                                                        class="so so-facebook"></i></a></span>
+                                                                                    <span><a href="https://www.instagram.com/leiria_cultura/" target="_blank"
+                                                    title="Instagram Cultura" rel="noopener"><i
+                                                        class="so so-instagram"></i></a></span>
+                                                                            </div>
+                                </div>
+                                                            <div class="social-inner">
+                                    <h6>Desporto</h6>
+                                    <div class="socials">
+
+                                                                                    <span><a href="https://www.facebook.com/leiriadesporto" target="_blank"
+                                                    title="Facebook Desporto" rel="noopener"><i
+                                                        class="so so-facebook"></i></a></span>
+                                                                                    <span><a href="https://www.instagram.com/leiriadesporto/" target="_blank"
+                                                    title="Instagram Desporto" rel="noopener"><i
+                                                        class="so so-instagram"></i></a></span>
+                                                                            </div>
+                                </div>
+                                                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="external-links-footer hide-on-desktop hide-on-laptop hide-on-ls-tablet hide-on-pt-tablet">
+            <a href="https://www.visiteleiria.pt" class="external-link"
+                target="_blank">VISITE LEIRIA<span></span></a>
+            <a href="https://www.cm-leiria.pt " class="external-link "
+                target="_blank">MUNICÍPIO DE LEIRIA<span></span></a>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <div class="footer-bot">
+        <div class="desktop-33 desktop-push-33 ls-tablet-33 ls-tablet-push-33 pt-tablet-60 pt-tablet-push-20">
+
+            <ul class="sec-nav">
+	<li class="first pp"><a href="https://leiriagenda.cm-leiria.pt/pt/politica-de-privacidade" title="Política de Privacidade"><span>Política de Privacidade</span></a></li>
+	<li class="last cp"><a href="https://leiriagenda.cm-leiria.pt/pt/politica-de-cookies" title="Política de Cookies"><span>Política de Cookies</span></a></li>
+</ul>
+
+
+            <div class="clear"></div>
+        </div>
+        <div class="desktop-33 desktop-pull-33 ls-tablet-33 ls-tablet-pull-33 pt-tablet-25 pt-tablet-pull-60">
+            <div class="copy">2026 &copy; Leiria Agenda</div>
+        </div>
+
+        <div class="desktop-33 ls-tablet-33 pt-tablet-15">
+            <a href="https://www.velcrodesign.com" target="_blank" rel="noopener" class="velcro"
+                title="Velcrodesign"></a>
+        </div>
+    </div>
+</footer>
+
+    <!-- LOADING -->
+
+    <script>
+        var BASE_URL = "https://leiriagenda.cm-leiria.pt";
+        var CURRENT_URL = "https://leiriagenda.cm-leiria.pt/pt/agenda/proximos-eventos";
+        var CURRENT_LANGUAGE = "pt";
+
+        var LANG = {
+            a_enviar: 'A enviar...',
+            preencha_os_campos_em_falta: 'Preencha os campos obrigatórios',
+            email_invalido: 'Preencha um email válido',
+            inscricao_sucesso: 'Inscrição com sucesso',
+            inscricao_erro: 'Erro ao inscrever. Tente novamente mais tarde por favor.',
+            aguarde: 'Aguarde',
+            accept_privacy_policy: 'Por favor, aceite a política de privacidade para submeter o formulário.',
+            cookies_txt: 'Este site utiliza cookies que permitem melhorar o desempenho e experiência do utilizador na utilização do mesmo. Para mais informação, consulte a nossa {policy_url}',
+            cookies_btn: 'OK',
+            cp_txt: 'Política de Cookies',
+            cp_url: 'https://leiriagenda.cm-leiria.pt/pt/politica-de-cookies',
+            login_required_title: 'É preciso fazer login para avançar',
+            error: 'Erro',
+            escolher_cat: 'Insira as categorias',
+            cancelled: 'app.cancelled',
+            sure_delete_roteiro: 'De certeza que quer eliminar o roteiro?'
+        }
+    </script>
+
+    <!-- JAVASCRIPT -->
+    
+    <script src="js/libs/toastify/toastify.min.js"></script>
+    <script src="js/gsap/gsap.min.js"></script>
+    <script src="js/plugins.js?v=1684159749"></script>
+
+    <script src="js/fancybox/jquery.fancybox.min.js"></script>
+    <script src="js/libs/select2/js/select2.min.js"></script>
+    <script src="js/site.min.js?v=1715785051"></script>
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr@4.6.13/dist/l10n/pt.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/plugins/rangePlugin.min.js"
+        integrity="sha512-44bA1YzQUqHACfLj2v0wEdX9z6EmlALcta6ENgPZnxH/aIiuBw92he+M/51kTCueY/2DsqEYM7mCwGUyO2q79w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const start_time = $('#data_inicio');
+        const end_time = $('#data_fim');
+
+
+        start_time.flatpickr({
+            inline: true,
+            locale: "pt",
+            onChange: (selectedDates) => {
+                end_time.flatpickr({
+                    inline: true,
+                    locale: "pt",
+                    minDate: new Date(selectedDates),
+                });
+            }
+        });
+        end_time.flatpickr({
+            inline: true,
+            locale: "pt",
+        });
+    </script>
+
+    <noscript>Scripts auxiliares de javascript</noscript>
+
+</body>
+
+</html>
