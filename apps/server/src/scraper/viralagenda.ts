@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import { DateTime } from "luxon";
+import { isLeiriaDistrict } from "./district";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
 import type { RawEvent } from "./types";
@@ -271,10 +272,12 @@ export function toRawEvent(
 	card: ListingCard,
 	detail: DetailEvent | null,
 ): RawEvent | null {
-	// City scope: detail address locality wins; fall back to card node names.
-	const cardIsLeiria = card.cities.some((c) => c.toLowerCase() === "leiria");
-	const detailIsLeiria = (detail?.city ?? "").toLowerCase() === "leiria";
-	if (!cardIsLeiria && !detailIsLeiria) {
+	// District scope: detail address locality wins; fall back to card node
+	// names. Any of the 14 district municipalities (or Leiria freguesias)
+	// passes — see district.ts for the authoritative list.
+	const cardIsDistrict = card.cities.some((c) => isLeiriaDistrict(c));
+	const detailIsDistrict = isLeiriaDistrict(detail?.city);
+	if (!cardIsDistrict && !detailIsDistrict) {
 		return null;
 	}
 

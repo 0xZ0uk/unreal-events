@@ -116,7 +116,7 @@ describe("buildRawEvents (offline fixture)", () => {
 		expect(events[0]?.url).toBe(card.url);
 	});
 
-	test("city resolves to Leiria for a Leiria venue slug", () => {
+	test("city is null at raw level — resolved at ingest (district scope)", () => {
 		const card = {
 			id: 1,
 			url: "https://x/Comprar/Bilhetes/1-fake-teatro_miguel_franco-teatro_miguel_franco/",
@@ -124,6 +124,9 @@ describe("buildRawEvents (offline fixture)", () => {
 			venueSlug: "teatro_miguel_franco",
 		};
 		const events = buildRawEvents(card, detailHtml);
-		expect(events[0]?.city).toBe("Leiria");
+		// SLICE_6: BOL listings are district-filtered upstream (the `10`
+		// segment); raw events carry city=null and ingest resolves it from
+		// the venue name. No city-scope gate here anymore.
+		expect(events[0]?.city).toBeNull();
 	});
 });

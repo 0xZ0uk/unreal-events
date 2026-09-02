@@ -230,8 +230,11 @@ export function slugToTitle(slug: string): string {
 
 /**
  * Merge a BOL listing card with its detail html into RawEvents — one per
- * session. Title/venue strings are derived from the embedded slugs; city is
- * `Leiria` only when the venue pre-filter agrees, else null.
+ * session. Title/venue strings are derived from the embedded slugs. BOL
+ * listings are already district-filtered (the `10` district segment in the
+ * search URL), so the venue pre-filter (city-scope era) is no longer a
+ * gate: any venue in the district result set passes, city stays null and
+ * is resolved at ingest from the venue name.
  */
 export function buildRawEvents(
 	card: ListingLink,
@@ -246,7 +249,7 @@ export function buildRawEvents(
 		endAt: null,
 		dateText: null,
 		venueName,
-		city: isLeiriaVenue(card.venueSlug) ? "Leiria" : null,
+		city: null, // resolved at ingest via venue name (district scope)
 		categories: [],
 		imageUrl: null,
 		url: card.url,
@@ -255,7 +258,11 @@ export function buildRawEvents(
 
 const BOL_SITE = "https://www.bol.pt";
 
-/** BOL district-Leiria search listings (top-level-category IDs verified live). */
+/**
+ * BOL district-filtered search listings (the `10` segment = distrito de
+ * Leiria — covers all district municipalities, not just the city).
+ * Top-level-category IDs verified live.
+ */
 export const LISTING_URLS = [
 	`${BOL_SITE}/Comprar/pesquisa/2-2003-10-0-0-0/musica_e_concertos`,
 	`${BOL_SITE}/Comprar/pesquisa/2-2001-10-0-0-0/musica`,
@@ -281,7 +288,8 @@ interface ScrapeDeps {
 const MAX_REQUESTS = 400;
 const DETAIL_CONCURRENCY = 4;
 
-const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+const defaultSleep = (ms: number) =>
+	new Promise<void>((r) => setTimeout(r, ms));
 const randomDelay = () => 300 + Math.floor(Math.random() * 200);
 
 /**

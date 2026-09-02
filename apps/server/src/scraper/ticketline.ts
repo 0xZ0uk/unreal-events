@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import { DateTime } from "luxon";
+import { isLeiriaDistrict } from "./district";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
 import type { RawEvent } from "./types";
@@ -12,8 +13,8 @@ import type { RawEvent } from "./types";
  * `meta itemprop="startDate" content="YYYY-MM-DD"`, name, venue string and
  * category. We fetch two variants and dedupe by event id:
  *   - full-text search:  /pesquisa?query=leiria
- *   - venue-scoped:      /pesquisa?venues=2101  (a Leiria venue, so these
- *     results are deterministically in-city)
+ *   - venue-scoped:      /pesquisa?venues=2101  (a Leiria-city venue; the
+ *     venue-scoped channel still catches district-wide tours)
  *
  * Detail pages expose the primary event as schema.org sessions: each
  * `<li itemprop="Event">` carries a resolvable `content="YYYY-MM-DDTHH:mm"`
@@ -21,14 +22,15 @@ import type { RawEvent } from "./types";
  * lowPrice. Festival "aggregator" pages (the parent show listing child
  * productions) have no resolvable session — we fall back to the search row.
  *
- * City scope: only events resolved to Leiria (via the detail address region /
- * locality, or by the venue-scoped search) are ingested. Events listed at past
- * dates are dropped (Ticketline shows past runs too).
+ * District scope: events are kept when resolved to ANY of the 14 Leiria
+ * district municipalities (or Leiria freguesias) — district.ts is the
+ * authority. The detail address (locality/region) drives the test; rows
+ * listed at past dates are dropped (Ticketline shows past runs too).
  */
 
 export const SITE = "https://www.ticketline.pt";
 export const SEARCH_URL = `${SITE}/pesquisa?query=leiria`;
-/** A Leiria venue (Pigs Arena tour stop) — results are deterministically in-city. */
+/** A Leiria-city venue (Pigs Arena tour stop) — seeds the district sweep. */
 export const VENUE_SEARCH_URL = `${SITE}/pesquisa?venues=2101`;
 
 export const MAX_REQUESTS = 120;
@@ -287,8 +289,10 @@ export function toRawEvent(
 	const time = detail?.time ?? null;
 	const startAt = toEpoch(date, time);
 
-	// City scope: venue-scoped searches are deterministically Leiria; otherwise
-	// trust the detail's resolved address (falling back to the venue string).
+	// District scope: venue-scoped searches are deterministically Leiria;
+	// otherwise trust the detail's resolved address (falling back to the
+	// venue string). Then apply the district test (14 municipalities +
+	// Leiria freguesias — district.ts is the authority).
 	let city: string | null;
 	if (row.venueScoped) {
 		city = "Leiria";
@@ -297,9 +301,9 @@ export function toRawEvent(
 	} else if (mentionsLeiria(row.venue)) {
 		city = "Leiria";
 	} else {
-		return null; // not resolvable to Leiria → drop
+		return null; // not resolvable to any place → drop
 	}
-	if (city.toLowerCase() !== "leiria") {
+	if (!isLeiriaDistrict(city)) {
 		return null;
 	}
 

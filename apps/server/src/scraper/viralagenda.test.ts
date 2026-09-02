@@ -109,11 +109,15 @@ describe("toRawEvent (Leiria city scope)", () => {
 		expect(lisbonDay(raw!.startAt!)).toBe("2026-09-06");
 	});
 
-	test("non-Leiria card (Pombal) is filtered out", () => {
+	test("district-scope card (Pombal) is now IN scope", () => {
 		const pombal = parseListing(districtHtml).find(
 			(c) => c.cities[0] === "Pombal",
 		)!;
-		expect(toRawEvent(pombal, null)).toBeNull();
+		// SLICE_6 scope correction: Pombal is a district municipality, so its
+		// events are kept (city passes through to the venue row).
+		const raw = toRawEvent(pombal, null);
+		expect(raw).not.toBeNull();
+		expect(raw?.city?.toLowerCase()).toContain("pombal");
 	});
 });
 

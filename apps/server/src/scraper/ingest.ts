@@ -25,7 +25,9 @@ async function resolveOrCreateVenue(
 		.values({
 			name: name || venueName.trim(),
 			slug,
-			city: city ?? "Leiria",
+			// District scope: an unresolvable city still belongs to the tracker
+			// (the sources pre-filter by district); label it honestly.
+			city: city ?? "Leiria (distrito)",
 		})
 		.onConflictDoNothing({ target: schema.venues.slug })
 		.returning({ id: schema.venues.id });
@@ -139,10 +141,7 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 		await db
 			.delete(schema.events)
 			.where(
-				eq(
-					schema.events.fingerprint,
-					fingerprintUndated(raw.title, venueRef),
-				),
+				eq(schema.events.fingerprint, fingerprintUndated(raw.title, venueRef)),
 			);
 	}
 	await db

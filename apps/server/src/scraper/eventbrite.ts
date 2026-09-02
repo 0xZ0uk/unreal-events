@@ -1,3 +1,4 @@
+import { isLeiriaDistrict } from "./district";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
 import type { RawEvent } from "./types";
@@ -214,8 +215,9 @@ export async function scrape(
 				if (!raw) {
 					continue;
 				}
-				// Concelho scope: venue city must be Leiria.
-				if ((raw.city ?? "").toLowerCase() !== "leiria") {
+				// District scope: venue city must be one of the 14 district
+				// municipalities (district.ts is the authority).
+				if (!isLeiriaDistrict(raw.city)) {
 					continue;
 				}
 				if (!byEid.has(raw.slug)) {

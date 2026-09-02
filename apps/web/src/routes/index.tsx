@@ -210,11 +210,13 @@ function EventRow({ event }: { event: Event }) {
 function FilterBar({
 	venues,
 	categories,
+	citiesFacet,
 	filters,
 	onChange,
 }: {
 	venues: { id: number; name: string; slug: string; city: string }[];
 	categories: string[];
+	citiesFacet: string[];
 	filters: {
 		venueSlug: string;
 		category: string;
@@ -316,19 +318,22 @@ function FilterBar({
 						className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 						style={{ fontFamily: "var(--p443-font-mono)" }}
 					>
-						Cidade
+						Concelho
 					</span>
 					<NativeSelect
 						value={filters.city}
 						onChange={(e) => onChange({ city: e.target.value })}
 						className="w-full"
-						aria-label="Cidade"
+						aria-label="Concelho"
 					>
-						<NativeSelectOption value="">Todas</NativeSelectOption>
-						<NativeSelectOption value="Leiria">Leiria</NativeSelectOption>
-						<NativeSelectOption value="Fora de Leiria">
-							Fora de Leiria
+						<NativeSelectOption value="">
+							Todo o distrito
 						</NativeSelectOption>
+						{citiesFacet.map((c) => (
+							<NativeSelectOption key={c} value={c}>
+								{c}
+							</NativeSelectOption>
+						))}
 					</NativeSelect>
 				</div>
 
@@ -456,17 +461,26 @@ function HomeComponent() {
 			category: category || undefined,
 			dateFrom: dateFrom ? lisbonMidnightEpoch(dateFrom) : undefined,
 			dateTo: dateTo ? lisbonMidnightEpoch(dateTo) : undefined,
-			city: city === "Leiria" ? "Leiria" : undefined,
+			city: city || undefined,
 			includeUndated: false,
 		}),
 	);
 
-	let events = hasFilter ? (listQuery.data ?? []) : (byDay.data ?? []);
-	if (city === "Fora de Leiria") {
-		events = events.filter((e: Event) => !e.venueCity || e.venueCity === "");
-	}
+	const events = hasFilter ? (listQuery.data ?? []) : (byDay.data ?? []);
 
 	const venues = venuesQuery.data ?? [];
+
+	// Concelho facet: distinct non-empty venue cities, alphabetical.
+	const citiesFacet = useMemo(() => {
+		const source = [...(byDay.data ?? []), ...(listQuery.data ?? [])];
+		return [
+			...new Set(
+				source
+					.map((e) => e.venueCity)
+					.filter((c): c is string => Boolean(c && c !== "?")),
+			),
+		].sort((a, b) => a.localeCompare(b));
+	}, [byDay.data, listQuery.data]);
 
 	const categories = useMemo(() => {
 		const source = [...(byDay.data ?? []), ...(listQuery.data ?? [])];
@@ -631,6 +645,7 @@ function HomeComponent() {
 				<FilterBar
 					venues={venues}
 					categories={categories}
+					citiesFacet={citiesFacet}
 					filters={{ venueSlug, category, dateFrom, dateTo, city }}
 					onChange={(patch) => {
 						if ("venueSlug" in patch) setVenueSlug(patch.venueSlug ?? "");
