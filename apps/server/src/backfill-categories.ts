@@ -27,9 +27,12 @@ for (const row of rows) {
 		if (unk) unknown.add(unk);
 	}
 	if (JSON.stringify(next) !== JSON.stringify(raw)) {
+		// updated_at is bumped here by $onUpdateFn — accepted for this one-off
+		// taxonomy migration. True last-touch provenance lives in
+		// event_sources.first_seen_at / scrape_runs, not events.updated_at.
 		await db
 			.update(schema.events)
-			.set({ categories: next, updated_at: Math.floor(Date.now() / 1000) })
+			.set({ categories: next })
 			.where(eq(schema.events.id, row.id));
 		changed++;
 	} else {

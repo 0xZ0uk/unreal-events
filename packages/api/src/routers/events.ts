@@ -128,16 +128,19 @@ export const eventsRouter = router({
 			conditions.push(eq(schema.venues.city, input.city));
 		}
 
+		// Merge BEFORE slicing: LIMIT/OFFSET on raw session rows could split a
+		// same-day group across pages (badge-less duplicates, short pages).
+		// Volume is small (hundreds), so fetch matching rows unbounded, merge
+		// sessions, then apply offset/limit on merged events.
 		const rows = await db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
-			.orderBy(schema.events.start_at)
-			.limit(input.limit)
-			.offset(input.offset);
+			.orderBy(schema.events.start_at);
 
-		return toPublicEventList(rows);
+		const merged = toPublicEventList(rows);
+		return merged.slice(input.offset, input.offset + input.limit);
 	}),
 
 	byDay: publicProcedure.query(async () => {
