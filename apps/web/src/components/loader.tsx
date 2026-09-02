@@ -7,7 +7,7 @@ export default function Loader() {
 				<Loader2 className="size-5 animate-spin" />
 			</div>
 			<p
-				className="font-mono text-[11px] font-bold uppercase tracking-[1.4px] text-[var(--arc-ink-muted)] dark:text-zinc-500"
+				className="font-bold font-mono text-[11px] text-[var(--arc-ink-muted)] uppercase tracking-[1.4px] dark:text-zinc-500"
 				style={{ fontFamily: "var(--font-mono)" }}
 			>
 				A carregar

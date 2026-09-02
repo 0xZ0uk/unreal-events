@@ -10,11 +10,15 @@ import { buildDigest, parseKeywords } from "./digest-core";
  */
 const argv = process.argv.slice(2);
 const newIdx = argv.indexOf("--new");
-const newHours = newIdx >= 0 ? Number.parseInt(argv[newIdx + 1] ?? "24", 10) : undefined;
+const newHours =
+	newIdx >= 0 ? Number.parseInt(argv[newIdx + 1] ?? "24", 10) : undefined;
 
 const keywords = parseKeywords(process.env.DIGEST_KEYWORDS);
 
-const digest = await buildDigest({ keywords, ...(newHours != null ? { newHours } : {}) });
+const digest = await buildDigest({
+	keywords,
+	...(newHours != null ? { newHours } : {}),
+});
 
 const fmtEvent = (e: (typeof digest.events)[number]) =>
 	`• ${e.when} — ${e.title}${e.venue ? ` @ ${e.venue}` : ""}${e.url ? `\n  ${e.url}` : ""}`;

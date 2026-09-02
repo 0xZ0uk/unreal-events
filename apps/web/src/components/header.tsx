@@ -90,7 +90,7 @@ export default function Header() {
 											? { date: undefined }
 											: (undefined as never)
 								}
-								className={`p443-btn px-2 py-1.5 text-[11px] uppercase tracking-[0.04em] whitespace-nowrap ${
+								className={`p443-btn whitespace-nowrap px-2 py-1.5 text-[11px] uppercase tracking-[0.04em] ${
 									active
 										? "border-[var(--p443-primary)] border-b-2 text-[var(--p443-ink)]"
 										: "text-[var(--p443-ink-muted)]"

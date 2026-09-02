@@ -51,9 +51,7 @@ console.log(
 			url,
 			title: raw.title,
 			venue: raw.venueName,
-			startAt: raw.startAt
-				? new Date(raw.startAt * 1000).toISOString()
-				: null,
+			startAt: raw.startAt ? new Date(raw.startAt * 1000).toISOString() : null,
 			...result,
 		},
 		null,
