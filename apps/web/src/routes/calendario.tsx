@@ -1,3 +1,7 @@
+import { Badge } from "@events-tracker/ui/components/badge";
+import { Button } from "@events-tracker/ui/components/button";
+import { Card } from "@events-tracker/ui/components/card";
+import { Separator } from "@events-tracker/ui/components/separator";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
@@ -9,11 +13,6 @@ import {
 	Rss,
 	Sparkles,
 } from "lucide-react";
-
-import { Badge } from "@events-tracker/ui/components/badge";
-import { Button } from "@events-tracker/ui/components/button";
-import { Card } from "@events-tracker/ui/components/card";
-import { Separator } from "@events-tracker/ui/components/separator";
 import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/calendario")({
@@ -151,35 +150,35 @@ function CalendarComponent() {
 		monthCount === 1 ? "1 evento" : `${monthCount} eventos`;
 
 	return (
-		<div className="min-h-[calc(100vh-64px)] bg-[var(--arc-canvas)] dark:bg-zinc-950">
+		<div className="min-h-[calc(100vh-64px)] bg-[var(--p443-canvas)]">
 			{/* Hero - cream */}
 			<div className="mx-auto max-w-[1280px] px-4 pt-8 pb-6 sm:px-8 sm:pt-10">
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 					<div>
-						<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[var(--arc-ink)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-canvas)] dark:bg-white dark:text-black">
+						<div className="mb-3 inline-flex items-center gap-2 rounded-[2px] bg-[var(--p443-surface)] px-3 py-1 font-bold text-[11px] text-[var(--p443-canvas)] uppercase tracking-[0.6px]">
 							<CalendarDays className="size-3.5" />
 							Vista mensal
 						</div>
 						<h1
-							className="text-[40px] font-bold leading-[0.95] tracking-[-1.6px] text-[var(--arc-ink)] dark:text-white sm:text-[40px]"
+							className="font-bold text-[40px] text-[var(--p443-ink)] leading-[0.95] tracking-[-1.6px] sm:text-[40px]"
 							style={{ fontFamily: "var(--font-display)" }}
 						>
 							Calendário
 						</h1>
 						<p
-							className="mt-2 flex items-center gap-2 text-sm text-[var(--arc-ink-muted)] dark:text-zinc-400"
+							className="mt-2 flex items-center gap-2 text-[var(--p443-ink-muted)] text-sm"
 							style={{ fontFamily: "var(--font-dek)" }}
 						>
 							<span
 								data-testid="calendar-month"
-								className="rounded-full bg-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-wide text-[var(--arc-ink)] shadow-sm ring-1 ring-foreground/10 dark:bg-zinc-900 dark:text-white dark:ring-white/10"
+								className="rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] px-3 py-1 font-bold font-mono text-[var(--p443-ink)] text-xs uppercase tracking-wide"
 								style={{ fontFamily: "var(--font-mono)" }}
 							>
 								{monthName(year, month)} {year}
 							</span>
 							<span
 								data-testid="calendar-count"
-								className="font-mono text-xs font-medium uppercase tracking-wide dark:text-zinc-400"
+								className="font-medium font-mono text-xs uppercase tracking-wide"
 								style={{ fontFamily: "var(--font-mono)" }}
 							>
 								· {monthEventsLabel}
@@ -191,7 +190,7 @@ function CalendarComponent() {
 						<Link
 							to="/"
 							search={{ date: undefined }}
-							className="inline-flex items-center gap-1.5 rounded-full border border-[var(--arc-ink)]/15 bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink)] shadow-sm transition-colors hover:border-[var(--arc-ink)] hover:bg-[var(--arc-ink)] hover:text-[var(--arc-canvas)] dark:border-white/15 dark:bg-zinc-900 dark:text-white dark:hover:bg-white dark:hover:text-black"
+							className="inline-flex items-center gap-1.5 rounded-[4px] border border-[var(--p443-ink)]/15 bg-[var(--p443-surface)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-ink)] uppercase tracking-[0.6px] transition-colors hover:border-[var(--p443-ink)] hover:border-[var(--p443-ink-muted)] hover:bg-[var(--p443-surface)]"
 						>
 							<ArrowLeft className="size-3.5" />
 							Agenda
@@ -200,7 +199,7 @@ function CalendarComponent() {
 							href="http://localhost:3301/events.ics"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-1.5 rounded-full bg-[var(--arc-primary)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-white shadow-sm transition-colors hover:bg-[var(--arc-primary-deep)]"
+							className="inline-flex items-center gap-1.5 rounded-[2px] bg-[var(--p443-primary)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-on-primary)] uppercase tracking-[0.6px] transition-colors hover:bg-[var(--p443-primary-hover)]"
 						>
 							<Rss className="size-3.5" />
 							Subscrever ICS
@@ -211,7 +210,7 @@ function CalendarComponent() {
 			</div>
 
 			{/* Blue voltage month control bar - single per page? We use blue band here as control header */}
-			<div className="w-full bg-[var(--arc-primary)] px-4 py-4 sm:px-8">
+			<div className="w-full border-[var(--p443-hairline)] border-y bg-[var(--p443-surface)] px-4 py-4 sm:px-8">
 				<div className="mx-auto flex max-w-[1280px] items-center justify-between">
 					<Button
 						variant="outline"
@@ -219,17 +218,17 @@ function CalendarComponent() {
 						onClick={() => goMonth(-1)}
 						data-testid="cal-prev"
 						aria-label="Mês anterior"
-						className="size-9 rounded-full border-white/20 bg-white/10 p-0 text-white backdrop-blur hover:bg-white hover:text-[var(--arc-primary)]"
+						className="size-9 rounded-[4px] border-[var(--p443-hairline)] bg-[var(--p443-hairline)] p-0 text-[var(--p443-on-primary)] backdrop-blur hover:bg-[var(--p443-surface)] hover:text-[var(--p443-primary)]"
 					>
 						<ChevronLeft className="size-4" />
 					</Button>
 
 					<div className="flex items-center gap-3">
-						<div className="hidden size-8 items-center justify-center rounded-full bg-white/15 sm:flex">
-							<Sparkles className="size-4 text-white" />
+						<div className="hidden size-8 items-center justify-center rounded-[2px] bg-[var(--p443-hairline)] sm:flex">
+							<Sparkles className="size-4 text-[var(--p443-on-primary)]" />
 						</div>
 						<span
-							className="text-[20px] font-bold tracking-tight text-white"
+							className="font-bold text-[20px] text-[var(--p443-on-primary)] tracking-tight"
 							style={{
 								fontFamily: "var(--font-display)",
 								letterSpacing: "-0.02em",
@@ -237,7 +236,7 @@ function CalendarComponent() {
 						>
 							{monthName(year, month)} {year}
 						</span>
-						<Badge className="hidden bg-white text-[var(--arc-primary)] hover:bg-white sm:inline-flex">
+						<Badge variant="secondary" className="hidden sm:inline-flex">
 							{monthEventsLabel}
 						</Badge>
 					</div>
@@ -248,7 +247,7 @@ function CalendarComponent() {
 						onClick={() => goMonth(1)}
 						data-testid="cal-next"
 						aria-label="Mês seguinte"
-						className="size-9 rounded-full border-white/20 bg-white/10 p-0 text-white backdrop-blur hover:bg-white hover:text-[var(--arc-primary)]"
+						className="size-9 rounded-[4px] border-[var(--p443-hairline)] bg-[var(--p443-hairline)] p-0 text-[var(--p443-on-primary)] backdrop-blur hover:bg-[var(--p443-surface)] hover:text-[var(--p443-primary)]"
 					>
 						<ChevronRight className="size-4" />
 					</Button>
@@ -257,13 +256,13 @@ function CalendarComponent() {
 
 			{/* Grid */}
 			<div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-8 sm:py-8">
-				<Card className="overflow-hidden rounded-[12px] border border-foreground/10 bg-white p-0 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:border-white/10">
+				<Card className="overflow-hidden rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] p-0">
 					{/* Weekday header - mono eyebrow */}
-					<div className="grid grid-cols-7 border-b border-foreground/10 bg-[var(--arc-surface-students)]/50 dark:bg-zinc-800/50 dark:border-white/10">
+					<div className="grid grid-cols-7 border-[var(--p443-hairline)] border-b bg-[var(--p443-surface)]/50">
 						{WEEKDAYS.map((w) => (
 							<div
 								key={w}
-								className="px-2 py-3 text-center font-mono text-[11px] font-bold uppercase tracking-[1.4px] text-[var(--arc-ink-students)] dark:text-zinc-400"
+								className="px-2 py-3 text-center font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[1.4px]"
 								style={{ fontFamily: "var(--font-mono)" }}
 							>
 								{w}
@@ -287,23 +286,21 @@ function CalendarComponent() {
 									type="button"
 									key={key}
 									onClick={() => navigate({ to: "/", search: { date: key } })}
-									className={`group flex min-h-[112px] flex-col items-stretch gap-1 p-2 text-left transition-colors hover:bg-[var(--arc-primary)]/[0.04] dark:hover:bg-white/[0.04] ${
-										i % 7 !== 6
-											? "border-r border-foreground/10 dark:border-white/10"
-											: ""
-									} ${i < CELLS - 7 ? "border-b border-foreground/10 dark:border-white/10" : ""} ${
+									className={`group flex min-h-[112px] flex-col items-stretch gap-1 p-2 text-left transition-colors hover:bg-[var(--p443-primary)]/[0.06] ${
+										i % 7 !== 6 ? "border-[var(--p443-hairline)] border-r" : ""
+									} ${i < CELLS - 7 ? "border-[var(--p443-hairline)] border-b" : ""} ${
 										inMonth
-											? "bg-white dark:bg-zinc-900"
-											: "bg-[var(--arc-surface-students)]/40 dark:bg-zinc-950"
+											? "bg-[var(--p443-surface)]"
+											: "bg-[var(--p443-surface)]/40"
 									}`}
 								>
 									<span
-										className={`self-start rounded-full px-2 py-1 font-mono text-xs font-bold tabular-nums transition-colors ${
+										className={`self-start rounded-[2px] px-2 py-1 font-bold font-mono text-xs tabular-nums transition-colors ${
 											isToday
-												? "bg-[var(--arc-primary)] text-white shadow-sm"
+												? "bg-[var(--p443-primary)] text-[var(--p443-on-primary)] shadow-sm"
 												: inMonth
-													? "bg-transparent text-[var(--arc-ink)] group-hover:bg-[var(--arc-ink)] group-hover:text-[var(--arc-canvas)] dark:text-white dark:group-hover:bg-white dark:group-hover:text-black"
-													: "text-[var(--arc-ink-students-soft)] dark:text-zinc-500"
+													? "bg-transparent text-[var(--p443-ink)] group-hover:bg-[var(--p443-ink)] group-hover:text-[var(--p443-canvas)]"
+													: "text-[var(--p443-ink-muted)]"
 										}`}
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
@@ -313,10 +310,10 @@ function CalendarComponent() {
 										{renderable.map((ev) => (
 											<span
 												key={ev.id}
-												className="truncate rounded-[6px] bg-[var(--arc-primary)]/10 px-1.5 py-1 text-[11px] font-medium leading-tight text-[var(--arc-primary-deep)] ring-1 ring-[var(--arc-primary)]/10 group-hover:bg-[var(--arc-primary)] group-hover:text-white group-hover:ring-[var(--arc-primary)] dark:bg-[var(--arc-primary)]/20 dark:text-white dark:ring-white/10"
+												className="truncate rounded-[2px] bg-[var(--p443-primary)]/10 px-1.5 py-1 font-medium text-[11px] text-[var(--p443-primary-hover)] leading-tight ring-1 ring-[var(--p443-primary)]/10 group-hover:bg-[var(--p443-primary)] group-hover:text-[var(--p443-on-primary)]"
 											>
 												<span
-													className="font-mono text-[11px] font-bold tabular-nums"
+													className="font-bold font-mono text-[11px] tabular-nums"
 													style={{ fontFamily: "var(--font-mono)" }}
 												>
 													{fmtTime(ev.startAt)}
@@ -326,14 +323,14 @@ function CalendarComponent() {
 										))}
 										{overflow > 0 && (
 											<span
-												className="px-1 font-mono text-[11px] font-bold text-[var(--arc-primary)] dark:text-white"
+												className="px-1 font-bold font-mono text-[11px] text-[var(--p443-primary)]"
 												style={{ fontFamily: "var(--font-mono)" }}
 											>
 												+{overflow} mais
 											</span>
 										)}
 										{dayEvents.length === 0 && inMonth && (
-											<span className="hidden px-1 font-mono text-[10px] uppercase tracking-wide text-transparent group-hover:text-[var(--arc-ink-muted)] sm:block dark:group-hover:text-zinc-500">
+											<span className="hidden px-1 font-mono text-[10px] text-transparent uppercase tracking-wide group-hover:text-[var(--p443-ink-muted)] sm:block">
 												Ver dia →
 											</span>
 										)}
@@ -344,9 +341,9 @@ function CalendarComponent() {
 					</div>
 				</Card>
 
-				<div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-500">
+				<div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]">
 					<span className="inline-flex items-center gap-1.5">
-						<span className="size-2 rounded-full bg-[var(--arc-primary)]" />{" "}
+						<span className="size-2 rounded-[2px] bg-[var(--p443-primary)]" />{" "}
 						Hoje
 					</span>
 					<Separator orientation="vertical" className="h-3" />
@@ -354,13 +351,13 @@ function CalendarComponent() {
 				</div>
 			</div>
 
-			<footer className="border-t border-foreground/10 bg-[var(--arc-canvas)] px-4 py-8 sm:px-8 dark:bg-zinc-950 dark:border-white/10">
-				<div className="mx-auto flex max-w-[1280px] items-center justify-between font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-500">
+			<footer className="border-[var(--p443-hairline)] border-t bg-[var(--p443-canvas)] px-4 py-8 sm:px-8">
+				<div className="mx-auto flex max-w-[1280px] items-center justify-between font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]">
 					<span>Europe/Lisbon · Segunda a Domingo</span>
 					<Link
 						to="/"
 						search={{ date: undefined }}
-						className="hover:text-[var(--arc-ink)] dark:hover:text-white"
+						className="hover:text-[var(--p443-ink)]"
 					>
 						Voltar à agenda →
 					</Link>

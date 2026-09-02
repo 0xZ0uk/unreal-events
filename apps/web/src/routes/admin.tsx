@@ -1,3 +1,15 @@
+import { Badge } from "@events-tracker/ui/components/badge";
+import { Button } from "@events-tracker/ui/components/button";
+import { Card, CardContent } from "@events-tracker/ui/components/card";
+import { Separator } from "@events-tracker/ui/components/separator";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@events-tracker/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -11,19 +23,6 @@ import {
 	Sparkles,
 } from "lucide-react";
 import type { ReactNode } from "react";
-
-import { Badge } from "@events-tracker/ui/components/badge";
-import { Button } from "@events-tracker/ui/components/button";
-import { Card, CardContent } from "@events-tracker/ui/components/card";
-import { Separator } from "@events-tracker/ui/components/separator";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@events-tracker/ui/components/table";
 import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/admin")({
@@ -66,28 +65,28 @@ function StatCard({
 	accent?: "blue" | "ink" | "muted";
 }) {
 	return (
-		<Card className="rounded-[10px] border border-foreground/10 bg-white p-0 shadow-[0_5px_10px_rgba(0,0,0,0.04)] dark:bg-zinc-900 dark:border-white/10">
+		<Card className="rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] p-0">
 			<CardContent className="flex items-center gap-4 p-5">
 				<div
 					className={
 						accent === "blue"
-							? "flex size-10 items-center justify-center rounded-[8px] bg-[var(--arc-primary)] text-white shadow-sm"
+							? "flex size-10 items-center justify-center rounded-[8px] bg-[var(--p443-primary)] text-[var(--p443-on-primary)] shadow-sm"
 							: accent === "ink"
-								? "flex size-10 items-center justify-center rounded-[8px] bg-[var(--arc-ink)] text-[var(--arc-canvas)] shadow-sm dark:bg-white dark:text-black"
-								: "flex size-10 items-center justify-center rounded-[8px] bg-[var(--arc-surface-students)] text-[var(--arc-ink-students)] dark:bg-zinc-800 dark:text-zinc-300"
+								? "flex size-10 items-center justify-center rounded-[8px] bg-[var(--p443-ink)] text-[var(--p443-canvas)] shadow-sm"
+								: "flex size-10 items-center justify-center rounded-[8px] bg-[var(--p443-surface)] text-[var(--p443-ink-muted)]"
 					}
 				>
 					{icon}
 				</div>
 				<div className="min-w-0">
 					<p
-						className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+						className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 						style={{ fontFamily: "var(--font-mono)" }}
 					>
 						{label}
 					</p>
 					<p
-						className="font-display text-[28px] font-bold leading-none tracking-tight text-[var(--arc-ink)] tabular-nums dark:text-white"
+						className="font-bold font-display text-[28px] text-[var(--p443-ink)] tabular-nums leading-none tracking-tight"
 						style={{
 							fontFamily: "var(--font-display)",
 							letterSpacing: "-0.02em",
@@ -96,7 +95,7 @@ function StatCard({
 						{value}
 					</p>
 					<p
-						className="font-mono text-[11px] text-[var(--arc-ink-students-soft)] dark:text-zinc-500"
+						className="font-mono text-[11px] text-[var(--p443-ink-muted)]"
 						style={{ fontFamily: "var(--font-mono)" }}
 					>
 						{sub}
@@ -119,27 +118,27 @@ function AdminComponent() {
 	).length;
 
 	return (
-		<div className="min-h-[calc(100vh-64px)] bg-[var(--arc-canvas)] dark:bg-zinc-950">
+		<div className="min-h-[calc(100vh-64px)] bg-[var(--p443-canvas)]">
 			{/* Hero */}
 			<div className="mx-auto max-w-[1280px] px-4 pt-8 pb-6 sm:px-8 sm:pt-10">
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 					<div>
-						<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[var(--arc-ink)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-canvas)] dark:bg-white dark:text-black">
+						<div className="mb-3 inline-flex items-center gap-2 rounded-[2px] bg-[var(--p443-surface)] px-3 py-1 font-bold text-[11px] text-[var(--p443-canvas)] uppercase tracking-[0.6px]">
 							<Radio className="size-3.5" />
 							Operação
 						</div>
 						<h1
-							className="text-[40px] font-bold leading-[0.95] tracking-[-1.6px] text-[var(--arc-ink)] dark:text-white"
+							className="font-bold text-[40px] text-[var(--p443-ink)] leading-[0.95] tracking-[-1.6px]"
 							style={{ fontFamily: "var(--font-display)" }}
 						>
 							Dashboard
-							<span className="font-normal text-[var(--arc-ink-muted)] dark:text-zinc-400">
+							<span className="font-normal text-[var(--p443-ink-muted)]">
 								{" "}
 								de Scraping
 							</span>
 						</h1>
 						<p
-							className="mt-3 max-w-[560px] text-[17px] leading-[1.5] text-[var(--arc-ink-students)] dark:text-zinc-300"
+							className="mt-3 max-w-[560px] text-[17px] text-[var(--p443-ink-muted)] leading-[1.5]"
 							style={{ fontFamily: "var(--font-dek)" }}
 						>
 							Últimas execuções dos coletores — estado, volume e falhas.
@@ -149,7 +148,7 @@ function AdminComponent() {
 						<Link
 							to="/"
 							search={{ date: undefined }}
-							className="inline-flex items-center gap-1.5 rounded-full border border-[var(--arc-ink)]/15 bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink)] shadow-sm hover:bg-[var(--arc-ink)] hover:text-[var(--arc-canvas)] dark:border-white/15 dark:bg-zinc-900 dark:text-white dark:hover:bg-white dark:hover:text-black"
+							className="inline-flex items-center gap-1.5 rounded-[4px] border border-[var(--p443-ink)]/15 bg-[var(--p443-surface)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-ink)] uppercase tracking-[0.6px] hover:border-[var(--p443-ink-muted)] hover:bg-[var(--p443-surface)]"
 						>
 							Ver agenda
 							<ArrowUpRight className="size-3.5" />
@@ -158,7 +157,7 @@ function AdminComponent() {
 							href="http://localhost:3301/events.ics"
 							target="_blank"
 							rel="noreferrer"
-							className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[var(--arc-primary)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-white shadow-sm hover:bg-[var(--arc-primary-deep)]"
+							className="hidden items-center gap-1.5 rounded-[2px] bg-[var(--p443-primary)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-on-primary)] uppercase tracking-[0.6px] hover:bg-[var(--p443-primary-hover)] sm:inline-flex"
 						>
 							ICS
 							<ArrowUpRight className="size-3" />
@@ -168,27 +167,27 @@ function AdminComponent() {
 			</div>
 
 			{/* Blue band - status */}
-			<div className="w-full bg-[var(--arc-primary)] px-4 py-6 sm:px-8">
+			<div className="w-full border-[var(--p443-hairline)] border-y bg-[var(--p443-surface)] px-4 py-6 sm:px-8">
 				<div className="mx-auto flex max-w-[1280px] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<div className="flex items-center gap-4">
-						<div className="hidden size-10 items-center justify-center rounded-[10px] bg-white/15 sm:flex">
-							<Activity className="size-5 text-white" />
+						<div className="hidden size-10 items-center justify-center rounded-[2px] bg-[var(--p443-hairline)] sm:flex">
+							<Activity className="size-5 text-[var(--p443-on-primary)]" />
 						</div>
 						<div>
 							<p
-								className="font-mono text-[11px] font-bold uppercase tracking-[1.4px] text-white/70"
+								className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[1.4px]"
 								style={{ fontFamily: "var(--font-mono)" }}
 							>
 								Estado da recolha
 							</p>
 							<p
-								className="text-[20px] font-bold leading-tight text-white"
+								className="font-bold text-[20px] text-[var(--p443-on-primary)] leading-tight"
 								style={{ fontFamily: "var(--font-display)" }}
 							>
 								{withErrors === 0
 									? "Tudo operacional"
 									: `${withErrors} fontes com erro`}
-								<span className="font-normal text-white/80">
+								<span className="font-normal text-[var(--p443-on-primary)]/80">
 									{" "}
 									· {rows.length} runs recentes
 								</span>
@@ -196,13 +195,13 @@ function AdminComponent() {
 						</div>
 					</div>
 					<div className="flex items-center gap-2">
-						<Badge className="rounded-full bg-white px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wide text-[var(--arc-primary)] hover:bg-white">
+						<Badge className="rounded-[2px] bg-[var(--p443-surface)] px-3 py-1.5 font-bold font-mono text-[11px] text-[var(--p443-primary)] uppercase tracking-wide hover:bg-[var(--p443-surface)]">
 							<Clock className="size-3" />
 							Cron 07:00 LISBOA
 						</Badge>
 						<Badge
 							variant="outline"
-							className="rounded-full border-white/30 bg-transparent px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wide text-white hover:bg-white/10 hover:text-white"
+							className="rounded-[4px] border-[var(--p443-hairline)] bg-transparent px-3 py-1.5 font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] text-[var(--p443-on-primary)] uppercase tracking-wide hover:bg-[var(--p443-hairline)] hover:text-[var(--p443-on-primary)]"
 						>
 							Auto-diário
 						</Badge>
@@ -237,7 +236,7 @@ function AdminComponent() {
 					<StatCard
 						icon={
 							<AlertTriangle
-								className={`size-5 ${withErrors > 0 ? "text-[var(--arc-accent-red)]" : ""}`}
+								className={`size-5 ${withErrors > 0 ? "text-[#d0342c]" : ""}`}
 							/>
 						}
 						label="Com erros"
@@ -250,21 +249,21 @@ function AdminComponent() {
 
 			{/* Table */}
 			<div className="mx-auto max-w-[1280px] px-4 pb-10 sm:px-8">
-				<Card className="overflow-hidden rounded-[12px] border border-foreground/10 bg-white p-0 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:border-white/10">
-					<div className="flex items-center justify-between border-b border-foreground/10 bg-[var(--arc-surface-students)]/30 px-5 py-4 dark:bg-zinc-800/30 dark:border-white/10">
+				<Card className="overflow-hidden rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] p-0">
+					<div className="flex items-center justify-between border-[var(--p443-hairline)] border-b bg-[var(--p443-surface)]/30 px-5 py-4">
 						<div className="flex items-center gap-3">
-							<div className="flex size-8 items-center justify-center rounded-[8px] bg-[var(--arc-ink)] text-[var(--arc-canvas)] dark:bg-white dark:text-black">
+							<div className="flex size-8 items-center justify-center rounded-[8px] bg-[var(--p443-ink)] text-[var(--p443-canvas)]">
 								<Sparkles className="size-4" />
 							</div>
 							<div>
 								<p
-									className="font-display text-[15px] font-bold leading-none tracking-tight text-[var(--arc-ink)] dark:text-white"
+									className="font-bold font-display text-[15px] text-[var(--p443-ink)] leading-none tracking-tight"
 									style={{ fontFamily: "var(--font-display)" }}
 								>
 									Histórico de runs
 								</p>
 								<p
-									className="font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+									className="font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 									style={{ fontFamily: "var(--font-mono)" }}
 								>
 									Mais recentes primeiro · Europe/Lisbon
@@ -279,39 +278,39 @@ function AdminComponent() {
 					<div className="overflow-x-auto">
 						<Table>
 							<TableHeader>
-								<TableRow className="border-foreground/10 bg-transparent hover:bg-transparent dark:border-white/10">
+								<TableRow className="border-[var(--p443-hairline)] bg-transparent hover:bg-transparent">
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Hora (PT)
 									</TableHead>
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Fonte
 									</TableHead>
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Encontrados
 									</TableHead>
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Novos
 									</TableHead>
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Falhas
 									</TableHead>
 									<TableHead
-										className="font-mono text-[11px] font-bold uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+										className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 										style={{ fontFamily: "var(--font-mono)" }}
 									>
 										Erro
@@ -323,7 +322,7 @@ function AdminComponent() {
 									<TableRow>
 										<TableCell
 											colSpan={6}
-											className="py-10 text-center font-mono text-xs uppercase tracking-wide text-[var(--arc-ink-muted)] dark:text-zinc-500"
+											className="py-10 text-center font-mono text-[var(--p443-ink-muted)] text-xs uppercase tracking-wide"
 										>
 											A carregar execuções…
 										</TableCell>
@@ -333,16 +332,16 @@ function AdminComponent() {
 									<TableRow>
 										<TableCell colSpan={6} className="py-10 text-center">
 											<div className="flex flex-col items-center gap-2">
-												<div className="flex size-10 items-center justify-center rounded-full bg-[var(--arc-surface-students)] dark:bg-zinc-800">
-													<Radio className="size-5 text-[var(--arc-ink-muted)]" />
+												<div className="flex size-10 items-center justify-center rounded-[2px] bg-[var(--p443-surface)]">
+													<Radio className="size-5 text-[var(--p443-ink-muted)]" />
 												</div>
 												<p
-													className="font-mono text-xs font-bold uppercase tracking-wide text-[var(--arc-ink-muted)] dark:text-zinc-400"
+													className="font-bold font-mono text-[var(--p443-ink-muted)] text-xs uppercase tracking-wide"
 													style={{ fontFamily: "var(--font-mono)" }}
 												>
 													Sem execuções
 												</p>
-												<p className="text-sm text-[var(--arc-ink-muted)] dark:text-zinc-500">
+												<p className="text-[var(--p443-ink-muted)] text-sm">
 													Ainda não há execuções registadas.
 												</p>
 											</div>
@@ -357,49 +356,49 @@ function AdminComponent() {
 											key={r.id}
 											className={
 												isBad
-													? "bg-[var(--arc-students-pinkish)]/10 hover:bg-[var(--arc-students-pinkish)]/15 dark:bg-red-950/20"
-													: "hover:bg-[var(--arc-surface-students)]/40 dark:hover:bg-zinc-800/40"
+													? "bg-[#d0342c]/10 hover:bg-[#d0342c]/15"
+													: "hover:bg-[var(--p443-surface)]/40/40"
 											}
 										>
-											<TableCell className="whitespace-nowrap font-mono text-xs tabular-nums text-[var(--arc-ink-students)] dark:text-zinc-300">
+											<TableCell className="whitespace-nowrap font-mono text-[var(--p443-ink-muted)] text-xs tabular-nums">
 												<span className="inline-flex items-center gap-1.5">
-													<span className="flex size-6 items-center justify-center rounded-full bg-[var(--arc-surface-students-grey)] dark:bg-zinc-800">
+													<span className="flex size-6 items-center justify-center rounded-[2px] bg-[var(--p443-surface)]">
 														<Clock className="size-3" />
 													</span>
 													{fmtLisbon(r.startedAt, true)}
 												</span>
 											</TableCell>
-											<TableCell className="font-display text-sm font-semibold text-[var(--arc-ink)] dark:text-white">
+											<TableCell className="font-display font-semibold text-[var(--p443-ink)] text-sm">
 												<Badge
 													variant={isBad ? "destructive" : "secondary"}
-													className="rounded-full px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide"
+													className="rounded-[2px] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide"
 												>
 													{r.source}
 												</Badge>
 											</TableCell>
-											<TableCell className="font-mono text-sm tabular-nums dark:text-zinc-300">
+											<TableCell className="font-mono text-sm tabular-nums">
 												{r.found}
 											</TableCell>
 											<TableCell
-												className={`font-mono text-sm tabular-nums ${r.new > 0 ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-[var(--arc-ink-muted)] dark:text-zinc-400"}`}
+												className={`font-mono text-sm tabular-nums ${r.new > 0 ? "font-bold text-[var(--p443-primary)]" : "text-[var(--p443-ink-muted)]"}`}
 											>
 												{r.new > 0 ? `+${r.new}` : r.new}
 											</TableCell>
 											<TableCell>
 												<Badge
 													variant={r.failed > 0 ? "destructive" : "outline"}
-													className="rounded-full px-2.5 py-1 font-mono text-xs tabular-nums"
+													className="rounded-[2px] px-2.5 py-1 font-mono text-xs tabular-nums"
 												>
 													{r.failed}
 												</Badge>
 											</TableCell>
 											<TableCell className="max-w-[260px]">
 												{r.error ? (
-													<span className="inline-block max-w-[260px] truncate rounded-[6px] bg-[var(--arc-students-pinkish)]/15 px-2 py-1 font-mono text-xs font-medium text-[var(--arc-accent-red)] ring-1 ring-[var(--arc-students-pinkish)]/20 dark:bg-red-900/30 dark:text-red-300">
+													<span className="inline-block max-w-[260px] truncate rounded-[2px] bg-[#d0342c]/15 px-2 py-1 font-medium font-mono text-[#d0342c] text-xs ring-1 ring-[#d0342c]/20">
 														{r.error}
 													</span>
 												) : (
-													<span className="font-mono text-xs text-[var(--arc-ink-students-soft)] dark:text-zinc-500">
+													<span className="font-mono text-[var(--p443-ink-muted)] text-xs">
 														—
 													</span>
 												)}
@@ -411,23 +410,23 @@ function AdminComponent() {
 						</Table>
 					</div>
 
-					<div className="flex items-center justify-between border-t border-foreground/10 bg-[var(--arc-surface-students)]/20 px-5 py-3 dark:border-white/10 dark:bg-zinc-800/20">
+					<div className="flex items-center justify-between border-[var(--p443-hairline)] border-t bg-[var(--p443-surface)]/20 px-5 py-3">
 						<p
-							className="font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-400"
+							className="font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 							style={{ fontFamily: "var(--font-mono)" }}
 						>
 							Cron diário · 07:00 Europe/Lisbon
 						</p>
-						<p className="hidden font-mono text-[11px] text-[var(--arc-ink-students-soft)] sm:block dark:text-zinc-500">
+						<p className="hidden font-mono text-[11px] text-[var(--p443-ink-muted)] sm:block">
 							Reveja falhas — 0 encontrados ×2 dias = seletor partido.
 						</p>
 					</div>
 				</Card>
 
-				<div className="mt-6 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-[var(--arc-ink-muted)] dark:text-zinc-500">
-					<Separator className="flex-1 bg-foreground/10" />
+				<div className="mt-6 flex items-center gap-2 font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]">
+					<Separator className="flex-1 bg-[var(--p443-hairline)]" />
 					<span>Europe/Lisbon</span>
-					<Separator className="flex-1 bg-foreground/10" />
+					<Separator className="flex-1 bg-[var(--p443-hairline)]" />
 				</div>
 			</div>
 		</div>

@@ -3,38 +3,43 @@ import { cn } from "@events-tracker/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
-	"group/button inline-flex shrink-0 items-center justify-center rounded-[8px] border border-transparent bg-clip-padding text-[14px] font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+	"group/button inline-flex shrink-0 items-center justify-center rounded-[4px] border border-transparent bg-clip-padding text-[14px] font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 	{
 		variants: {
 			variant: {
+				/* Primary CTA: amber fill — the ONE colour in the system */
 				default:
-					"bg-primary text-primary-foreground hover:bg-[var(--arc-primary-dark)] shadow-[0_8px_30px_rgba(0,0,0,0.12)]",
-				arc: "bg-[var(--arc-ink)] text-[var(--arc-canvas)] hover:bg-[var(--arc-primary-dark)] rounded-[22px] h-[52px] px-[22px] text-[15px] font-medium shadow-[0_8px_30px_rgba(0,0,0,0.12)]",
-				"arc-cta":
-					"bg-[var(--arc-ink)] text-[var(--arc-canvas)] hover:bg-[var(--arc-primary-dark)] rounded-[22px] h-[76px] px-[22px] pr-[8px] text-[20px] font-normal shadow-[0_8px_30px_rgba(0,0,0,0.12)] gap-3",
-				outline:
-					"border border-[var(--arc-ink)] bg-[var(--arc-canvas)] text-[var(--arc-ink)] hover:bg-[var(--arc-surface-students)] rounded-[8px] aria-expanded:bg-muted aria-expanded:text-foreground",
+					"bg-[var(--p443-primary)] text-[var(--p443-on-primary)] hover:bg-[var(--p443-primary-hover)] rounded-[4px]",
+				/* Secondary: dark surface, ink text */
 				secondary:
-					"bg-[var(--arc-surface-students-grey)] text-[var(--arc-ink-students)] hover:bg-[var(--arc-surface-students-hover)] rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase",
+					"bg-[var(--p443-surface)] text-[var(--p443-ink)] border border-[var(--p443-hairline)] hover:border-[var(--p443-ink-muted)] rounded-[4px]",
+				/* Ghost: quiet, muted */
 				ghost:
-					"hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 rounded-[8px]",
+					"bg-transparent text-[var(--p443-ink-muted)] hover:text-[var(--p443-ink)] hover:bg-[var(--p443-surface)] rounded-[4px]",
+				/* Outline: hairline border, sharp */
+				outline:
+					"border border-[var(--p443-hairline)] bg-transparent text-[var(--p443-ink)] hover:border-[var(--p443-ink-muted)] rounded-[4px] aria-expanded:bg-muted aria-expanded:text-foreground",
 				destructive:
-					"bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-				link: "text-[var(--arc-primary)] underline-offset-4 hover:underline",
-				blue: "bg-[var(--arc-primary)] text-[var(--arc-canvas)] hover:bg-[var(--arc-primary-deep)] rounded-[8px] shadow-sm",
+					"bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
+				link: "text-[var(--p443-primary)] underline-offset-4 hover:underline",
+				/* Legacy Arc variants kept as aliases → primary look */
+				arc: "bg-[var(--p443-primary)] text-[var(--p443-on-primary)] hover:bg-[var(--p443-primary-hover)] rounded-[4px] h-[52px] px-[22px] text-[15px]",
+				"arc-cta":
+					"bg-[var(--p443-primary)] text-[var(--p443-on-primary)] hover:bg-[var(--p443-primary-hover)] rounded-[4px] h-[52px] px-[22px] text-[16px] gap-3",
+				blue: "bg-[var(--p443-primary)] text-[var(--p443-on-primary)] hover:bg-[var(--p443-primary-hover)] rounded-[4px]",
 			},
 			size: {
 				default:
 					"h-9 gap-1.5 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
-				xs: "h-6 gap-1 rounded-full px-3 text-xs has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3",
-				sm: "h-8 gap-1.5 rounded-[8px] px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3.5",
+				xs: "h-6 gap-1 rounded-[2px] px-3 text-xs has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3",
+				sm: "h-8 gap-1.5 rounded-[2px] px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3.5",
 				lg: "h-10 gap-1.5 px-5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
-				cta: "h-[76px] gap-3 rounded-[22px] px-[22px] pr-[8px] text-[20px]",
-				icon: "size-9 rounded-[8px]",
+				cta: "h-[52px] gap-3 rounded-[4px] px-[22px] text-[16px]",
+				icon: "size-9 rounded-[4px]",
 				"icon-xs":
-					"size-7 rounded-[8px] [&_svg:not([class*='size-'])]:size-3.5",
-				"icon-sm": "size-8 rounded-[8px]",
-				"icon-lg": "size-10 rounded-[12px]",
+					"size-7 rounded-[2px] [&_svg:not([class*='size-'])]:size-3.5",
+				"icon-sm": "size-8 rounded-[4px]",
+				"icon-lg": "size-10 rounded-[4px]",
 			},
 		},
 		defaultVariants: {
