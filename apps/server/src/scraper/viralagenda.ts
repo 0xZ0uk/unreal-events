@@ -283,18 +283,21 @@ export function toRawEvent(
 
 	let startAt: number | null = null;
 	let endAt: number | null = null;
-	// Prefer the detail's real start datetime; a placeholder "00:59" from a
-	// no-time card must never leak through, so gate it on a real time.
+	// TIME POLICY: the listing card's `data-date-*` is the site's own UI time —
+	// what users see. The detail JSON-LD startDate is systematically ONE HOUR
+	// EARLY during DST (WEST): VA's generator emits UTC-shifted wall times with
+	// a stale +01:00 label (verified 2026-09-02: card 21:30+01:00 vs JSON-LD
+	// 20:30+01:00 for the same event; leiriagenda/eventbrite corroborate the
+	// card). So when the card carries a real time it wins; the detail time is
+	// only used when the card has a placeholder (00:59 / N/D).
+	const cardHasRealTime = card.hasTime && !!card.dateStart;
 	const detailStart = isoToEpoch(detail?.startDate);
-	const detailHasRealTime =
-		detailStart != null &&
-		!isPlaceholderTime(detail?.startDate?.match(/T(.*)$/)?.[1] ?? "");
-	if (detailHasRealTime || detailStart !== null) {
+	if (cardHasRealTime) {
+		startAt = isoToEpoch(card.dateStart);
+	} else if (detailStart !== null) {
 		startAt = detailStart;
 	} else if (card.dateStart) {
-		startAt = card.hasTime
-			? isoToEpoch(card.dateStart)
-			: dateOnlyEpoch(card.dateStart);
+		startAt = dateOnlyEpoch(card.dateStart);
 	}
 	if (!startAt && card.dateStart) {
 		// last resort: the date alone, i.e. resolve even a placeholder time date
@@ -302,12 +305,19 @@ export function toRawEvent(
 	}
 
 	const detailEnd = isoToEpoch(detail?.endDate);
-	if (detailEnd !== null && detailEnd !== startAt) {
+	const cardEnd =
+		card.dateEnd && card.dateEnd !== card.dateStart ? card.dateEnd : null;
+	if (cardHasRealTime && cardEnd) {
+		endAt = isoToEpoch(cardEnd);
+	} else if (detailEnd !== null && detailEnd !== startAt) {
 		endAt = detailEnd;
-	} else if (card.dateEnd && card.dateEnd !== card.dateStart) {
-		endAt = card.hasTime
-			? isoToEpoch(card.dateEnd)
-			: dateOnlyEpoch(card.dateEnd);
+	} else if (cardEnd) {
+		endAt = card.hasTime ? isoToEpoch(cardEnd) : dateOnlyEpoch(cardEnd);
+	}
+	// Sanity: an end before its start (e.g. a date-only detail endDate that
+	// resolves to midnight of the start day) is noise — drop it.
+	if (endAt != null && startAt != null && endAt < startAt) {
+		endAt = null;
 	}
 
 	const city = detail?.city ?? card.city;
