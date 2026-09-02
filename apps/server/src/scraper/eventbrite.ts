@@ -175,7 +175,8 @@ export function toRawEvent(e: EbEvent): RawEvent | null {
 		dateText: null,
 		venueName,
 		city,
-		categories: ["Eventbrite"],
+		// No platform-name category; canonicalization happens at ingest.
+		categories: [],
 		imageUrl: e.image?.url ?? null,
 		url:
 			e.url ??

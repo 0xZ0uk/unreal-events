@@ -321,7 +321,8 @@ export function toRawEvent(
 			row.venue.split(",")[0]?.trim() ||
 			"Local a definir",
 		city: "Leiria",
-		categories: row.categories.length > 0 ? row.categories : ["Ticketline"],
+		// No platform-name fallback; canonicalization happens at ingest.
+		categories: row.categories,
 		imageUrl: null,
 		url,
 	};

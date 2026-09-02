@@ -1,7 +1,7 @@
-import { buildDigest, buildIcs, parseKeywords } from "./digest-core";
 import { db, schema } from "@events-tracker/db";
 import { desc, eq, isNotNull } from "drizzle-orm";
 import { Hono } from "hono";
+import { buildDigest, buildIcs, parseKeywords } from "./digest-core";
 
 /**
  * Digest + ICS endpoints (SLICE_3). Logic lives in digest-core.ts so the
@@ -44,7 +44,8 @@ digestRoutes.get("/events.ics", async (c) => {
 			.orderBy(desc(schema.events.id))
 			.limit(500);
 		const lines = rows.map(
-			(r) => `• ${r.title} — ${r.venueName ?? "—"}${r.date_text ? ` (${r.date_text})` : ""}`,
+			(r) =>
+				`• ${r.title} — ${r.venueName ?? "—"}${r.date_text ? ` (${r.date_text})` : ""}`,
 		);
 		return c.text(["Eventos sem data fixa", "", ...lines].join("\n"), 200, {
 			"content-type": "text/plain; charset=utf-8",

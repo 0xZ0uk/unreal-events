@@ -1,7 +1,7 @@
 import { db, schema } from "@events-tracker/db";
 import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
-
+import { mergeSameDaySessions } from "../grouping";
 import { publicProcedure, router } from "../index";
 
 const eventSelect = {
@@ -55,6 +55,16 @@ function toPublicEvent(row: EventRow) {
 		categories: row.categories ?? [],
 		dateText: row.date_text,
 	};
+}
+
+/**
+ * toPublicEvent + same-day session merging: rows that share normalized title,
+ * venue, and Lisbon day are sessions of one show (kept separate in the DB and
+ * ICS on purpose) — list views surface a single entry with `sessionStarts`.
+ * Rows must arrive ordered by start_at (they do in every query here).
+ */
+function toPublicEventList(rows: EventRow[]) {
+	return mergeSameDaySessions(rows.map(toPublicEvent));
 }
 
 const listInput = z.object({
@@ -118,16 +128,19 @@ export const eventsRouter = router({
 			conditions.push(eq(schema.venues.city, input.city));
 		}
 
+		// Merge BEFORE slicing: LIMIT/OFFSET on raw session rows could split a
+		// same-day group across pages (badge-less duplicates, short pages).
+		// Volume is small (hundreds), so fetch matching rows unbounded, merge
+		// sessions, then apply offset/limit on merged events.
 		const rows = await db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
-			.orderBy(schema.events.start_at)
-			.limit(input.limit)
-			.offset(input.offset);
+			.orderBy(schema.events.start_at);
 
-		return rows.map(toPublicEvent);
+		const merged = toPublicEventList(rows);
+		return merged.slice(input.offset, input.offset + input.limit);
 	}),
 
 	byDay: publicProcedure.query(async () => {
@@ -142,7 +155,7 @@ export const eventsRouter = router({
 			)
 			.orderBy(schema.events.start_at);
 
-		return rows.map(toPublicEvent);
+		return toPublicEventList(rows);
 	}),
 
 	calendar: publicProcedure.input(calendarInput).query(async ({ input }) => {
@@ -171,7 +184,7 @@ export const eventsRouter = router({
 			)
 			.orderBy(schema.events.start_at);
 
-		return rows.map(toPublicEvent);
+		return toPublicEventList(rows);
 	}),
 
 	undated: publicProcedure.query(async () => {

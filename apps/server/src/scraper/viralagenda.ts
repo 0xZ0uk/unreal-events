@@ -320,7 +320,8 @@ export function toRawEvent(
 		dateText: null, // always a machine-readable date → no undated path
 		venueName: detail?.venue?.trim() || card.venue.trim() || "Local a definir",
 		city: city ? city.trim() : "Leiria",
-		categories: card.categories.length > 0 ? card.categories : ["Viral Agenda"],
+		// No platform-name fallback; canonicalization happens at ingest.
+		categories: card.categories,
 		imageUrl: detail?.image ?? card.imageUrl,
 		url: card.url,
 	};

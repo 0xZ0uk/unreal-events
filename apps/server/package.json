@@ -1,39 +1,39 @@
 {
-  "name": "server",
-  "type": "module",
-  "main": "src/index.ts",
-  "scripts": {
-    "build": "tsdown",
-    "check-types": "tsc -b",
-    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
-    "dev": "bun run --hot src/index.ts",
-    "start": "bun run dist/index.mjs",
-    "scrape:leiriagenda": "bun run src/scraper/run.ts leiriagenda",
-    "geocode:venues": "bun run src/scraper/geocode.ts",
-    "test": "bun test",
-    "digest": "bun run src/digest-cli.ts",
-    "scrape": "bun run src/scraper/run.ts",
-    "ingest:url": "bun run src/ingest-url.ts"
-  },
-  "dependencies": {
-    "@events-tracker/api": "workspace:*",
-    "@events-tracker/db": "workspace:*",
-    "@events-tracker/env": "workspace:*",
-    "@hono/trpc-server": "^0.4.2",
-    "@trpc/server": "catalog:",
-    "cheerio": "^1.2.0",
-    "dotenv": "catalog:",
-    "hono": "catalog:",
-    "libsql": "catalog:",
-    "luxon": "^3.7.2",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@events-tracker/config": "workspace:*",
-    "@types/bun": "catalog:",
-    "@types/luxon": "^3.7.5",
-    "drizzle-orm": "^0.45.2",
-    "tsdown": "^0.22.14",
-    "typescript": "catalog:"
-  }
+	"name": "server",
+	"type": "module",
+	"main": "src/index.ts",
+	"scripts": {
+		"build": "tsdown",
+		"check-types": "tsc -b",
+		"compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+		"dev": "bun run --hot src/index.ts",
+		"start": "bun run dist/index.mjs",
+		"scrape:leiriagenda": "bun run src/scraper/run.ts leiriagenda",
+		"geocode:venues": "bun run src/scraper/geocode.ts",
+		"test": "bun test",
+		"digest": "bun run src/digest-cli.ts",
+		"scrape": "bun run src/scraper/run.ts",
+		"ingest:url": "bun run src/ingest-url.ts"
+	},
+	"dependencies": {
+		"@events-tracker/api": "workspace:*",
+		"@events-tracker/db": "workspace:*",
+		"@events-tracker/env": "workspace:*",
+		"@hono/trpc-server": "^0.4.2",
+		"@trpc/server": "catalog:",
+		"cheerio": "^1.2.0",
+		"dotenv": "catalog:",
+		"hono": "catalog:",
+		"libsql": "catalog:",
+		"luxon": "^3.7.2",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@events-tracker/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"@types/luxon": "^3.7.5",
+		"drizzle-orm": "^0.45.2",
+		"tsdown": "^0.22.14",
+		"typescript": "catalog:"
+	}
 }

@@ -51,7 +51,8 @@ describe("toRawEvent", () => {
 		expect(raw!.startAt).toBe(1788555600);
 		expect(raw!.city).toBe("Pedrogão");
 		expect(raw!.venueName).toBe("Praia Nova Beach Club");
-		expect(raw!.categories).toEqual(["Shotgun"]);
+		// SLICE_6: platform names are no longer injected as categories.
+		expect(raw!.categories).toEqual([]);
 		expect(raw!.url).toBe(
 			"https://shotgun.live/en/events/last-friday-night-praia-do-pedrogao",
 		);

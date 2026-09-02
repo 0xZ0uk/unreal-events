@@ -77,6 +77,8 @@ type Event = {
 	startAt: number;
 	venueName: string | null;
 	venueCity: string | null;
+	/** Same-day session start times (incl. startAt) when this row merged 2+. */
+	sessionStarts?: number[];
 };
 
 function currentLisbonDate(): { y: number; m: number } {
@@ -319,6 +321,12 @@ function CalendarComponent() {
 													{fmtTime(ev.startAt)}
 												</span>{" "}
 												<span className="font-medium">{ev.title}</span>
+												{(ev.sessionStarts?.length ?? 0) > 1 && (
+													<span className="font-bold font-mono text-[10px] opacity-70">
+														{" "}
+														· +{(ev.sessionStarts?.length ?? 0) - 1}
+													</span>
+												)}
 											</span>
 										))}
 										{overflow > 0 && (

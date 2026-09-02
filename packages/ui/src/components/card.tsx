@@ -1,5 +1,5 @@
 import { cn } from "@events-tracker/ui/lib/utils";
-import * as React from "react";
+import type * as React from "react";
 
 function Card({
 	className,
@@ -11,7 +11,7 @@ function Card({
 			data-slot="card"
 			data-size={size}
 			className={cn(
-				"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-[2px] border border-[var(--p443-hairline)] bg-card py-(--card-spacing) text-sm/relaxed text-card-foreground [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0",
+				"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-[2px] border border-[var(--p443-hairline)] bg-card py-(--card-spacing) text-card-foreground text-sm/relaxed [--card-spacing:--spacing(4)] has-[>img:first-child]:pt-0 has-data-[slot=card-footer]:pb-0 data-[size=sm]:has-data-[slot=card-footer]:pb-0 data-[size=sm]:[--card-spacing:--spacing(3)]",
 				className,
 			)}
 			{...props}
@@ -37,7 +37,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
 		<div
 			data-slot="card-title"
 			className={cn(
-				"cn-font-heading text-sm font-medium group-data-[size=sm]/card:text-sm",
+				"cn-font-heading font-medium text-sm group-data-[size=sm]/card:text-sm",
 				className,
 			)}
 			{...props}
@@ -49,7 +49,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="card-description"
-			className={cn("text-xs/relaxed text-muted-foreground", className)}
+			className={cn("text-muted-foreground text-xs/relaxed", className)}
 			{...props}
 		/>
 	);
@@ -93,10 +93,10 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
 	Card,
-	CardHeader,
-	CardFooter,
-	CardTitle,
 	CardAction,
-	CardDescription,
 	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
 };

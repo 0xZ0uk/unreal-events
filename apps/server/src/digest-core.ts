@@ -52,9 +52,7 @@ export interface DigestOptions {
 	newHours?: number;
 }
 
-export async function buildDigest(
-	opts: DigestOptions,
-): Promise<{
+export async function buildDigest(opts: DigestOptions): Promise<{
 	since: number;
 	keywords: string[];
 	total: number;
@@ -68,7 +66,10 @@ export async function buildDigest(
 	];
 	if (opts.newHours != null) {
 		conditions.push(
-			gte(schema.events.created_at, Math.floor(Date.now() / 1000) - opts.newHours * 3600),
+			gte(
+				schema.events.created_at,
+				Math.floor(Date.now() / 1000) - opts.newHours * 3600,
+			),
 		);
 	}
 
@@ -141,7 +142,12 @@ export async function buildIcs(keywords: string[]): Promise<string> {
 		})
 		.from(schema.events)
 		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
-		.where(and(gte(schema.events.start_at, Date.now() / 1000), isNull(schema.events.date_text)))
+		.where(
+			and(
+				gte(schema.events.start_at, Date.now() / 1000),
+				isNull(schema.events.date_text),
+			),
+		)
 		.orderBy(asc(schema.events.start_at))
 		.limit(1000);
 

@@ -34,22 +34,30 @@ async function geocode(query: string): Promise<NominatimHit | null> {
 		const data = (await res.json()) as NominatimHit[];
 		return data[0] ?? null;
 	} catch (err) {
-		console.error(`  Nominatim request failed for "${query}": ${(err as Error).message}`);
+		console.error(
+			`  Nominatim request failed for "${query}": ${(err as Error).message}`,
+		);
 		return null;
 	} finally {
 		clearTimeout(timer);
 	}
 }
 
-const needs = await db.query.venues.findMany({ where: isNull(schema.venues.lat) });
+const needs = await db.query.venues.findMany({
+	where: isNull(schema.venues.lat),
+});
 
 if (needs.length === 0) {
-	console.log(JSON.stringify({ venues: 0, geocoded: 0, missed: [], requests: 0 }));
+	console.log(
+		JSON.stringify({ venues: 0, geocoded: 0, missed: [], requests: 0 }),
+	);
 	process.exit(0);
 }
 
 if (needs.length > MAX_REQUESTS) {
-	console.error(`Refusing to run: ${needs.length} venues exceeds MAX_REQUESTS=${MAX_REQUESTS}`);
+	console.error(
+		`Refusing to run: ${needs.length} venues exceeds MAX_REQUESTS=${MAX_REQUESTS}`,
+	);
 	process.exit(1);
 }
 
@@ -80,11 +88,17 @@ for (const venue of needs) {
 			geocoded.push({ name: venue.name, lat, lng });
 			console.log(`  ok: ${venue.name} → ${lat}, ${lng}`);
 		} else {
-			missed.push({ name: venue.name, reason: `non-numeric coords (${hit.lat},${hit.lon})` });
+			missed.push({
+				name: venue.name,
+				reason: `non-numeric coords (${hit.lat},${hit.lon})`,
+			});
 			console.log(`  MISS (bad coords): ${venue.name}`);
 		}
 	} else {
-		missed.push({ name: venue.name, reason: "no matching place or request error" });
+		missed.push({
+			name: venue.name,
+			reason: "no matching place or request error",
+		});
 		console.log(`  MISS: ${venue.name}`);
 	}
 
@@ -103,6 +117,8 @@ console.log(JSON.stringify(result, null, 2));
 if (geocoded.length > 0) {
 	console.log(
 		"\nSamples:",
-		geocoded.slice(0, 3).map((g) => `${g.name} → ${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}`),
+		geocoded
+			.slice(0, 3)
+			.map((g) => `${g.name} → ${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}`),
 	);
 }

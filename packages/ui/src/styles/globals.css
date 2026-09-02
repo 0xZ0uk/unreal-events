@@ -129,7 +129,7 @@
 	font-family: var(--p443-font-display);
 	font-size: clamp(40px, 5vw, 64px);
 	font-weight: 800;
-	line-height: 1.0;
+	line-height: 1;
 	letter-spacing: -0.02em;
 }
 @utility p443-headline {
