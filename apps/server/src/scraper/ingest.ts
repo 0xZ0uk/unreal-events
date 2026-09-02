@@ -1,6 +1,7 @@
 import { db, schema } from "@events-tracker/db";
 import { eq } from "drizzle-orm";
 
+import { canonicalizeCategories } from "./categories";
 import { fingerprint, fingerprintUndated } from "./fingerprint";
 import { normalizeVenueName, slugify } from "./normalize";
 import type { RawEvent } from "./types";
@@ -53,6 +54,10 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	// Deterministic venue ref independent of DB state → stable across scrapes.
 	const venueRef = slugify(normalizeVenueName(raw.venueName));
 	const now = Math.floor(Date.now() / 1000);
+	// Canonical taxonomy (SLICE_6): collapse variants, drop platform names.
+	// Applied on both write paths; change detection below compares canonical
+	// values so re-scrapes converge instead of flip-flopping.
+	const categories = canonicalizeCategories(raw.categories);
 	// Undated raws hash a literal UNDATED marker so re-scrapes dedupe instead
 	// of minting a new fingerprint per ingestion timestamp.
 	const fp =
@@ -70,7 +75,7 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 			(existing.description ?? null) !== raw.description ||
 			(existing.image_url ?? null) !== raw.imageUrl ||
 			JSON.stringify(existing.categories ?? []) !==
-				JSON.stringify(raw.categories) ||
+				JSON.stringify(categories) ||
 			(existing.end_at ?? null) !== raw.endAt ||
 			(existing.url ?? null) !== raw.url;
 		if (changed) {
@@ -80,7 +85,7 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 					title: raw.title,
 					description: raw.description,
 					image_url: raw.imageUrl,
-					categories: raw.categories,
+					categories,
 					end_at: raw.endAt,
 					url: raw.url,
 					updated_at: now,
@@ -120,7 +125,7 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 			venue_id: venueId,
 			image_url: raw.imageUrl,
 			url: raw.url,
-			categories: raw.categories,
+			categories,
 			date_text: raw.dateText,
 			fingerprint: fp,
 			created_at: now,

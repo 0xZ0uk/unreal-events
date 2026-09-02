@@ -147,7 +147,9 @@ export function toRawEvent(slug: string, ld: EventLd | null): RawEvent | null {
 		dateText: null,
 		venueName: venueName || "Local a definir",
 		city,
-		categories: ["Shotgun"],
+		// No platform-name category: Shotgun rows carry real categories from
+		// JSON-LD when present; canonicalization happens at ingest.
+		categories: [],
 		imageUrl: typeof ld.image === "string" ? ld.image : (ld.image?.url ?? null),
 		url: ld.url?.trim() || `${SITE}/en/events/${slug}`,
 	};

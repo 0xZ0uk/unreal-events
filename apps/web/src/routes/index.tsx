@@ -42,6 +42,8 @@ type Event = {
 	imageUrl: string | null;
 	url: string | null;
 	categories: string[];
+	/** Same-day session start times (incl. startAt) when this row merged 2+. */
+	sessionStarts?: number[];
 	dateText?: string | null;
 };
 
@@ -96,17 +98,22 @@ function isMultiDay(e: Event) {
 
 function EventRow({ event }: { event: Event }) {
 	const multiDay = isMultiDay(event);
+	// Merged rows can include a midnight-pinned placeholder session (source had
+	// no time) alongside timed sessions — show the first session with a real
+	// time instead of a blank rail.
+	const firstTimed =
+		event.sessionStarts?.find((s) => fmtTime(s) !== "") ?? event.startAt;
 	const timeLabel =
 		multiDay && event.endAt != null
 			? `${dayKey(event.startAt)} → ${dayKey(event.endAt)}`
-			: fmtTime(event.startAt);
+			: fmtTime(firstTimed);
 
 	return (
 		<Card className="group gap-0 overflow-hidden rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] py-0 transition-colors hover:border-[var(--p443-ink-muted)]">
 			<CardContent className="flex items-stretch gap-0 p-0">
 				{/* Time rail - mono, muted */}
 				<div className="flex w-[96px] shrink-0 flex-col items-center justify-center gap-1 border-[var(--p443-hairline)] border-r bg-[var(--p443-surface)]/60 px-3 py-4 text-center transition-colors group-hover:bg-[var(--p443-surface)] sm:w-[112px]">
-					{multiDay ? (
+					{multiDay && event.endAt != null ? (
 						<>
 							<span
 								className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
@@ -121,7 +128,7 @@ function EventRow({ event }: { event: Event }) {
 								className="font-bold font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]"
 								style={{ fontFamily: "var(--p443-font-mono)" }}
 							>
-								{dayKey(event.endAt!)}
+								{dayKey(event.endAt)}
 							</span>
 							<span className="mt-1 rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] px-2 py-0.5 font-bold font-mono text-[10px] text-[var(--p443-ink-muted)] uppercase tracking-wide">
 								vários dias
@@ -145,6 +152,12 @@ function EventRow({ event }: { event: Event }) {
 								{timeLabel || "—"}
 							</span>
 							<span className="mt-0.5 size-1 rounded-full bg-[var(--p443-ink-muted)] opacity-0 transition-opacity group-hover:opacity-100" />
+							{(event.sessionStarts?.length ?? 0) > 1 && (
+								<span className="rounded-[2px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] px-2 py-0.5 font-bold font-mono text-[10px] text-[var(--p443-ink-muted)] uppercase tracking-wide">
+									+{(event.sessionStarts?.length ?? 0) - 1} sessão
+									{(event.sessionStarts?.length ?? 0) > 2 ? "s" : ""}
+								</span>
+							)}
 						</>
 					)}
 				</div>
@@ -326,9 +339,7 @@ function FilterBar({
 						className="w-full"
 						aria-label="Concelho"
 					>
-						<NativeSelectOption value="">
-							Todo o distrito
-						</NativeSelectOption>
+						<NativeSelectOption value="">Todo o distrito</NativeSelectOption>
 						{citiesFacet.map((c) => (
 							<NativeSelectOption key={c} value={c}>
 								{c}
