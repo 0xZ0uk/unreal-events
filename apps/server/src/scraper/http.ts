@@ -56,6 +56,11 @@ export async function defaultFetchText(url: string): Promise<string> {
 		try {
 			const res = await fetch(url, {
 				signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+				headers: {
+					"User-Agent":
+						"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+					Accept: "text/html,application/xhtml+xml",
+				},
 			});
 			if (!res.ok) {
 				const err = new Error(`GET ${url} -> HTTP ${res.status}`);
