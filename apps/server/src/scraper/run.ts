@@ -44,6 +44,8 @@ for (const id of toRun) {
 				found: result.itemsFound,
 				new: result.itemsNew,
 				updated: result.itemsUpdated,
+				skippedPast: result.itemsSkippedPast,
+				purged: result.itemsPurged,
 				failed: result.itemsFailed,
 				error: result.error,
 				runId: result.runId,

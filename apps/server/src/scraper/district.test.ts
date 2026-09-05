@@ -76,3 +76,18 @@ describe("isLeiriaDistrict (freguesias and loose forms)", () => {
 		expect(isLeiriaDistrict(undefined)).toBe(false);
 	});
 });
+
+// SLICE_7: Oleiros (Castelo Branco) leaked through /leir/ on the first
+// festasearraiais run — the stem check needs a word boundary.
+describe("district gate — Oleiros exclusion (SLICE_7)", () => {
+	test("Oleiros is NOT Leiria district", () => {
+		expect(isLeiriaDistrict("Oleiros")).toBe(false);
+		expect(isLeiriaDistrict("oleiros")).toBe(false);
+	});
+
+	test("Leiria stems still match after the boundary fix", () => {
+		expect(isLeiriaDistrict("Leira")).toBe(true);
+		expect(isLeiriaDistrict("Leiria (cidade)")).toBe(true);
+		expect(isLeiriaDistrict("Leiria e arredores")).toBe(true);
+	});
+});
