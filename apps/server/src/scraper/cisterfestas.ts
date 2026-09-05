@@ -34,7 +34,12 @@ import type { RawEvent } from "./types";
 
 export const SITE = "https://cister.fm";
 export const LISTING_BASE = `${SITE}/salao-de-festas/`;
-export const MAX_LISTING_PAGES = 45;
+/**
+ * The listing pagination is JS-driven: every /page/N/ serves the same ~50
+ * items (verified live). MAX_LISTING_PAGES is just a safety net — the walk
+ * stops as soon as a page yields zero novel urls.
+ */
+export const MAX_LISTING_PAGES = 10;
 export const MAX_DETAIL_REQUESTS = 400;
 /** Year-inference tolerance: a festa counts as "live" until 1 day past. */
 export const YEAR_TOLERANCE_S = 86_400;
@@ -44,13 +49,6 @@ export const YEAR_TOLERANCE_S = 86_400;
  * "22 de Agosto" scraped from a 2025 post must NOT become Aug 2027.
  */
 export const ANNOUNCE_HORIZON_S = 150 * 86_400;
-/**
- * Stop walking the listing after this many consecutive pages whose slugs
- * contain no month from the recent/future window (currentMonth − 3 … ahead).
- * The listing is newest-first, so a run of month-stale pages means the rest
- * is old news; the detail pass re-checks real years and drops past festas.
- */
-export const MAX_STALE_PAGES = 4;
 
 export interface CisterState {
 	seen: string[];
@@ -301,38 +299,8 @@ export async function scrape(
 	const seen = new Set(state.seen);
 
 	const discovered = new Map<string, URL>();
-	// Fresh month names: current month −2 … +3 (mod 12). Month names repeat
-	// yearly, so this is a coarse freshness proxy — the detail pass re-checks
-	// real years; this only tells the listing walk when to stop.
-	const freshMonths = (now: number): string[] => {
-		const m = new Date(now * 1000).getUTCMonth(); // 0-based
-		const names = [
-			"janeiro",
-			"fevereiro",
-			"marco",
-			"abril",
-			"maio",
-			"junho",
-			"julho",
-			"agosto",
-			"setembro",
-			"outubro",
-			"novembro",
-			"dezembro",
-		];
-		const out: string[] = [];
-		for (let off = -2; off <= 3; off++) {
-			out.push(names[(m + off + 12) % 12] ?? "");
-		}
-		return out.filter(Boolean);
-	};
-	const fresh = freshMonths(deps.now);
-	let stalePages = 0;
 	for (let page = 1; page <= MAX_LISTING_PAGES; page++) {
-		if (
-			detailRequests >= MAX_DETAIL_REQUESTS ||
-			stalePages >= MAX_STALE_PAGES
-		) {
+		if (detailRequests >= MAX_DETAIL_REQUESTS) {
 			break;
 		}
 		const url = page === 1 ? LISTING_BASE : `${LISTING_BASE}page/${page}/`;
@@ -350,12 +318,7 @@ export async function scrape(
 		}
 		const found = parseListingLinks(html);
 		let novel = 0;
-		let freshSlug = 0;
 		for (const u of found) {
-			const slug = decodeURIComponent(u.split("/salaodefestas/")[1] ?? "");
-			if (fresh.some((mo) => slug.includes(mo))) {
-				freshSlug++;
-			}
 			if (!discovered.has(u)) {
 				discovered.set(u, new URL(u));
 				if (!seen.has(u)) {
@@ -363,13 +326,10 @@ export async function scrape(
 				}
 			}
 		}
-		// Newest-first listing: a page with no fresh-month slugs and nothing
-		// unseen is old news; after MAX_STALE_PAGES consecutive such pages,
-		// stop (detail pass re-checks real years).
-		if (freshSlug === 0 && novel === 0) {
-			stalePages++;
-		} else {
-			stalePages = 0;
+		// JS-driven pagination repeats the same page — one page with zero
+		// novel urls ends the walk.
+		if (novel === 0) {
+			break;
 		}
 	}
 
