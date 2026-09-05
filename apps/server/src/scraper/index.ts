@@ -4,9 +4,11 @@
  * shared normalize/fingerprint/ingest pipeline.
  */
 import { scrape as scrapeBol } from "./bol";
+import { scrape as scrapeCisterfestas } from "./cisterfestas";
 import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
 import { isLeiriaDistrict } from "./district";
 import { scrape as scrapeEventbrite } from "./eventbrite";
+import { scrape as scrapeFestasearraiais } from "./festasearraiais";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
 import { scrape as scrapeShotgun } from "./shotgun";
 import { scrape as scrapeTicketline } from "./ticketline";
@@ -18,6 +20,13 @@ import { scrape as scrapeViralagenda } from "./viralagenda";
 const scrapeShotgunDistrict = async () =>
 	scrapeShotgun(undefined, (evidence) => isLeiriaDistrict(evidence));
 
+/** SLICE_7 sources run the district gate inside their own modules. */
+const scrapeFestasearraiaisDistrict = async () =>
+	scrapeFestasearraiais(undefined, (city) => isLeiriaDistrict(city));
+
+const scrapeCisterfestasDistrict = async () =>
+	scrapeCisterfestas(undefined, (place) => isLeiriaDistrict(place));
+
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
@@ -25,6 +34,8 @@ export const sources = {
 	eventbrite: scrapeEventbrite,
 	viralagenda: scrapeViralagenda,
 	ticketline: scrapeTicketline,
+	festasearraiais: scrapeFestasearraiaisDistrict,
+	cisterfestas: scrapeCisterfestasDistrict,
 	shotgun: scrapeShotgunDistrict,
 } as const;
 

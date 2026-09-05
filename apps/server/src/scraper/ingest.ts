@@ -53,12 +53,17 @@ interface EventWrite {
 /** Upsert a single raw event into events + event_sources. */
 async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	const now = Math.floor(Date.now() / 1000);
-	// Past guard: archive-y sources (CM Leiria RSS serves its full historical
-	// agenda) emit events whose date is already gone. Never write them —
-	// they'd be invisible to user queries but bloat the DB and get purged
-	// moments later. Skips BEFORE venue resolution so stale raws can't even
-	// mint venue rows.
-	if (raw.startAt != null && raw.startAt < now) {
+	// Past guard (end-aware, SLICE_7): archive-y sources (CM Leiria RSS serves
+	// its full historical agenda; Cister FM lists past festas) emit events
+	// whose date is already gone. Skip only when the event has FULLY ENDED —
+	// `(endAt ?? startAt) < now`. A past startAt alone must NOT drop an
+	// ongoing multi-day festa (Vestiaria 28 Aug–8 Sep, Tremoceira 4–7 Sep) —
+	// those are exactly the events users want mid-festa. Never write them:
+	// they'd be invisible to queries but bloat the DB and get purged moments
+	// later. Skips BEFORE venue resolution so stale raws can't even mint
+	// venue rows.
+	const guardAt = raw.endAt ?? raw.startAt;
+	if (guardAt != null && guardAt < now) {
 		return { action: "skippedPast" };
 	}
 	const venueId = await resolveOrCreateVenue(raw.venueName, raw.city);

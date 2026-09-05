@@ -102,6 +102,32 @@ const KNOWN_PARISHES = [
 	"ordem",
 	"benedita",
 	"ribafria",
+	// Alcobaca + Porto de Mos freguesias / localities (Cister FM source +
+	// festasearraiais streetAddress evidence). Cister local LOCAL field is a
+	// worked place name (e.g. "Tremoceira", "Vestiaria") rather than a
+	// concelho -- these belong to the district and must gate in.
+	"pedreiras",
+	"tremoceira",
+	"vestiaria",
+	"alfeizerao",
+	"aljubarrota",
+	"barrio",
+	"cela",
+	"evora de alcobaca",
+	"maiorga",
+	"martinganca",
+	"pataias",
+	"sao martinho do porto",
+	"turquel",
+	"alcaria",
+	"alqueidao da serra",
+	"alvados",
+	"arrimal",
+	"calvaria de cima",
+	"junceira",
+	"mendiga",
+	"sao bento",
+	"serro ventoso",
 ] as const;
 
 /** Anything embedding the district name is in scope ("leiria e arredores",
