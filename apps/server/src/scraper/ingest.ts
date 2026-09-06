@@ -5,6 +5,7 @@ import { canonicalizeCategories } from "./categories";
 import { fingerprint, fingerprintUndated } from "./fingerprint";
 import { normalizeVenueName, slugify } from "./normalize";
 import { purgePastEvents } from "./purge";
+import { reconcileIdentities } from "./reconcile";
 import type { RawEvent } from "./types";
 
 /** Resolve (by normalized slug) or create a venue, returning its stable id. */
@@ -52,12 +53,17 @@ interface EventWrite {
 /** Upsert a single raw event into events + event_sources. */
 async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	const now = Math.floor(Date.now() / 1000);
-	// Past guard: archive-y sources (CM Leiria RSS serves its full historical
-	// agenda) emit events whose date is already gone. Never write them —
-	// they'd be invisible to user queries but bloat the DB and get purged
-	// moments later. Skips BEFORE venue resolution so stale raws can't even
-	// mint venue rows.
-	if (raw.startAt != null && raw.startAt < now) {
+	// Past guard (end-aware, SLICE_7): archive-y sources (CM Leiria RSS serves
+	// its full historical agenda; Cister FM lists past festas) emit events
+	// whose date is already gone. Skip only when the event has FULLY ENDED —
+	// `(endAt ?? startAt) < now`. A past startAt alone must NOT drop an
+	// ongoing multi-day festa (Vestiaria 28 Aug–8 Sep, Tremoceira 4–7 Sep) —
+	// those are exactly the events users want mid-festa. Never write them:
+	// they'd be invisible to queries but bloat the DB and get purged moments
+	// later. Skips BEFORE venue resolution so stale raws can't even mint
+	// venue rows.
+	const guardAt = raw.endAt ?? raw.startAt;
+	if (guardAt != null && guardAt < now) {
 		return { action: "skippedPast" };
 	}
 	const venueId = await resolveOrCreateVenue(raw.venueName, raw.city);
@@ -79,24 +85,27 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	});
 
 	if (existing) {
+		// Cross-source reconciliation: a second source seeing the same event
+		// may carry a category the first lacked, or a time the first lacked.
+		// Union categories (no data loss), backfill blanks — never overwrite
+		// the first source's values, so re-scrapes converge instead of
+		// flip-flopping between sources' fields.
+		const existingCats = (existing.categories ?? []) as string[];
+		const mergedCats = [...new Set([...existingCats, ...categories])].sort();
+		const mergedEnd =
+			existing.end_at ?? (raw.startAt != null ? raw.endAt : null);
+		const mergedUrl = existing.url ?? raw.url;
 		const changed =
-			existing.title !== raw.title ||
-			(existing.description ?? null) !== raw.description ||
-			(existing.image_url ?? null) !== raw.imageUrl ||
-			JSON.stringify(existing.categories ?? []) !==
-				JSON.stringify(categories) ||
-			(existing.end_at ?? null) !== raw.endAt ||
-			(existing.url ?? null) !== raw.url;
+			JSON.stringify(existingCats) !== JSON.stringify(mergedCats) ||
+			existing.end_at !== mergedEnd ||
+			existing.url !== mergedUrl;
 		if (changed) {
 			await db
 				.update(schema.events)
 				.set({
-					title: raw.title,
-					description: raw.description,
-					image_url: raw.imageUrl,
-					categories,
-					end_at: raw.endAt,
-					url: raw.url,
+					categories: mergedCats,
+					end_at: mergedEnd,
+					url: mergedUrl,
 					updated_at: now,
 				})
 				.where(eq(schema.events.id, existing.id));
@@ -234,9 +243,19 @@ export async function ingest(
 		itemsPurged = await purgePastEvents();
 	} catch (purgeErr) {
 		// Never fail the run over cleanup; surface it in the run record.
-		const msg =
-			purgeErr instanceof Error ? purgeErr.message : String(purgeErr);
+		const msg = purgeErr instanceof Error ? purgeErr.message : String(purgeErr);
 		error = error ?? `purge failed: ${msg}`;
+	}
+
+	// Identity reconciliation: collapse rows that are the same real-world
+	// event but hashed differently due to source time disagreements (e.g.
+	// Viral Agenda's DST-shifted JSON-LD). Merges categories + attributions
+	// onto the earliest row; no-op on a converged DB.
+	try {
+		await reconcileIdentities();
+	} catch (recErr) {
+		const msg = recErr instanceof Error ? recErr.message : String(recErr);
+		error = error ?? `reconcile failed: ${msg}`;
 	}
 
 	const finishedAt = Math.floor(Date.now() / 1000);

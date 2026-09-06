@@ -102,14 +102,44 @@ const KNOWN_PARISHES = [
 	"ordem",
 	"benedita",
 	"ribafria",
+	// Alcobaca + Porto de Mos freguesias / localities (Cister FM source +
+	// festasearraiais streetAddress evidence). Cister local LOCAL field is a
+	// worked place name (e.g. "Tremoceira", "Vestiaria") rather than a
+	// concelho -- these belong to the district and must gate in.
+	"pedreiras",
+	"tremoceira",
+	"vestiaria",
+	"alfeizerao",
+	"aljubarrota",
+	"barrio",
+	"cela",
+	"evora de alcobaca",
+	"maiorga",
+	"martinganca",
+	"pataias",
+	"sao martinho do porto",
+	"turquel",
+	"alcaria",
+	"alqueidao da serra",
+	"alvados",
+	"arrimal",
+	"calvaria de cima",
+	"junceira",
+	"mendiga",
+	"sao bento",
+	"serro ventoso",
 ] as const;
 
-/** Anything embedding the district name is in scope ("leiria e arredores",
- *  "leiria (cidade)", the "Leira" typo the leiriagenda source emits, venue
- *  names containing the word, etc.). The typo check keeps the leira/leiria
- *  stem (leir*) so "Leira" and "Leiriao"-style mangles still match. */
+/**
+ * Anything embedding the district name is in scope ("leiria e arredores",
+ * "leiria (cidade)", the "Leira" typo the leiriagenda source emits, venue
+ * names containing the word, etc.). The typo check keeps the leira/leiria
+ * stem (leir*) but requires a WORD BOUNDARY before it — bare /leir/ matches
+ * the "o-leir-os" in "Oleiros" (Castelo Branco district), which leaked
+ * through on the first festasearraiais run.
+ */
 function mentionsLeiriaName(norm: string): boolean {
-	return /leir/.test(norm);
+	return /(^|[^a-z])leir/.test(norm);
 }
 
 /**
