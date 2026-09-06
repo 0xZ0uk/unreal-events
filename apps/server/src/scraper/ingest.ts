@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { canonicalizeCategories } from "./categories";
 import { fingerprint, fingerprintUndated } from "./fingerprint";
 import { normalizeVenueName, slugify } from "./normalize";
+import { purgePastEvents } from "./purge";
 import type { RawEvent } from "./types";
 
 /** Resolve (by normalized slug) or create a venue, returning its stable id. */
@@ -45,15 +46,23 @@ async function resolveOrCreateVenue(
 }
 
 interface EventWrite {
-	action: "inserted" | "updated" | "unchanged";
+	action: "inserted" | "updated" | "unchanged" | "skippedPast";
 }
 
 /** Upsert a single raw event into events + event_sources. */
 async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
+	const now = Math.floor(Date.now() / 1000);
+	// Past guard: archive-y sources (CM Leiria RSS serves its full historical
+	// agenda) emit events whose date is already gone. Never write them —
+	// they'd be invisible to user queries but bloat the DB and get purged
+	// moments later. Skips BEFORE venue resolution so stale raws can't even
+	// mint venue rows.
+	if (raw.startAt != null && raw.startAt < now) {
+		return { action: "skippedPast" };
+	}
 	const venueId = await resolveOrCreateVenue(raw.venueName, raw.city);
 	// Deterministic venue ref independent of DB state → stable across scrapes.
 	const venueRef = slugify(normalizeVenueName(raw.venueName));
-	const now = Math.floor(Date.now() / 1000);
 	// Canonical taxonomy (SLICE_6): collapse variants, drop platform names.
 	// Applied on both write paths; change detection below compares canonical
 	// values so re-scrapes converge instead of flip-flopping.
@@ -168,6 +177,10 @@ export interface IngestResult {
 	itemsFound: number;
 	itemsNew: number;
 	itemsUpdated: number;
+	/** Dated raws whose start_at was already past — refused by the guard. */
+	itemsSkippedPast: number;
+	/** Expired dated rows deleted by the post-scrape purge. */
+	itemsPurged: number;
 	itemsFailed: number;
 	error: string | null;
 	runId: number | null;
@@ -191,6 +204,7 @@ export async function ingest(
 	const startedAt = Math.floor(Date.now() / 1000);
 	let itemsNew = 0;
 	let itemsUpdated = 0;
+	let itemsSkippedPast = 0;
 	let itemsFailed = meta.failures;
 	let error = meta.firstError;
 
@@ -201,6 +215,8 @@ export async function ingest(
 				itemsNew++;
 			} else if (res.action === "updated") {
 				itemsUpdated++;
+			} else if (res.action === "skippedPast") {
+				itemsSkippedPast++;
 			}
 		} catch (err) {
 			itemsFailed++;
@@ -208,6 +224,19 @@ export async function ingest(
 				error = err instanceof Error ? err.message : String(err);
 			}
 		}
+	}
+
+	// Post-scrape hygiene: the DB should only hold today-or-future dated
+	// events. Anything that expired since the last cycle goes now (guard
+	// alone can't remove rows that were valid when first ingested).
+	let itemsPurged = 0;
+	try {
+		itemsPurged = await purgePastEvents();
+	} catch (purgeErr) {
+		// Never fail the run over cleanup; surface it in the run record.
+		const msg =
+			purgeErr instanceof Error ? purgeErr.message : String(purgeErr);
+		error = error ?? `purge failed: ${msg}`;
 	}
 
 	const finishedAt = Math.floor(Date.now() / 1000);
@@ -228,6 +257,8 @@ export async function ingest(
 		itemsFound: meta.found,
 		itemsNew,
 		itemsUpdated,
+		itemsSkippedPast,
+		itemsPurged,
 		itemsFailed,
 		error,
 		runId: run[0]?.id ?? null,
