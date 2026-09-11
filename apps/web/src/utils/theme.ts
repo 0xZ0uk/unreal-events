@@ -11,15 +11,17 @@ import { useCallback, useEffect, useState } from "react";
  */
 export type Theme = "dark" | "light";
 
-const STORAGE_KEY = "unreal443-theme";
-/** Key a previous build stored its preference under. */
-const LEGACY_STORAGE_KEY = "theme";
+const STORAGE_KEY = "findleiria-theme";
+/** Keys an earlier build stored its preference under (rebrand, pre-rewrite). */
+const LEGACY_STORAGE_KEYS = ["unreal443-theme", "theme"];
 
 function readStored(): Theme {
 	if (typeof localStorage === "undefined") return "dark";
 	try {
-		const value = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
-		return value === "light" ? "light" : "dark";
+		const stored = [STORAGE_KEY, ...LEGACY_STORAGE_KEYS]
+			.map((key) => localStorage.getItem(key))
+			.find((value) => value !== null);
+		return stored === "light" ? "light" : "dark";
 	} catch {
 		return "dark";
 	}

@@ -1,6 +1,7 @@
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Agenda } from "@/hooks/use-agenda";
 import { MICRO } from "./layout";
+import { Wordmark } from "./wordmark";
 
 function Stat({ label, value, busy }: { label: string; value: string; busy: boolean }) {
 	return (
@@ -21,9 +22,7 @@ export function Masthead({ agenda }: { agenda: Agenda }) {
 	return (
 		<header className="pt-6 sm:pt-10">
 			<div className="flex items-center justify-between gap-4">
-				<span className="p443-wordmark">
-					UNREAL<span className="text-primary">443</span>
-				</span>
+				<Wordmark />
 				<ThemeToggle />
 			</div>
 

@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Unreal 443 — o que se passa em Leiria</title>
+    <title>FindLeiria — o que se passa em Leiria</title>
     <meta
       name="description"
       content="Agenda de Leiria: concertos, teatro, exposições, festas e mercados do distrito, recolhidos todos os dias das fontes originais."
     />
     <meta name="theme-color" content="#0a0a0a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
       // Set the theme before first paint: dark unless this visitor asked for light.
       try {
-        var stored = localStorage.getItem("unreal443-theme") || localStorage.getItem("theme");
+        var stored = localStorage.getItem("findleiria-theme") || localStorage.getItem("unreal443-theme") || localStorage.getItem("theme");
         var theme = stored === "light" ? "light" : "dark";
         document.documentElement.classList.add(theme);
         document.documentElement.style.colorScheme = theme;
