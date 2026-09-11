@@ -229,6 +229,32 @@ describe("venueCompatible (RULE 2 wildcard for event identity)", () => {
 	});
 });
 
+describe("venueCompatible city scope (RULE 2 regression)", () => {
+	// The placeholder row's own city is itself a scope string ("Leiria e
+	// arredores"), so it must compare equal to "Leiria" or this cross-source
+	// duplicate survives with no other disagreement.
+	test("a vague venue whose city carries a scope filler matches the bare city", () => {
+		expect(
+			venueCompatible(
+				"Leiria (cidade)",
+				"Centro Histórico de Leiria",
+				"Leiria e arredores",
+				"Leiria",
+			),
+		).toBe(true);
+	});
+	test("a scope-filler city still never crosses municipalities", () => {
+		expect(
+			venueCompatible(
+				"Leiria (cidade)",
+				"Mercado Municipal",
+				"Leiria e arredores",
+				"Lisboa",
+			),
+		).toBe(false);
+	});
+});
+
 describe("planComponents (cross-source event grouping)", () => {
 	test("ESQUERDA pair with split venue naming collapses into one component", () => {
 		const comps = planComponents([

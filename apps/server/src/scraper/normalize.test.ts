@@ -58,6 +58,12 @@ describe("normalizeCity", () => {
 		expect(normalizeCity(null)).toBe("");
 		expect(normalizeCity(undefined)).toBe("");
 	});
+	test("scope fillers drop, so 'e arredores' equals the bare city", () => {
+		expect(normalizeCity("Leiria e arredores")).toBe("leiria");
+		expect(normalizeCity("Concelho de Leiria")).not.toBe("leiria");
+		// Meaningful words are never stripped: only scope fillers are.
+		expect(normalizeCity("Vieira de Leiria")).toBe("vieira de leiria");
+	});
 });
 
 describe("venueTokens", () => {

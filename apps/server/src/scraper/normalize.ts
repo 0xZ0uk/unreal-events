@@ -115,11 +115,31 @@ export const GENERIC_VENUE_TOKENS = new Set([
 export const DISTRICT_MUNICIPALITY_TOKENS = new Set(["leiria"]);
 
 /**
+ * Words that name a city's SCOPE rather than identify it. A source
+ * advertising "Leiria e arredores" means the municipality, so its city
+ * string must compare equal to a bare "Leiria" — otherwise the cross-source
+ * city-agreement guard splits a duplicate that has no other disagreement.
+ */
+export const CITY_SCOPE_FILLERS = new Set([
+	"e",
+	"arredores",
+	"arredor",
+	"regiao",
+	"zona",
+	"concelho",
+	"distrito",
+]);
+
+/**
  * City identity: lowercase, diacritics stripped, parenthetical scope dropped
- * (`Leiria (distrito)` → `leiria`, `Leiria` → `leiria`).
+ * and scope fillers dropped (`Leiria (distrito)` → `leiria`,
+ * `Leiria e arredores` → `leiria`, `Vieira de Leiria` → `vieira de leiria`).
  */
 export function normalizeCity(city: string | null | undefined): string {
-	return normalizeTitle((city ?? "").replace(/\s*\([^)]*\)\s*/g, " "));
+	const base = normalizeTitle((city ?? "").replace(/\s*\([^)]*\)\s*/g, " "));
+	const words = wordsOf(base).filter((w) => !CITY_SCOPE_FILLERS.has(w));
+	// Never normalize a city away entirely: an all-filler string stays literal.
+	return words.length > 0 ? words.join(" ") : base;
 }
 
 /** Split a normalized name into its ordered words. */
