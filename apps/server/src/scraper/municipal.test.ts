@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 
 import { toEpochInLisbon } from "./fingerprint";
 import {
+	PAGE_ATTEMPTS,
 	parseDetail,
 	parseListingDates,
 	parseListingItems,
@@ -416,10 +417,40 @@ describe("scrape (injected fetchText over the real fixtures)", () => {
 			deps([], "https://www.cm-mgrande.pt/comunicar/eventos"),
 			() => true,
 		);
-		expect(res.failures).toBe(1);
-		expect(res.firstError).toBe("network down");
+		// Two consecutive fully-failed pages end the council (6 requests, not
+		// all 44); each dead page is one failure in the run record.
+		expect(res.failures).toBe(2);
+		expect(res.firstError).toContain("network down");
 		expect(res.events.length).toBeGreaterThan(0);
 		expect(res.events.some((e) => e.city === "Marinha Grande")).toBe(false);
+	});
+
+	test("a page that 403s mid-walk is retried, skipped, and the tail still walks", async () => {
+		// Live regression: the Marinha Grande paginator answered 403 at page 31
+		// of 44, and the old `break` meant pages 32-44 were never fetched on
+		// ANY run — their items could never be discovered.
+		let deadPageAttempts = 0;
+		const base = fetchFor(null);
+		const res = await scrape(
+			{
+				...deps([]),
+				fetchText: async (u: string) => {
+					if (u.includes("events_list_13_page=31")) {
+						deadPageAttempts++;
+						throw new Error("HTTP 403");
+					}
+					return base(u);
+				},
+			},
+			() => true,
+		);
+		expect(deadPageAttempts).toBe(PAGE_ATTEMPTS);
+		// 156 listing pages − the dead one + 55 detail pages.
+		expect(res.pagesFetched).toBe(210);
+		expect(res.discovered).toBe(163);
+		expect(res.events.length).toBe(40);
+		expect(res.failures).toBe(1);
+		expect(res.firstError).toContain("page=31");
 	});
 
 	test("out-of-district city is dropped by the injected gate", async () => {

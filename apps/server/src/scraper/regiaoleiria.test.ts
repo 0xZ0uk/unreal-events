@@ -31,6 +31,7 @@ const localidadeText = readFileSync(
 const NOW = Math.floor(Date.UTC(2026, 8, 11, 12, 0, 0) / 1000);
 
 import {
+	DEFAULT_STATE,
 	parseCartaz,
 	parseLocalidade,
 	parseMonthRows,
@@ -38,21 +39,12 @@ import {
 	scrape,
 	slugFor,
 	toRawEvent,
-	type MonthRow,
 	type RegiaoState,
 } from "./regiaoleiria";
 
 /** Load the "detail" cartaz map ourselves so tests can address specific ids. */
 const cartaz = parseCartaz(cartazText);
 const terms = parseLocalidade(localidadeText);
-
-function recordToRows(
-	postId: string,
-	dates: string[],
-	itemId: number,
-): MonthRow[] {
-	return dates.map((date) => ({ postId, date }));
-}
 
 /** A fetchText stub that routes each URL to the matching real fixture. */
 function fixtureFetch(url: string): Promise<string> {
@@ -79,7 +71,11 @@ function fixtureFetch(url: string): Promise<string> {
 }
 
 function makeDeps(overrides: Partial<RegiaoState> = {}) {
-	let state: RegiaoState = { seenPostIds: [], ...overrides };
+	// Spread DEFAULT_STATE, not a hand-written literal: the previous literal
+	// named a `seenPostIds` field that RegiaoState does not have, so every test
+	// ran with `monthsFetched === undefined` and the month-watermark branch
+	// (scrape step 1) was never exercised.
+	let state: RegiaoState = { ...DEFAULT_STATE, ...overrides };
 	return {
 		fetchText: fixtureFetch,
 		sleep: () => Promise.resolve(),
@@ -174,7 +170,7 @@ describe("scrape — district gate is the point", () => {
 		expect(res.droppedOutOfDistrict).toBeGreaterThan(0);
 		// Exactly one RawEvent per (post id, date).
 		const keys = res.events.map(
-			(e, i) => `${e.title}|${e.dateText ?? e.startAt}`,
+			(e) => `${e.title}|${e.dateText ?? e.startAt}`,
 		);
 		expect(new Set(keys).size).toBe(keys.length);
 	});

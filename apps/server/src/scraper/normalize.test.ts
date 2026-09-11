@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+	decodeEntities,
 	isVagueVenue,
 	normalizeCity,
 	normalizeTitle,
@@ -162,5 +163,39 @@ describe("venuesMatch (strict cross-source venue identity)", () => {
 				"Marinha Grande",
 			),
 		).toBe(false);
+	});
+});
+
+describe("decodeEntities (single canonical table)", () => {
+	test("decodes named entities every source needs, not just the latin-1 core", () => {
+		expect(decodeEntities("Ol&#x27; Obidos")).toBe("Ol' Obidos");
+		expect(decodeEntities("&ecirc; &auml; &agrave; &ocirc; &acirc;")).toBe(
+			"ê ä à ô â",
+		);
+		expect(decodeEntities("1&ordf; lugar &ordm;2")).toBe("1ª lugar º2");
+		expect(decodeEntities("&lsquo;aspas&rsquo; &laquo;x&raquo;")).toBe(
+			"‘aspas’ «x»",
+		);
+	});
+
+	test("uppercase hex numeric entities decode (municipal parity)", () => {
+		expect(decodeEntities("O&#X2019;Neill")).toBe("O’Neill");
+	});
+
+	test("out-of-range codepoints never throw, they stay verbatim", () => {
+		// RangeError from String.fromCodePoint used to escape scrape() and kill
+		// the whole district batch (municipal guarded this, the shared table did
+		// not until every source moved onto it).
+		expect(() => decodeEntities("x&#999999999;y")).not.toThrow();
+		expect(decodeEntities("x&#999999999;y")).toBe("x&#999999999;y");
+		expect(decodeEntities("x&#x110000;y")).toBe("x&#x110000;y");
+		expect(decodeEntities("x&#0;y")).toBe("x&#0;y");
+	});
+
+	test("strips the hydration comments and leaves real ampersands alone", () => {
+		expect(decodeEntities("set<!-- -->.")).toBe("set.");
+		expect(decodeEntities("Le Raincy & Foz do Arelho")).toBe(
+			"Le Raincy & Foz do Arelho",
+		);
 	});
 });

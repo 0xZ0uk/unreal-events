@@ -99,6 +99,15 @@ const KNOWN_PARISHES = [
 	"mira de aire",
 	"juncal",
 	"sao jorge",
+	// Caldas da Rainha freguesias that arrive through a neighbour's agenda
+	// card ("Avenida do Mar, Foz do Arelho" — festasearraiais live data;
+	// Salir do Porto appears inside the Tornada union's own name). Without
+	// them the Óbidos source had no way to place the tail and blamed Óbidos
+	// for a venue that sits in the next concelho.
+	"foz do arelho",
+	"salir do porto",
+	"tornada",
+	"carvalhal benfeito",
 	"ordem",
 	"benedita",
 	"ribafria",

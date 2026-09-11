@@ -21,20 +21,32 @@ const NAMED_ENTITIES: Record<string, string> = {
 	laquo: "«",
 	raquo: "»",
 	ordm: "º",
+	ordf: "ª",
 	deg: "°",
 	aacute: "á",
+	acirc: "â",
+	agrave: "à",
+	atilde: "ã",
+	auml: "ä",
 	eacute: "é",
+	ecirc: "ê",
 	iacute: "í",
 	oacute: "ó",
-	uacute: "ú",
-	atilde: "ã",
+	ocirc: "ô",
 	otilde: "õ",
+	uacute: "ú",
 	ccedil: "ç",
 	Aacute: "Á",
-	Eacute: "É",
-	Ccedil: "Ç",
+	Acirc: "Â",
 	Atilde: "Ã",
+	Eacute: "É",
+	Ecirc: "Ê",
+	Iacute: "Í",
+	Oacute: "Ó",
+	Ocirc: "Ô",
 	Otilde: "Õ",
+	Uacute: "Ú",
+	Ccedil: "Ç",
 };
 
 /**
@@ -45,15 +57,31 @@ const NAMED_ENTITIES: Record<string, string> = {
  * Every scraper decodes its own strings before they become display titles —
  * the ingest layer stores `raw.title` verbatim, so an undecoded entity ships
  * straight to the site.
+ *
+ * This is the ONE canonical decoder for the sources added in SLICE_9: a
+ * second private copy previously diverged (one knew `&ecirc;`, the other
+ * `&lsquo;`), so the same CMS markup decoded differently per source.
+ *
+ * Numeric entities are range-guarded: a malformed `&#99999999999;` (or a
+ * huge hex form) stays verbatim instead of throwing RangeError out of a
+ * scrape loop — a listing page must never be able to kill a whole run over
+ * one bad character reference.
  */
+function codepointOrRaw(match: string, code: number): string {
+	if (!Number.isSafeInteger(code) || code <= 0 || code > 0x10ffff) {
+		return match;
+	}
+	return String.fromCodePoint(code);
+}
+
 export function decodeEntities(s: string): string {
 	return s
 		.replace(/<!--[\s\S]*?-->/g, "")
-		.replace(/&#x([0-9a-fA-F]+);/g, (_m, hex: string) =>
-			String.fromCodePoint(Number.parseInt(hex, 16)),
+		.replace(/&#x([0-9a-fA-F]+);/gi, (m, hex: string) =>
+			codepointOrRaw(m, Number.parseInt(hex, 16)),
 		)
-		.replace(/&#(\d+);/g, (_m, dec: string) =>
-			String.fromCodePoint(Number.parseInt(dec, 10)),
+		.replace(/&#(\d+);/g, (m, dec: string) =>
+			codepointOrRaw(m, Number.parseInt(dec, 10)),
 		)
 		.replace(
 			/&([a-zA-Z]+);/g,

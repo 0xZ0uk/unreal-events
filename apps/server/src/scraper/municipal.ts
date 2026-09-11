@@ -1,6 +1,8 @@
 import { isLeiriaDistrict } from "./district";
+import { errorMessage } from "./errors";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
+import { decodeEntities } from "./normalize";
 import { loadState, saveState } from "./state";
 import type { RawEvent } from "./types";
 
@@ -181,56 +183,10 @@ const MONTHS: Record<string, number> = {
 	dez: 12,
 };
 
-const NAMED_ENTITIES: Record<string, string> = {
-	"&amp;": "&",
-	"&lt;": "<",
-	"&gt;": ">",
-	"&quot;": '"',
-	"&apos;": "'",
-	"&nbsp;": " ",
-	"&ordm;": "º",
-	"&ordf;": "ª",
-	"&hellip;": "…",
-	"&mdash;": "—",
-	"&ndash;": "–",
-	"&aacute;": "á",
-	"&acirc;": "â",
-	"&agrave;": "à",
-	"&atilde;": "ã",
-	"&auml;": "ä",
-	"&Aacute;": "Á",
-	"&Acirc;": "Â",
-	"&Atilde;": "Ã",
-	"&ccedil;": "ç",
-	"&Ccedil;": "Ç",
-	"&eacute;": "é",
-	"&ecirc;": "ê",
-	"&Eacute;": "É",
-	"&iacute;": "í",
-	"&Iacute;": "Í",
-	"&oacute;": "ó",
-	"&ocirc;": "ô",
-	"&otilde;": "õ",
-	"&Oacute;": "Ó",
-	"&uacute;": "ú",
-	"&Uacute;": "Ú",
-};
-
-function decodeEntities(input: string): string {
-	let out = input;
-	for (const [token, value] of Object.entries(NAMED_ENTITIES)) {
-		out = out.split(token).join(value);
-	}
-	return out.replace(/&#(x[0-9a-f]+|\d+);/gi, (full, n: string) => {
-		const code = n.toLowerCase().startsWith("x")
-			? Number.parseInt(n.slice(1), 16)
-			: Number.parseInt(n, 10);
-		if (!Number.isSafeInteger(code) || code <= 0 || code > 0x10ffff) {
-			return full;
-		}
-		return String.fromCodePoint(code);
-	});
-}
+// Entity decoding lives in ./normalize: one canonical table for every
+// SLICE_9 source. The private copy that lived here had drifted (it knew
+// `&ecirc;`/`&auml;`, the shared one knew `&lsquo;`), so identical CMS markup
+// decoded differently depending on which scraper read it.
 
 function stripTags(html: string): string {
 	return html
@@ -647,6 +603,11 @@ export function toRawEvent(
 	};
 }
 
+/** Attempts per listing page before that page is skipped as dead. */
+export const PAGE_ATTEMPTS = 3;
+/** Backoff between listing-page attempts (ms), indexed by attempt. */
+export const PAGE_BACKOFF_MS: readonly number[] = [2_000, 6_000];
+
 export async function scrape(
 	deps: ScrapeDeps = {
 		fetchText: defaultFetchText,
@@ -670,21 +631,44 @@ export async function scrape(
 	const delay = () => deps.sleep(randomDelay());
 
 	for (const site of SITES) {
+		// Consecutive pages where every attempt failed: one dead page is
+		// skipped, two in a row mean the council's site is down and hammering
+		// the rest of its pages helps nobody.
+		let deadPages = 0;
 		for (let page = 1; page <= site.maxPages; page++) {
 			const url =
 				page === 1 || !site.paginator
 					? site.listing
 					: `${site.listing}?${site.paginator}_page=${page}&paginating=true`;
-			let html: string;
-			try {
-				await delay();
-				html = await deps.fetchText(url);
-				pagesFetched++;
-			} catch (err) {
-				failures++;
-				firstError ??= err instanceof Error ? err.message : String(err);
-				break; // one council failing must not stop the others
+			let html: string | null = null;
+			let lastError: string | null = null;
+			for (let attempt = 0; attempt < PAGE_ATTEMPTS; attempt++) {
+				try {
+					await delay();
+					html = await deps.fetchText(url);
+					pagesFetched++;
+					break;
+				} catch (err) {
+					lastError = errorMessage(err);
+					if (attempt < PAGE_ATTEMPTS - 1) {
+						await deps.sleep(PAGE_BACKOFF_MS[attempt] ?? 5_000);
+					}
+				}
 			}
+			if (html === null) {
+				// Paginator pages are addressed explicitly (`_page=N`), so a
+				// failing page is skipped instead of ending the walk: `break`
+				// here is what kept Marinha Grande pages 32-44 unfetched on
+				// EVERY run after the 403 at page 31.
+				failures++;
+				firstError ??= `${url}: ${lastError ?? "unknown error"}`;
+				deadPages++;
+				if (deadPages >= 2) {
+					break; // council unreachable — the next council still runs
+				}
+				continue;
+			}
+			deadPages = 0;
 			for (const item of parseListingItems(html, site)) {
 				discovered.add(item.url);
 				// Already ingested in a previous run, or already handled on an

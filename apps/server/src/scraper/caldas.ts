@@ -1,3 +1,4 @@
+import { errorMessage } from "./errors";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
 import { loadState, saveState } from "./state";
@@ -142,8 +143,21 @@ export function parseCardDate(
 const pick = (block: string, re: RegExp): string | null =>
 	re.exec(block)?.[1] ?? null;
 
-/** Parse every server-rendered `events-card` block on a listing page. */
-export function parseListingCards(html: string): ListingCard[] {
+/**
+ * Parse every server-rendered `events-card` block on a listing page.
+ *
+ * Card dates come from three separate spans and can be malformed (unknown
+ * month token, `31` in a 30-day month, a stub card). Those cards are skipped
+ * and reported through `onMalformed` instead of throwing: this runs inside
+ * `scrape()`, and the runner walks every source of the district in one batch,
+ * so one corrupt card used to abort the whole run — no run row, no remaining
+ * sources. The optional callback lets a parse failure reach
+ * `ScrapeResult.failures` / `firstError` the way a fetch failure does.
+ */
+export function parseListingCards(
+	html: string,
+	onMalformed?: (reason: string) => void,
+): ListingCard[] {
 	const blocks = html.split('<div class="events-card">').slice(1);
 	const cards: ListingCard[] = [];
 	for (const b of blocks) {
@@ -162,12 +176,25 @@ export function parseListingCards(html: string): ListingCard[] {
 		if (!title || !sDay || !sMonth || !sYear) {
 			continue;
 		}
-		const start = parseCardDate(sDay, sMonth, sYear);
+		let start: CardDate;
+		try {
+			start = parseCardDate(sDay, sMonth, sYear);
+		} catch (err) {
+			onMalformed?.(`${slug}: start date — ${errorMessage(err)}`);
+			continue;
+		}
 		// Single-day cards (e.g. Futsal) omit the end-date block entirely.
-		const end =
-			eDay && eMonth && eYear
-				? parseCardDate(eDay, eMonth, eYear)
-				: { ...start };
+		let end: CardDate = { ...start };
+		if (eDay && eMonth && eYear) {
+			try {
+				end = parseCardDate(eDay, eMonth, eYear);
+			} catch (err) {
+				// Keep the card as a single-day event rather than dropping it:
+				// the start date is the part the listing actually showed, and
+				// the unusable end date is still reported as a failure.
+				onMalformed?.(`${slug}: end date — ${errorMessage(err)}`);
+			}
+		}
 		cards.push({
 			slug,
 			title: decodeEntities(title).trim(),
@@ -213,8 +240,20 @@ export function toRawEvent(
 	card: ListingCard,
 	url: string,
 	nowUnix: number,
+	onMalformed?: (reason: string) => void,
 ): RawEvent | null {
-	const { startAt, endAt } = cardEpochs(card);
+	let startAt: number;
+	let endAt: number;
+	try {
+		({ startAt, endAt } = cardEpochs(card));
+	} catch (err) {
+		// An impossible calendar date the listing markup still published
+		// (`29 Fev` in a non-leap year is the real one that reached us). Drop
+		// the card, but report it: this throw used to escape `scrape()` and
+		// take down every remaining source in the run.
+		onMalformed?.(`${card.slug}: campaign date — ${errorMessage(err)}`);
+		return null;
+	}
 	if (endAt < nowUnix - RETRO_TOLERANCE_S) {
 		return null;
 	}
@@ -257,6 +296,13 @@ export async function scrape(
 	let failures = 0;
 	let firstError: string | null = null;
 
+	/** Card-level parse failures are run failures too — they are the only
+	 * signal we get that the site's markup shifted under us. */
+	const onMalformed = (reason: string) => {
+		failures++;
+		firstError ??= reason;
+	};
+
 	const fetchText = deps.fetchText;
 	const delay = () => deps.sleep(randomDelay());
 
@@ -273,12 +319,13 @@ export async function scrape(
 			pagesFetched++;
 		} catch (err) {
 			failures++;
-			if (!firstError) {
-				firstError = err instanceof Error ? err.message : String(err);
-			}
-			break; // pages are sequential; a gap stops discovery
+			firstError ??= `${url}: ${errorMessage(err)}`;
+			// Pages are addressed explicitly (`?page=N`), so one dead page no
+			// longer ends discovery for good: `break` here meant every page
+			// after the failing one stayed unfetched on every future run too.
+			continue;
 		}
-		const cards = parseListingCards(html);
+		const cards = parseListingCards(html, onMalformed);
 		for (const c of cards) {
 			if (!discovered.has(c.slug)) {
 				discovered.set(c.slug, c);
@@ -302,7 +349,7 @@ export async function scrape(
 			continue;
 		}
 		const url = `${SITE}${AGENDA_PATH}/${slug}`;
-		const raw = toRawEvent(card, url, deps.now);
+		const raw = toRawEvent(card, url, deps.now, onMalformed);
 		if (raw && isInScope(raw.city)) {
 			// Guard against title+same-day collisions within a run.
 			const key = `${raw.title}|${raw.startAt}`;

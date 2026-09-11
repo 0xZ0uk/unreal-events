@@ -53,7 +53,7 @@ describe("parseDetail (offline fixture)", () => {
 
 	test("parses .hora into the correct epoch (2026-09-04 14:00 Lisbon)", () => {
 		expect(detail.startAt).toBe(1788526800);
-		expect(lisbonDay(detail.startAt)).toBe("2026-09-04");
+		expect(lisbonDay(detail.startAt!)).toBe("2026-09-04");
 	});
 
 	test("parses end date 2026-09-06", () => {
@@ -76,9 +76,13 @@ describe("parseDetail (offline fixture)", () => {
 		const a = fingerprint(
 			"Tattoo Artes",
 			"Centro Cultural Mercado de Sant'Ana",
-			detail.startAt,
+			detail.startAt!,
 		);
-		const b = fingerprint("Tattoo Artes", "mercado-de-santana", detail.startAt);
+		const b = fingerprint(
+			"Tattoo Artes",
+			"mercado-de-santana",
+			detail.startAt!,
+		);
 		expect(a).toBe(b);
 	});
 });

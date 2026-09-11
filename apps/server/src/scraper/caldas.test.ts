@@ -31,7 +31,7 @@ describe("parseListingCards (real page fixtures)", () => {
 	});
 
 	test("first card extracts slug/title/category/local start & end", () => {
-		const [first] = parseListingCards(page1);
+		const first = parseListingCards(page1)[0]!;
 		expect(first.slug).toBe("em-caldas-o-que");
 		expect(first.title).toBe("Em Caldas, o quê? setembro 2026");
 		expect(first.category).toBe("Agenda mensal");
@@ -182,6 +182,25 @@ describe("scrape (injected fetchText over the real fixtures)", () => {
 		expect(res.discovered).toBe(34);
 		expect(res.pagesFetched).toBe(4);
 	});
+
+	test("a dead listing page is skipped and the pages after it still parse", async () => {
+		const res = await scrape(
+			{
+				...deps([]),
+				fetchText: async (u: string) => {
+					if (u.includes("page=2")) {
+						throw new Error("HTTP 403");
+					}
+					return fetchMap.get(u) ?? "";
+				},
+			},
+			() => true,
+		);
+		expect(res.pagesFetched).toBe(3);
+		expect(res.discovered).toBe(22);
+		expect(res.failures).toBe(1);
+		expect(res.firstError).toContain("page=2");
+	});
 });
 
 describe("tolerances / constants", () => {
@@ -195,5 +214,41 @@ describe("tolerances / constants", () => {
 		expect(slugFor("setas-6ranking-singulares-m/f")).toBe(
 			"cl-setas-6ranking-singulares-m/f",
 		);
+	});
+});
+
+describe("malformed cards are reported, never thrown", () => {
+	test("parseCardDate throws on an unknown month token — why the guard exists", () => {
+		expect(() => parseCardDate("06", "xyz<!-- -->.", "&#x27;26")).toThrow();
+	});
+
+	test("a broken card is skipped and named, the other 11 survive", () => {
+		const broken = page1.replace("set<!-- -->.", "xyz<!-- -->.");
+		const reported: string[] = [];
+		const cards = parseListingCards(broken, (r) => reported.push(r));
+		expect(cards.length).toBe(11);
+		expect(cards.some((c) => c.slug === "em-caldas-o-que")).toBe(false);
+		expect(reported.length).toBe(1);
+		expect(reported[0]).toContain("em-caldas-o-que");
+		expect(parseListingCards(page1).length).toBe(12);
+	});
+
+	test("an impossible campaign date drops the card (null) instead of throwing", () => {
+		const reported: string[] = [];
+		const raw = toRawEvent(
+			{
+				slug: "x",
+				title: "X",
+				category: null,
+				start: { day: 29, month: 2, year: 2023 },
+				end: { day: 29, month: 2, year: 2023 },
+			},
+			"https://www.mcr.pt/agenda/x",
+			NOW,
+			(r) => reported.push(r),
+		);
+		expect(raw).toBeNull();
+		expect(reported.length).toBe(1);
+		expect(reported[0]).toContain("2023");
 	});
 });
