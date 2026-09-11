@@ -1,4 +1,4 @@
-import { db, schema } from "@events-tracker/db";
+import { schema } from "@events-tracker/db/browser";
 import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import { mergeSameDaySessions } from "../grouping";
@@ -105,7 +105,7 @@ const calendarInput = z.object({
 });
 
 export const eventsRouter = router({
-	list: publicProcedure.input(listInput).query(async ({ input }) => {
+	list: publicProcedure.input(listInput).query(async ({ ctx, input }) => {
 		const conditions = [];
 		if (!input.includeUndated) {
 			conditions.push(isNull(schema.events.date_text));
@@ -115,7 +115,7 @@ export const eventsRouter = router({
 		}
 		if (input.category) {
 			conditions.push(
-				sql`${schema.events.categories} like ${`%"${input.category}"%`}`,
+				sql`${schema.events.categories} like ${`%\"${input.category}\"%`}`,
 			);
 		}
 		if (input.dateFrom !== undefined) {
@@ -132,7 +132,7 @@ export const eventsRouter = router({
 		// same-day group across pages (badge-less duplicates, short pages).
 		// Volume is small (hundreds), so fetch matching rows unbounded, merge
 		// sessions, then apply offset/limit on merged events.
-		const rows = await db
+		const rows = await ctx.db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
@@ -143,10 +143,10 @@ export const eventsRouter = router({
 		return merged.slice(input.offset, input.offset + input.limit);
 	}),
 
-	byDay: publicProcedure.query(async () => {
+	byDay: publicProcedure.query(async ({ ctx }) => {
 		const now = Math.floor(Date.now() / 1000);
 
-		const rows = await db
+		const rows = await ctx.db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
@@ -158,7 +158,7 @@ export const eventsRouter = router({
 		return toPublicEventList(rows);
 	}),
 
-	calendar: publicProcedure.input(calendarInput).query(async ({ input }) => {
+	calendar: publicProcedure.input(calendarInput).query(async ({ ctx, input }) => {
 		const { year, month } = input;
 		// Lisbon-local month boundaries, then spill 7 days either side so the
 		// grid can render cross-month events on their true day.
@@ -171,7 +171,7 @@ export const eventsRouter = router({
 		const from = monthStart - 7 * 86400;
 		const to = nextMonthStart + 7 * 86400 - 1;
 
-		const rows = await db
+		const rows = await ctx.db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
@@ -187,8 +187,8 @@ export const eventsRouter = router({
 		return toPublicEventList(rows);
 	}),
 
-	undated: publicProcedure.query(async () => {
-		const rows = await db
+	undated: publicProcedure.query(async ({ ctx }) => {
+		const rows = await ctx.db
 			.select(eventSelect)
 			.from(schema.events)
 			.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
@@ -198,8 +198,8 @@ export const eventsRouter = router({
 		return rows.map(toPublicEvent);
 	}),
 
-	venues: publicProcedure.query(async () => {
-		const rows = await db
+	venues: publicProcedure.query(async ({ ctx }) => {
+		const rows = await ctx.db
 			.select({
 				id: schema.venues.id,
 				name: schema.venues.name,
@@ -212,11 +212,15 @@ export const eventsRouter = router({
 		return rows;
 	}),
 
-	stats: publicProcedure.query(async () => {
+	stats: publicProcedure.query(async ({ ctx }) => {
 		const [eventCount, venueCount, latestRun] = await Promise.all([
-			db.select({ count: sql<number>`count(*)` }).from(schema.events),
-			db.select({ count: sql<number>`count(*)` }).from(schema.venues),
-			db
+			ctx.db
+				.select({ count: sql<number>`count(*)` })
+				.from(schema.events),
+			ctx.db
+				.select({ count: sql<number>`count(*)` })
+				.from(schema.venues),
+			ctx.db
 				.select()
 				.from(schema.scrapeRuns)
 				.orderBy(desc(schema.scrapeRuns.started_at))

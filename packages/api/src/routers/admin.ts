@@ -1,4 +1,4 @@
-import { db, schema } from "@events-tracker/db";
+import { schema } from "@events-tracker/db/browser";
 import { desc } from "drizzle-orm";
 import { z } from "zod";
 
@@ -10,8 +10,8 @@ const runsInput = z.object({
 
 export const adminRouter = router({
 	/** Latest scrape runs, newest first. */
-	runs: publicProcedure.input(runsInput).query(async ({ input }) => {
-		const rows = await db
+	runs: publicProcedure.input(runsInput).query(async ({ ctx, input }) => {
+		const rows = await ctx.db
 			.select()
 			.from(schema.scrapeRuns)
 			.orderBy(desc(schema.scrapeRuns.started_at))
