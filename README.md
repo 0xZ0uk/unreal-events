@@ -87,10 +87,10 @@ DIGEST_KEYWORDS=tattoo,jazz pnpm --filter server digest -- --new 24
 
 - `--new N` limits to events ingested in the last N hours
 - `DIGEST_KEYWORDS` ⭐-marks watchlist hits in the output
-- ICS feed: start the server, then
-  http://localhost:3301/events.ics (add `?keyword=a,b` to filter, or
-  `?scope=undated` for undated events as text). Subscribe from any calendar
-  app.
+- ICS feed: `pnpm --filter server ics` writes `apps/web/public/events.ics`,
+  which the SPA serves as a static asset at `/events.ics` (add `?keyword=a,b` to
+  filter). The dev server also still serves `http://localhost:3301/events.ics`.
+  Subscribe from any calendar app.
 - Paste-a-link ingest:
   `pnpm --filter server ingest:url -- https://leiriagenda.cm-leiria.pt/pt/agenda/<slug>`
 
@@ -103,6 +103,7 @@ to Discord at 09:00. To replicate elsewhere, cron these two commands:
 ```bash
 cd apps/server && bun run src/scraper/run.ts leiriagenda && bun run src/scraper/run.ts cmleiriarss && bun run src/scraper/run.ts bol && bun run src/scraper/run.ts eventbrite
 DIGEST_KEYWORDS="..." bun run src/digest-cli.ts --new 24   # pipe to your notifier
+bun run src/ics-cli.ts                                     # regenerate the static /events.ics
 ```
 
 ### 8. Tests & checks
@@ -113,17 +114,41 @@ cd apps/server && bun test    # 52 offline tests (fixtures, no network)
 bunx biome check .            # lint/format
 ```
 
+### 9. Deploy (Vercel + Turso, no server)
+
+Production is a **static SPA that reads Turso directly from the browser**. There
+is no Hono process in production; the local daily scraper is the only writer.
+
+```bash
+turso db create unreal-events
+export DATABASE_URL="$(turso db show unreal-events --url)"
+export TURSO_AUTH_TOKEN="$(turso db tokens create unreal-events)"
+(cd packages/db && bunx drizzle-kit migrate)     # then import/dump existing rows
+turso db tokens create unreal-events --read-only # token for the browser
+```
+
+Vercel: import the repo with **Root Directory = repo root** — `vercel.json` owns
+install/build/output, so no framework preset is needed. Env:
+
+- `VITE_TURSO_URL` — the `libsql://` URL (the client upgrades it to HTTPS)
+- `VITE_TURSO_AUTH_TOKEN` — the **read-only** token
+
+Both are inlined into the bundle. That is acceptable here because the events are
+public data and a read-only token cannot write (Turso answers writes with
+`BLOCKED`). The scraper/runner gets the full token via `TURSO_AUTH_TOKEN` in
+`apps/server/.env`, alongside `DATABASE_URL=libsql://…`.
+
 ## Stack
 
-better-t-stack monorepo · pnpm + Bun · Hono (server, :3301) · React + TanStack
-Router (web, :3300) · tRPC · Drizzle + SQLite (libsql, `local.db` at repo root)
-· Turborepo + Biome.
+better-t-stack monorepo · pnpm + Bun · React + TanStack Router (web, :3300) ·
+Drizzle + libSQL (`local.db` in dev, remote Turso in production) · Hono + tRPC
+survive as a **local-dev only** surface · Turborepo + Biome.
 
 ```
-apps/server/     Hono API + scraper (src/scraper/) + digest (src/digest*.ts)
-apps/web/        TanStack Router UI (/ = agenda, /admin = runs dashboard)
-packages/api/    tRPC routers (events, admin)
-packages/db/     Drizzle schema, migrations, seeds
+apps/server/     scraper (src/scraper/) + digest + ICS CLI; Hono API for dev only
+apps/web/        static SPA (/ = agenda, /calendario = calendar, /admin = runs dashboard)
+packages/api/    query functions (src/queries/) + tRPC routers wrapping them
+packages/db/     Drizzle schema, migrations, seeds (src/browser.ts = browser client)
 ```
 
 ## Commands
