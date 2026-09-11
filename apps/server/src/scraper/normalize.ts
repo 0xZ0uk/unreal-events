@@ -3,6 +3,92 @@
  * pipelines. Kept dependency-light and pure so they are trivial to test.
  */
 
+/** Named HTML entities the Leiria sources actually emit. */
+const NAMED_ENTITIES: Record<string, string> = {
+	amp: "&",
+	lt: "<",
+	gt: ">",
+	quot: '"',
+	apos: "'",
+	nbsp: " ",
+	hellip: "…",
+	ndash: "–",
+	mdash: "—",
+	lsquo: "\u2018",
+	rsquo: "\u2019",
+	ldquo: "\u201C",
+	rdquo: "\u201D",
+	laquo: "«",
+	raquo: "»",
+	ordm: "º",
+	ordf: "ª",
+	deg: "°",
+	aacute: "á",
+	acirc: "â",
+	agrave: "à",
+	atilde: "ã",
+	auml: "ä",
+	eacute: "é",
+	ecirc: "ê",
+	iacute: "í",
+	oacute: "ó",
+	ocirc: "ô",
+	otilde: "õ",
+	uacute: "ú",
+	ccedil: "ç",
+	Aacute: "Á",
+	Acirc: "Â",
+	Atilde: "Ã",
+	Eacute: "É",
+	Ecirc: "Ê",
+	Iacute: "Í",
+	Oacute: "Ó",
+	Ocirc: "Ô",
+	Otilde: "Õ",
+	Uacute: "Ú",
+	Ccedil: "Ç",
+};
+
+/**
+ * Decode the HTML entities the municipal/CMS sources emit (mostly numeric:
+ * `&#8217;` for the curly apostrophe) and drop the `<!-- -->` comments
+ * Next.js hydration splices into text nodes.
+ *
+ * Every scraper decodes its own strings before they become display titles —
+ * the ingest layer stores `raw.title` verbatim, so an undecoded entity ships
+ * straight to the site.
+ *
+ * This is the ONE canonical decoder for the sources added in SLICE_9: a
+ * second private copy previously diverged (one knew `&ecirc;`, the other
+ * `&lsquo;`), so the same CMS markup decoded differently per source.
+ *
+ * Numeric entities are range-guarded: a malformed `&#99999999999;` (or a
+ * huge hex form) stays verbatim instead of throwing RangeError out of a
+ * scrape loop — a listing page must never be able to kill a whole run over
+ * one bad character reference.
+ */
+function codepointOrRaw(match: string, code: number): string {
+	if (!Number.isSafeInteger(code) || code <= 0 || code > 0x10ffff) {
+		return match;
+	}
+	return String.fromCodePoint(code);
+}
+
+export function decodeEntities(s: string): string {
+	return s
+		.replace(/<!--[\s\S]*?-->/g, "")
+		.replace(/&#x([0-9a-fA-F]+);/gi, (m, hex: string) =>
+			codepointOrRaw(m, Number.parseInt(hex, 16)),
+		)
+		.replace(/&#(\d+);/g, (m, dec: string) =>
+			codepointOrRaw(m, Number.parseInt(dec, 10)),
+		)
+		.replace(
+			/&([a-zA-Z]+);/g,
+			(m, name: string) => NAMED_ENTITIES[name] ?? m,
+		);
+}
+
 /** Lowercase, strip diacritics (NFD), strip punctuation, collapse whitespace. */
 export function normalizeTitle(input: string): string {
 	return input
@@ -94,6 +180,10 @@ export const GENERIC_VENUE_TOKENS = new Set([
 	"cidade",
 	"concelho",
 	"distrito",
+	// Scope qualifiers in parentheses ("Óbidos (vila)", "Leiria (cidade)"):
+	// without "vila" the token survives and the whole-town placeholder looks
+	// like a specific venue, so "Óbidos Vila Natal" stayed as two rows.
+	"vila",
 	"varios",
 	"varias",
 	"espacos",

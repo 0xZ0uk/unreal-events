@@ -91,3 +91,20 @@ describe("district gate — Oleiros exclusion (SLICE_7)", () => {
 		expect(isLeiriaDistrict("Leiria e arredores")).toBe(true);
 	});
 });
+
+// pullfrog nitpick on the Óbidos source: its venue tails are attributed to
+// Óbidos unless the district roster recognizes them, so a Caldas da Rainha
+// parish named on an Óbidos-agenda card was credited to the wrong concelho.
+describe("district gate — neighbour freguesias reach us through other agendas", () => {
+	test("Caldas da Rainha parishes that appear beside Óbidos events are district", () => {
+		expect(isLeiriaDistrict("Foz do Arelho")).toBe(true);
+		expect(isLeiriaDistrict("Salir do Porto")).toBe(true);
+		expect(isLeiriaDistrict("Tornada")).toBe(true);
+		expect(isLeiriaDistrict("Carvalhal Benfeito")).toBe(true);
+	});
+
+	test("still no free pass for places outside the district", () => {
+		expect(isLeiriaDistrict("Arelho")).toBe(false);
+		expect(isLeiriaDistrict("Serra do Bouro")).toBe(false);
+	});
+});
