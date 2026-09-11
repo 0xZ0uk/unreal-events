@@ -1,9 +1,7 @@
 import { publicProcedure, router } from "../index";
 import {
-	calendarInput,
 	eventStats,
 	eventsByDay,
-	eventsCalendar,
 	listEvents,
 	listInput,
 	undatedEvents,
@@ -22,10 +20,6 @@ export const eventsRouter = router({
 		.query(({ ctx, input }) => listEvents(ctx.db, input)),
 
 	byDay: publicProcedure.query(({ ctx }) => eventsByDay(ctx.db)),
-
-	calendar: publicProcedure
-		.input(calendarInput)
-		.query(({ ctx, input }) => eventsCalendar(ctx.db, input)),
 
 	undated: publicProcedure.query(({ ctx }) => undatedEvents(ctx.db)),
 

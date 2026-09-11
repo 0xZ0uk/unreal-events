@@ -1,13 +1,8 @@
-import { Separator } from "@events-tracker/ui/components/separator";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { ModeToggle } from "./mode-toggle";
 
-const links = [
-	{ to: "/" as const, label: "Agenda" },
-	{ to: "/calendario" as const, label: "Calendário" },
-	{ to: "/admin" as const, label: "Runs" },
-] as const;
+const links = [{ to: "/" as const, label: "Agenda" }] as const;
 
 export default function Header() {
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -56,13 +51,7 @@ export default function Header() {
 							<Link
 								key={to}
 								to={to}
-								search={
-									to === "/calendario"
-										? { y: undefined, m: undefined }
-										: to === "/"
-											? { date: undefined }
-											: (undefined as never)
-								}
+								search={{ date: undefined }}
 								className={`p443-btn border-b-2 px-3 py-2 text-[13px] uppercase tracking-[0.08em] transition-colors ${
 									active
 										? "border-[var(--p443-primary)] text-[var(--p443-ink)]"
@@ -83,13 +72,7 @@ export default function Header() {
 							<Link
 								key={to}
 								to={to}
-								search={
-									to === "/calendario"
-										? { y: undefined, m: undefined }
-										: to === "/"
-											? { date: undefined }
-											: (undefined as never)
-								}
+								search={{ date: undefined }}
 								className={`p443-btn whitespace-nowrap px-2 py-1.5 text-[11px] uppercase tracking-[0.04em] ${
 									active
 										? "border-[var(--p443-primary)] border-b-2 text-[var(--p443-ink)]"
@@ -104,20 +87,6 @@ export default function Header() {
 
 				{/* Actions */}
 				<div className="flex items-center gap-2">
-					<a
-						href="/events.ics"
-						target="_blank"
-						rel="noreferrer"
-						className="hidden sm:inline-flex"
-					>
-						<span className="p443-btn border border-[var(--p443-hairline)] px-3 py-2 text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.08em] transition-colors hover:border-[var(--p443-ink-muted)] hover:text-[var(--p443-ink)]">
-							Subscrever ICS
-						</span>
-					</a>
-					<Separator
-						orientation="vertical"
-						className="mx-1 hidden h-6 bg-[var(--p443-hairline)] sm:block"
-					/>
 					<ModeToggle />
 				</div>
 			</div>

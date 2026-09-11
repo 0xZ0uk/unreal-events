@@ -1,5 +1,14 @@
 # SLICE 8 — Vercel frontend + shared Turso DB
 
+> **Amendment (2026-09-11, post-build).** Shipped as specified — static SPA on
+> Vercel reading Turso directly. Three things were then cut, so §4 (ICS feed)
+> and the calendar/runs parts of §1–3 no longer describe the product:
+> the **ICS feed**, the **`/calendario` month view**, and the **`/admin` runs
+> dashboard** were removed, along with their queries (`eventsCalendar`,
+> `scrapeRuns`), routes, nav links, and the runner's ICS regeneration step. The
+> SPA is now a single agenda view. Everything else here (Turso as the shared DB,
+> read-only browser token, writer-only runner) still holds.
+
 **Goal:** drop the persistent Hono server. Deploy `apps/web` as a static SPA on
 Vercel, reading from a Turso (libSQL) database that the local daily runner
 writes to. One writer (the 07:00 scrape cron), one reader (the browser).

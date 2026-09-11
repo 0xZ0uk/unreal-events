@@ -8,7 +8,7 @@ import {
 } from "@events-tracker/ui/components/native-select";
 import { Separator } from "@events-tracker/ui/components/separator";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
 	ArrowUpRight,
 	CalendarDays,
@@ -561,38 +561,6 @@ function HomeComponent() {
 							</div>
 						)}
 					</div>
-
-					{/* Asymmetric secondary CTA - surface, no amber */}
-					<div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:flex-col">
-						<Link
-							to="/calendario"
-							search={{ y: undefined, m: undefined }}
-							className="no-underline"
-						>
-							<Button
-								variant="secondary"
-								size="cta"
-								className="w-full justify-between gap-4 sm:w-auto lg:w-[260px]"
-							>
-								<span
-									className="text-left font-medium leading-tight"
-									style={{ fontFamily: "var(--p443-font-display)" }}
-								>
-									Ver calendário
-								</span>
-								<span className="flex size-9 items-center justify-center rounded-[4px] border border-[var(--p443-hairline)] bg-[var(--p443-surface)] text-[var(--p443-ink)]">
-									<CalendarDays className="size-4" />
-								</span>
-							</Button>
-						</Link>
-						<a
-							href="/events.ics"
-							className="inline-flex items-center justify-center gap-2 rounded-[4px] border border-[var(--p443-hairline)] bg-transparent px-6 py-3 font-bold font-mono text-[11px] text-[var(--p443-ink)] uppercase tracking-[0.6px] transition-colors hover:border-[var(--p443-ink-muted)] hover:text-[var(--p443-ink-muted)]"
-						>
-							Subscrever ICS
-							<ArrowUpRight className="size-3.5" />
-						</a>
-					</div>
 				</div>
 			</div>
 
@@ -765,21 +733,6 @@ function HomeComponent() {
 					>
 						Unreal Events · Leiria · Europe/Lisbon
 					</p>
-					<div className="flex gap-6 font-mono text-[11px] text-[var(--p443-ink-muted)] uppercase tracking-[0.6px]">
-						<Link
-							to="/calendario"
-							search={{ y: undefined, m: undefined }}
-							className="hover:text-[var(--p443-ink)]"
-						>
-							Calendário
-						</Link>
-						<Link to="/admin" className="hover:text-[var(--p443-ink)]">
-							Runs
-						</Link>
-						<a href="/events.ics" className="hover:text-[var(--p443-ink)]">
-							ICS
-						</a>
-					</div>
 				</div>
 			</footer>
 		</div>

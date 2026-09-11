@@ -71,8 +71,8 @@ function toPublicEvent(row: EventRow) {
 
 /**
  * toPublicEvent + same-day session merging: rows that share normalized title,
- * venue, and Lisbon day are sessions of one show (kept separate in the DB and
- * ICS on purpose) — list views surface a single entry with `sessionStarts`.
+ * venue, and Lisbon day are sessions of one show (kept separate in the DB on
+ * purpose) — list views surface a single entry with `sessionStarts`.
  * Rows must arrive ordered by start_at (they do in every query here).
  */
 function toPublicEventList(rows: EventRow[]) {
@@ -91,34 +91,6 @@ export const listInput = z.object({
 });
 
 export type ListInput = z.infer<typeof listInput>;
-
-export const calendarInput = z.object({
-	year: z.number().int().min(1970).max(2200),
-	month: z.number().int().min(1).max(12),
-});
-
-export type CalendarInput = z.infer<typeof calendarInput>;
-
-const pad2 = (n: number) => String(n).padStart(2, "0");
-
-/** Epoch seconds for Lisbon-local midnight of a `YYYY-MM-DD` date string. */
-function lisbonMidnightEpoch(dateStr: string): number {
-	const parts = dateStr.split("-");
-	const y = Number(parts[0]);
-	const m = Number(parts[1]);
-	const d = Number(parts[2]);
-	const target = `${y}-${pad2(m)}-${pad2(d)}`;
-	const base = Math.floor(Date.UTC(y, m - 1, d, 0, 0, 0) / 1000);
-	for (const cand of [base, base - 3600, base + 3600]) {
-		const key = new Intl.DateTimeFormat("en-CA", {
-			timeZone: "Europe/Lisbon",
-		}).format(new Date(cand * 1000));
-		if (key === target) {
-			return cand;
-		}
-	}
-	return base;
-}
 
 export async function listEvents(db: Db, input: ListInput) {
 	const conditions = [];
@@ -173,35 +145,6 @@ export async function eventsByDay(db: Db) {
 	return toPublicEventList(rows);
 }
 
-export async function eventsCalendar(db: Db, input: CalendarInput) {
-	const { year, month } = input;
-	// Lisbon-local month boundaries, then spill 7 days either side so the
-	// grid can render cross-month events on their true day.
-	const monthStart = lisbonMidnightEpoch(`${year}-${pad2(month)}-01`);
-	const nextYear = month === 12 ? year + 1 : year;
-	const nextMonth = month === 12 ? 1 : month + 1;
-	const nextMonthStart = lisbonMidnightEpoch(
-		`${nextYear}-${pad2(nextMonth)}-01`,
-	);
-	const from = monthStart - 7 * 86400;
-	const to = nextMonthStart + 7 * 86400 - 1;
-
-	const rows = await db
-		.select(eventSelect)
-		.from(schema.events)
-		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
-		.where(
-			and(
-				gte(schema.events.start_at, from),
-				lte(schema.events.start_at, to),
-				isNull(schema.events.date_text),
-			),
-		)
-		.orderBy(schema.events.start_at);
-
-	return toPublicEventList(rows);
-}
-
 export async function undatedEvents(db: Db) {
 	const rows = await db
 		.select(eventSelect)
@@ -246,28 +189,3 @@ export async function eventStats(db: Db) {
 		lastRunNew: latest?.items_new ?? null,
 	};
 }
-
-export async function scrapeRuns(db: Db, input: { limit: number }) {
-	const rows = await db
-		.select()
-		.from(schema.scrapeRuns)
-		.orderBy(desc(schema.scrapeRuns.started_at))
-		.limit(input.limit);
-
-	return rows.map((r) => ({
-		id: r.id,
-		source: r.source,
-		startedAt: r.started_at,
-		finishedAt: r.finished_at,
-		found: r.items_found,
-		new: r.items_new,
-		failed: r.items_failed,
-		error: r.error,
-	}));
-}
-
-export const runsInput = z.object({
-	limit: z.number().int().min(1).max(500).default(50),
-});
-
-export type RunsInput = z.infer<typeof runsInput>;

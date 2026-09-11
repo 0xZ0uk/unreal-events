@@ -1,17 +1,9 @@
-import type {
-	CalendarInput,
-	ListInput,
-	RunsInput,
-} from "@events-tracker/api/queries/events";
+import type { ListInput } from "@events-tracker/api/queries/events";
 import {
-	calendarInput,
 	eventStats,
 	eventsByDay,
-	eventsCalendar,
 	listEvents,
 	listInput,
-	runsInput,
-	scrapeRuns,
 	undatedEvents,
 	venues,
 } from "@events-tracker/api/queries/events";
@@ -68,13 +60,6 @@ export const api = {
 					queryFn: () => eventsByDay(db),
 				}),
 		},
-		calendar: {
-			queryOptions: (input: CalendarInput) =>
-				queryOptions({
-					queryKey: ["events", "calendar", input],
-					queryFn: () => eventsCalendar(db, calendarInput.parse(input)),
-				}),
-		},
 		undated: {
 			queryOptions: () =>
 				queryOptions({
@@ -94,15 +79,6 @@ export const api = {
 				queryOptions({
 					queryKey: ["events", "stats"],
 					queryFn: () => eventStats(db),
-				}),
-		},
-	},
-	admin: {
-		runs: {
-			queryOptions: (input?: Partial<RunsInput>) =>
-				queryOptions({
-					queryKey: ["admin", "runs", input ?? null],
-					queryFn: () => scrapeRuns(db, runsInput.parse(input ?? {})),
 				}),
 		},
 	},
