@@ -1,18 +1,18 @@
 import { db, schema } from "@events-tracker/db";
 import { and, eq, isNull } from "drizzle-orm";
 import { fingerprint } from "./fingerprint";
-import { identityKey, planMerge } from "./identity";
-import { normalizeVenueName } from "./normalize";
+import { planComponents, planMerge } from "./identity";
 
 /**
  * Cross-source identity reconciliation (post-scrape repair pass).
  * Pure rules in identity.ts; this module owns the DB work.
  *
- * Groups dated rows by identityKey (title+venue+Lisbon day). Within a
- * group, the highest-trust tier forms the canonical session set; rows from
- * lower-trust tiers are absorbed into their nearest canonical session:
- * categories union, attributions move, keeper times untouched. Idempotent —
- * a converged DB is a no-op.
+ * Splits dated rows into identity COMPONENTS via planComponents (title+day
+ * group, then venue-compatible union-find — RULE 2/3), then within each
+ * component the highest-trust tier forms the canonical session set; rows
+ * from lower-trust tiers are absorbed into their nearest canonical session
+ * within SESSION_WINDOW_SECONDS: categories union, attributions move, keeper
+ * times untouched. Idempotent — a converged DB is a no-op.
  */
 export async function reconcileIdentities(): Promise<number> {
 	const now = Math.floor(Date.now() / 1000);
@@ -26,6 +26,7 @@ export async function reconcileIdentities(): Promise<number> {
 			categories: schema.events.categories,
 			fingerprint: schema.events.fingerprint,
 			venue: schema.venues.name,
+			city: schema.venues.city,
 		})
 		.from(schema.events)
 		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
@@ -44,20 +45,10 @@ export async function reconcileIdentities(): Promise<number> {
 		sourcesByEvent.set(a.event_id, list);
 	}
 
-	const groups = new Map<string, typeof rows>();
-	for (const r of rows) {
-		const key = identityKey(
-			r.title,
-			normalizeVenueName(r.venue ?? ""),
-			r.start_at,
-		);
-		const list = groups.get(key) ?? [];
-		list.push(r);
-		groups.set(key, list);
-	}
+	const components = planComponents(rows);
 
 	let merged = 0;
-	for (const group of groups.values()) {
+	for (const group of components) {
 		if (group.length < 2) continue;
 		const fps = new Set(group.map((r) => r.fingerprint));
 		if (fps.size < 2) continue; // already one identity (same-day sessions)
