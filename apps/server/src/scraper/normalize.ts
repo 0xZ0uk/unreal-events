@@ -152,6 +152,10 @@ export const GENERIC_VENUE_TOKENS = new Set([
 	"cidade",
 	"concelho",
 	"distrito",
+	// Scope qualifiers in parentheses ("Óbidos (vila)", "Leiria (cidade)"):
+	// without "vila" the token survives and the whole-town placeholder looks
+	// like a specific venue, so "Óbidos Vila Natal" stayed as two rows.
+	"vila",
 	"varios",
 	"varias",
 	"espacos",

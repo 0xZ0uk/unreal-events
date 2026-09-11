@@ -13,6 +13,7 @@
  * follow. Same-tier rows are never merged into each other.
  */
 
+import { isDistrictLocality } from "./district";
 import { lisbonDay } from "./fingerprint";
 import {
 	isVagueVenue,
@@ -149,12 +150,22 @@ export interface ComponentRow {
  * duplicate EVENT rows fuse — but it must NEVER be used to merge venue ROWS
  * (a vague "Leiria (cidade)" row treated as a hub would collapse every
  * Leiria venue into one). Venue-row merging stays strictly `venuesMatch`.
+ *
+ * `aStart`/`bStart` (optional) unlock one further wildcard for the case where
+ * two rows agree on the event but not on the CITY string: a concelho-level
+ * placeholder ("Marinha Grande" as the municipal agenda's venue) against a
+ * specific venue whose city is a parish of that same concelho ("Ordem",
+ * "São Pedro de Moel"). Accepted only for a NON-municipality locality AND the
+ * same session (≤ SESSION_WINDOW_SECONDS), so it cannot fuse a same-titled
+ * same-day event across concelhos.
  */
 export function venueCompatible(
 	aVenue: string | null,
 	bVenue: string | null,
 	aCity: string | null,
 	bCity: string | null,
+	aStart: number | null = null,
+	bStart: number | null = null,
 ): boolean {
 	// No venue either side: only an exact match groups (mirrors the old
 	// empty-venue identity key — never cross-wire an unlocated roster to a
@@ -164,7 +175,14 @@ export function venueCompatible(
 	const bVague = isVagueVenue(bVenue, bCity);
 	if (aVague && bVague) return true;
 	if (aVague || bVague) {
-		return normalizeCity(aCity ?? "") === normalizeCity(bCity ?? "");
+		if (normalizeCity(aCity ?? "") === normalizeCity(bCity ?? "")) return true;
+		const specificCity = aVague ? bCity : aCity;
+		return (
+			isDistrictLocality(specificCity) &&
+			aStart !== null &&
+			bStart !== null &&
+			Math.abs(aStart - bStart) <= SESSION_WINDOW_SECONDS
+		);
 	}
 	return venuesMatch(aVenue, bVenue, aCity, bCity);
 }
@@ -208,7 +226,16 @@ export function planComponents<T extends ComponentRow>(rows: T[]): T[][] {
 		for (const a of group) {
 			for (const b of group) {
 				if (a.id >= b.id) continue;
-				if (venueCompatible(a.venue, b.venue, a.city, b.city)) {
+				if (
+					venueCompatible(
+						a.venue,
+						b.venue,
+						a.city,
+						b.city,
+						a.start_at,
+						b.start_at,
+					)
+				) {
 					union(a.id, b.id);
 				}
 			}

@@ -344,3 +344,182 @@ describe("planComponents (cross-source event grouping)", () => {
 		expect(a).not.toBe(b);
 	});
 });
+
+/**
+ * Tier 1 duplicate shapes (real rows from the district ingest run). Each test
+ * names the ids it came from so a future change that re-opens the pair is
+ * traceable to the live data it broke.
+ */
+describe("venueCompatible parish-city wildcard (Tier 1)", () => {
+	// 390 (viralagenda: hall + parish city) vs 684 (municipal agenda: concelho).
+	test("vague concelho placeholder matches a specific venue in a district parish", () => {
+		expect(
+			venueCompatible(
+				"Marinha Grande",
+				"SBR 1º Janeiro",
+				"Marinha Grande",
+				"Ordem",
+				1789686000,
+				1789686000,
+			),
+		).toBe(true);
+	});
+
+	test("but never across municipalities, even at the same instant", () => {
+		expect(
+			venueCompatible(
+				"Marinha Grande",
+				"Mercado Municipal",
+				"Marinha Grande",
+				"Leiria",
+				1789686000,
+				1789686000,
+			),
+		).toBe(false);
+	});
+
+	test("and never for a different session", () => {
+		expect(
+			venueCompatible(
+				"Marinha Grande",
+				"SBR 1º Janeiro",
+				"Marinha Grande",
+				"Ordem",
+				1789686000,
+				1789686000 + 19 * 3600,
+			),
+		).toBe(false);
+	});
+
+	test("out-of-district cities never match, even at the same instant", () => {
+		expect(
+			venueCompatible(
+				"Leiria (cidade)",
+				"Mercado de Leiria",
+				"Leiria",
+				"Lisboa",
+				1789686000,
+				1789686000,
+			),
+		).toBe(false);
+	});
+
+	test("without start evidence the wildcard stays closed", () => {
+		expect(
+			venueCompatible(
+				"Marinha Grande",
+				"SBR 1º Janeiro",
+				"Marinha Grande",
+				"Ordem",
+			),
+		).toBe(false);
+	});
+
+	// 570 vs 730: "Óbidos (vila)" is the whole town, "Cerca do Castelo" is the
+	// venue inside it. Before "vila" joined the generic tokens the placeholder
+	// looked specific and the pair survived as two rows.
+	test("a whole-town placeholder in parentheses is vague, not a venue", () => {
+		expect(
+			venueCompatible("Óbidos (vila)", "Cerca do Castelo", "Óbidos", "Óbidos"),
+		).toBe(true);
+	});
+});
+
+describe("planComponents on Tier 1 duplicate shapes", () => {
+	test("municipal concelho placeholder + viralagenda hall in a parish = one component", () => {
+		const comps = planComponents([
+			{
+				id: 390,
+				title: "FESTA DA ORDEM'26",
+				start_at: 1789686000,
+				venue: "SBR 1º Janeiro",
+				city: "Ordem",
+			},
+			{
+				id: 684,
+				title: "FESTA DA ORDEM'26",
+				start_at: 1789686000,
+				venue: "Marinha Grande",
+				city: "Marinha Grande",
+			},
+		]);
+		expect(comps).toHaveLength(1);
+		expect(comps[0]?.map((r) => r.id).sort((a, b) => a - b)).toEqual([390, 684]);
+	});
+
+	test("Óbidos Vila Natal ('(vila)' placeholder vs the castle) = one component", () => {
+		const comps = planComponents([
+			{
+				id: 570,
+				title: "Óbidos Vila Natal",
+				start_at: 1795773600,
+				venue: "Óbidos (vila)",
+				city: "Óbidos",
+			},
+			{
+				id: 730,
+				title: "Óbidos Vila Natal",
+				start_at: 1795737600,
+				venue: "Cerca do Castelo",
+				city: "Óbidos",
+			},
+		]);
+		expect(comps).toHaveLength(1);
+	});
+
+	// 498 vs 625: both rows name a REAL venue in the same concelho (they are
+	// different parishes). Conservative rule: stay separate — this is the
+	// pre-existing viralagenda-vs-itself pair, not a Tier 1 regression.
+	test("two specific venues in different parishes of one concelho stay separate", () => {
+		const comps = planComponents([
+			{
+				id: 498,
+				title: "10.º Aniversário",
+				start_at: 1790415000,
+				venue: "Núcleo Sporting Clube de Portugal da Marinha Grande",
+				city: "Marinha Grande",
+			},
+			{
+				id: 625,
+				title: "10.º Aniversário",
+				start_at: 1790415000,
+				venue: "Praia da Vieira",
+				city: "Vieira de Leiria",
+			},
+		]);
+		expect(comps).toHaveLength(2);
+	});
+
+	// ...but the very same pair DOES fuse once the municipal agenda's
+	// concelho-level row (vague "Marinha Grande") is in the group: it is
+	// compatible with 498 (same city) AND with 625 (Vieira de Leiria is a
+	// locality of Marinha Grande), so the component is transitive. Intentional:
+	// the duplicate has to disappear, and the keeper keeps the descriptive
+	// venue while the attributions merge.
+	test("a vague concelho row bridges two specific parish venues (transitive)", () => {
+		const comps = planComponents([
+			{
+				id: 498,
+				title: "10.º Aniversário",
+				start_at: 1790415000,
+				venue: "Núcleo Sporting Clube de Portugal da Marinha Grande",
+				city: "Marinha Grande",
+			},
+			{
+				id: 625,
+				title: "10.º Aniversário",
+				start_at: 1790415000,
+				venue: "Praia da Vieira",
+				city: "Vieira de Leiria",
+			},
+			{
+				id: 900,
+				title: "10.º Aniversário",
+				start_at: 1790415000,
+				venue: "Marinha Grande",
+				city: "Marinha Grande",
+			},
+		]);
+		expect(comps).toHaveLength(1);
+	});
+});
