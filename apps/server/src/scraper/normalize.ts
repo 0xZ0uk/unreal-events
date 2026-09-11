@@ -3,6 +3,64 @@
  * pipelines. Kept dependency-light and pure so they are trivial to test.
  */
 
+/** Named HTML entities the Leiria sources actually emit. */
+const NAMED_ENTITIES: Record<string, string> = {
+	amp: "&",
+	lt: "<",
+	gt: ">",
+	quot: '"',
+	apos: "'",
+	nbsp: " ",
+	hellip: "…",
+	ndash: "–",
+	mdash: "—",
+	lsquo: "\u2018",
+	rsquo: "\u2019",
+	ldquo: "\u201C",
+	rdquo: "\u201D",
+	laquo: "«",
+	raquo: "»",
+	ordm: "º",
+	deg: "°",
+	aacute: "á",
+	eacute: "é",
+	iacute: "í",
+	oacute: "ó",
+	uacute: "ú",
+	atilde: "ã",
+	otilde: "õ",
+	ccedil: "ç",
+	Aacute: "Á",
+	Eacute: "É",
+	Ccedil: "Ç",
+	Atilde: "Ã",
+	Otilde: "Õ",
+};
+
+/**
+ * Decode the HTML entities the municipal/CMS sources emit (mostly numeric:
+ * `&#8217;` for the curly apostrophe) and drop the `<!-- -->` comments
+ * Next.js hydration splices into text nodes.
+ *
+ * Every scraper decodes its own strings before they become display titles —
+ * the ingest layer stores `raw.title` verbatim, so an undecoded entity ships
+ * straight to the site.
+ */
+export function decodeEntities(s: string): string {
+	return s
+		.replace(/<!--[\s\S]*?-->/g, "")
+		.replace(/&#x([0-9a-fA-F]+);/g, (_m, hex: string) =>
+			String.fromCodePoint(Number.parseInt(hex, 16)),
+		)
+		.replace(/&#(\d+);/g, (_m, dec: string) =>
+			String.fromCodePoint(Number.parseInt(dec, 10)),
+		)
+		.replace(
+			/&([a-zA-Z]+);/g,
+			(m, name: string) => NAMED_ENTITIES[name] ?? m,
+		);
+}
+
 /** Lowercase, strip diacritics (NFD), strip punctuation, collapse whitespace. */
 export function normalizeTitle(input: string): string {
 	return input

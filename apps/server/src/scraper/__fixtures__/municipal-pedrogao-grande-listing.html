@@ -1,0 +1,905 @@
+<!DOCTYPE HTML>
+<html lang="pt-PT">
+
+<head>
+  <title>Agenda de Eventos</title>
+        <style>
+        .stickyForm{
+          display:none;
+        }
+        #aida-mount textarea{
+          height: unset !important;
+          min-height: unset !important;
+          max-height: unset !important;
+        }
+        #aida-mount button{
+          padding: 0 4px;
+        }
+        .ReactVirtualized__Grid {
+          padding-top: 4px;
+        }
+      </style>
+<link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/mandatory-aafd8803b7.min.css" media="all"><link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/vendor/superfish-f6f8538a6a.vendor.css" media="all">
+<link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/mega_search-edbd93863d.min.css" media="all">
+
+  <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="R5InM+f/pgmVyuQhGiRdeS7UDobgAqERcT+5ZbQmiw0CcxAC5hSTM6ibPc5Nyb7V4eJhhJA0GiZvJRNhKsB2sQ==" />
+  <script src="/assets/wm-smile/javascripts/vendor/smile-frontoffice-4d347401ab.vendor.js"></script>  <script src="/assets/wm-smile/javascripts/frontoffice/smile-fcaf307b9d.min.js"></script>
+<script src="/assets/wm-smile/javascripts/vendor/superfish-f90ea9c68f.vendor.js"></script>
+<script src="/assets/wm-smile/javascripts/frontoffice/widgets-common-2fccc4e5f9.min.js"></script>
+<script src="/assets/wm-smile/javascripts/frontoffice/mega-search-0be32de85c.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://aida.wiremaze.com/aida/cdn/aida-client/aida-client.min.js" crossorigin="anonymous"></script>
+
+  
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- FONTFACE LINKS - colocar os links das fontes usadas -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!--<link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-semibold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-bold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-extrabold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-extrabold.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-light.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-light.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-regularitalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-regularitalic.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-semibolditalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-semibolditalic.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-bolditalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-bolditalic.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-extrabolditalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-extrabolditalic.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-lightitalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/opensans-lightitalic.woff" as="font" type="font/woff" crossorigin>-->
+    
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/icons/fontawesome-solid.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/fontface/icons/fontawesome-solid.woff" as="font" type="font/woff" crossorigin>
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SCRIPTS E CALLER - other included scripts are on the bottom of this page -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <link rel="stylesheet" type="text/css" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/stylesheets/caller_fo-a6e026eb19.min.css" media="all">
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/theme_utils_interior-30f557a6bd.min.js"></script>
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/theme_utils_geral-14e9f3afcf.min.js"></script>
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/vendor/jquery-d21aab6b53.mmenu.all.min.js"></script><!-- Mobile Menu -->
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/vendor/simpleScrollbar-03808bca29.min.js"></script><!-- Scrollbars Custom -->
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- FAVICON / APPLE ICON -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <link rel="shortcut icon" href="/cmpedrogaogrande/uploads/site_zone/favicon/1/favicon_pedrogaogrande.png" />
+  <link rel="apple-touch-icon" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/cmpedrogaogrande/cm_pedrogaogrande/images/apple-touch-icon-180x180.png" />
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- META TAGS -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=2, minimum-scale=1, user-scalable=yes">
+  <!-- facebook share: imagens aparecerem no 1º load-->
+  <meta property="og:image:width" content="450"/>
+  <meta property="og:image:height" content="298"/>
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- PARTILHA FACEBOOK -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '2325890977740617',
+        xfbml      : true,
+        version    : 'v2.5'
+      });
+    };
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+  <!-- NAO APAGAR ISTO -->
+  <meta name="keywords" content="">
+  
+  <link rel="canonical" href="https://www.cm-pedrogaogrande.pt/viver/cultura/agenda-de-eventos">
+<meta name="wm:pagetype" content="page"/>
+<meta name="wm:page_id" content="1563"/>
+<meta property="og:title" content="Agenda de Eventos" />
+<meta property="og:type" content="article" />
+
+
+
+<meta property="og:image" content="https://www.cm-pedrogaogrande.pt/cmpedrogaogrande/uploads/site/logo/1/wiremaze.gif" />
+<meta property="og:url" content="https://www.cm-pedrogaogrande.pt/viver/cultura/agenda-de-eventos" />
+<meta property="og:description" content="" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Agenda de Eventos" />
+<meta name="twitter:description" content="" />
+
+
+  <!-- NAO APAGAR ISTO -->
+
+<script src="/assets/wm-smile/javascripts/frontoffice/cookiebar/jquery-b75e3684dd.cookiebar.min.js"></script><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HYCV811B40"></script>
+<script>$(window).on('accepted', checkCookieBarGoogleApi);function checkCookieBarGoogleApi(){if(jQuery.cookieBar && jQuery.cookieBar('cookies')){
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HYCV811B40');
+}}checkCookieBarGoogleApi()</script></head>
+
+<body class="interior geral">
+
+  <div class="loading-overlay"></div>
+  
+  <a href="#accessibilityMainContent" class="accessibilityElement">Passar para o Conteúdo Principal</a>
+
+  <a href="#stickyFooter" title="voltar ao topo da página" class="cd-top">Top</a>
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- MOBILE MENU -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <div class="mobileMenu">
+    <a href="#menu">
+      <span class="accessibilityElement">menu</span>
+    </a>
+    <nav id="menu"></nav>
+  </div>
+
+  <div id="stickyFooter">
+    
+    <!-------------------------------------------------------------------------------------------------------------->
+    <!-- REFURBISHED AREA -->
+    <!-------------------------------------------------------------------------------------------------------------->
+  
+    <div class="homeHeaderImg_AREA">  
+  <div id="article_322" class="widget article" data-id="322" data-content_type="Article">
+  <div class="writer_text"><p><img src="/thumbs/cmpedrogaogrande/uploads/writer_file/image/250/pedrogao_grande_1_2500_2500.jpg" alt="Pedrog&atilde;o-Grande" /></p><div class="writer_text_clear"></div></div>
+</div>
+
+</div>
+     <header class="grid-container full headerInterior">
+      <div class="grid-container">
+        <div class="grid-x grid-margin-x">
+          <div class="xxsmall-12 cell grid-x">
+            <div class="logo_AREA xxsmall-12  hidden-post">  
+  
+<div id="html_block_28" class="widget html_block" data-id="28" data-content_type="HtmlBlock">
+
+  <a href="/" title="Voltar ao início"><img src="/cmpedrogaogrande/layout/logo_pedrogao.svg" alt="Logótipo" /></a>
+
+</div>
+
+</div>
+          </div>
+        </div>
+      </div>
+       <div class="grid-container full navInterior">
+        <div class="grid-container grid-x">
+         <nav class="navContainer xxsmall-12 large-4 xlarge-9 cell " id="navbar">
+                <div class="grid-container">
+                  <div class="menu_AREA xxsmall-12 show-for-xlarge cell hidden-post">
+                     
+  <div id="horizontal_menu_1" class="widget horizontal_menu" data-id="1" data-content_type="HorizontalMenu">
+
+    <ul class="depth1 ddmenu sf-menu sf-navbar"><li class="depth1 pos_1 first has_descendants"><a href="/municipio" target="_self" class="depth1 pos_1 first has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7192</p><!--googleon: all--><span>Município</span></a><ul class="depth2 "><li class="depth2 pos_1 first has_descendants"><a href="/municipio/camara-municipal" target="_self" class="depth2 pos_1 first has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3614</p><!--googleon: all--><span>Câmara Municipal</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/camara-municipal/mensagem-do-presidente" target="_self" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3379</p><!--googleon: all--><span>Mensagem do Presidente</span></a></li><li class="depth3 pos_2 "><a href="/municipio/camara-municipal/executivo-municipal" target="_self" class="depth3 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1274</p><!--googleon: all--><span>Executivo Municipal</span></a></li><li class="depth3 pos_3 has_descendants"><a href="/municipio/camara-municipal/reunioes-de-camara" target="_self" class="depth3 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5506</p><!--googleon: all--><span>Reuniões de Câmara</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/camara-municipal/reunioes-de-camara/calendario-das-reunioes-de-camara" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1887</p><!--googleon: all--><span>Calendário das Reuniões de Câmara</span></a></li><li class="depth4 pos_2 "><a href="/municipio/camara-municipal/reunioes-de-camara/atas" target="_self" class="depth4 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4874</p><!--googleon: all--><span>Atas</span></a></li><li class="depth4 pos_3 last "><a href="/municipio/camara-municipal/reunioes-de-camara/deliberacoes" target="_self" class="depth4 pos_3 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2431</p><!--googleon: all--><span>Deliberações</span></a></li></ul></li><li class="depth3 pos_4 "><a href="/municipio/camara-municipal/heraldica-municipal" target="_self" class="depth3 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8407</p><!--googleon: all--><span>Heráldica Municipal</span></a></li><li class="depth3 pos_5 last has_descendants"><a href="/municipio/camara-municipal/documentos" target="_self" class="depth3 pos_5 last has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1924</p><!--googleon: all--><span>Documentos</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/camara-municipal/documentos/regulamento-organico" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5734</p><!--googleon: all--><span>Regulamento Orgânico</span></a></li><li class="depth4 pos_2 "><a href="/municipio/camara-municipal/documentos/editais" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7507</p><!--googleon: all--><span>Editais</span></a></li><li class="depth4 pos_3 "><a href="/municipio/camara-municipal/documentos/informacoes-a-populacao" target="_self" class="depth4 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3914</p><!--googleon: all--><span>Informações à População</span></a></li><li class="depth4 pos_4 last "><a href="/municipio/camara-municipal/documentos/regimento-da-camara-municipal" target="_self" class="depth4 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8351</p><!--googleon: all--><span>Regimento da Câmara Municipal</span></a></li></ul></li></ul></li><li class="depth2 pos_2 has_descendants"><a href="/municipio/assembleia-municipal" target="_self" class="depth2 pos_2 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3064</p><!--googleon: all--><span>Assembleia Municipal</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/assembleia-municipal/constituicao" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3093</p><!--googleon: all--><span>Constituição</span></a></li><li class="depth3 pos_2 "><a href="/municipio/assembleia-municipal/atas" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7236</p><!--googleon: all--><span>Atas</span></a></li><li class="depth3 pos_3 "><a href="/municipio/assembleia-municipal/editais" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6364</p><!--googleon: all--><span>Editais</span></a></li><li class="depth3 pos_4 last "><a href="/municipio/assembleia-municipal/regimento" target="_self" class="depth3 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9111</p><!--googleon: all--><span>Regimento</span></a></li></ul></li><li class="depth2 pos_3 has_descendants"><a href="/municipio/freguesias" target="_self" class="depth2 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9424</p><!--googleon: all--><span>Freguesias</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/freguesias/freguesia-da-graca" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9851</p><!--googleon: all--><span>Freguesia da Graça</span></a></li><li class="depth3 pos_2 "><a href="/municipio/freguesias/freguesia-de-pedrogao-grande" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5311</p><!--googleon: all--><span>Freguesia de Pedrógão Grande</span></a></li><li class="depth3 pos_3 last "><a href="/municipio/freguesias/freguesia-de-vila-facaia" target="_self" class="depth3 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4653</p><!--googleon: all--><span>Freguesia de Vila Facaia</span></a></li></ul></li><li class="depth2 pos_4 has_descendants"><a href="/municipio/contratacao-publica" target="_self" class="depth2 pos_4 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2272</p><!--googleon: all--><span>Contratação Pública</span></a><ul class="depth3 "><li class="depth3 pos_1 first last has_descendants"><a href="/municipio/contratacao-publica/bens-e-servicos" target="_self" class="depth3 pos_1 first last has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1813</p><!--googleon: all--><span>Bens e Serviços</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/municipio/contratacao-publica/bens-e-servicos/bens-e-servicos-cofinanciados" target="_self" class="depth4 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7951</p><!--googleon: all--><span>Bens e Serviços Cofinanciados</span></a></li></ul></li></ul></li><li class="depth2 pos_5 has_descendants"><a href="/municipio/recursos-humanos" target="_self" class="depth2 pos_5 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5024</p><!--googleon: all--><span>Recursos Humanos</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/recursos-humanos/organograma" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5086</p><!--googleon: all--><span>Organograma</span></a></li><li class="depth3 pos_2 "><a href="/municipio/recursos-humanos/mapa-de-pessoal" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9790</p><!--googleon: all--><span>Mapa de Pessoal</span></a></li><li class="depth3 pos_3 "><a href="/municipio/recursos-humanos/balanco-social" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9229</p><!--googleon: all--><span>Balanço Social</span></a></li><li class="depth3 pos_4 "><a href="/municipio/recursos-humanos/pepal" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6733</p><!--googleon: all--><span>PEPAL</span></a></li><li class="depth3 pos_5 has_descendants"><a href="/municipio/recursos-humanos/procedimentos-concursais" target="_self" class="depth3 pos_5 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2768</p><!--googleon: all--><span>Procedimentos Concursais</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/recursos-humanos/procedimentos-concursais/concursos-a-decorrer" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1114</p><!--googleon: all--><span>Concursos a Decorrer</span></a></li><li class="depth4 pos_2 "><a href="/municipio/recursos-humanos/procedimentos-concursais/concursos-concluidos" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4270</p><!--googleon: all--><span>Concursos Concluídos</span></a></li><li class="depth4 pos_3 "><a href="/municipio/recursos-humanos/procedimentos-concursais/concursos-de-mobilidade-interna" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7612</p><!--googleon: all--><span>Concursos de Mobilidade Interna</span></a></li><li class="depth4 pos_4 last "><a href="/municipio/recursos-humanos/procedimentos-concursais/formularios-de-candidatura" target="_self" class="depth4 pos_4 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8215</p><!--googleon: all--><span>Formulários de Candidatura</span></a></li></ul></li><li class="depth3 pos_6 "><a href="/municipio/recursos-humanos/lista-nominativa" target="_self" class="depth3 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7439</p><!--googleon: all--><span>Lista Nominativa </span></a></li><li class="depth3 pos_7 last "><a href="/municipio/recursos-humanos/iefp" target="_self" class="depth3 pos_7 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3766</p><!--googleon: all--><span>IEFP</span></a></li></ul></li><li class="depth2 pos_6 "><a href="/municipio/codigo-de-etica-e-de-conduta" target="_self" class="depth2 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1862</p><!--googleon: all--><span>Código de Ética e de Conduta</span></a></li><li class="depth2 pos_7 "><a href="/municipio/revista-municipal" target="_self" class="depth2 pos_7 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>998</p><!--googleon: all--><span>Revista Municipal</span></a></li><li class="depth2 pos_8 "><a href="/municipio/julgados-de-paz" target="_self" class="depth2 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7793</p><!--googleon: all--><span>Julgados de Paz</span></a></li><li class="depth2 pos_9 has_descendants"><a href="/municipio/servicos/gestao-financeira-municipal" target="_self" class="depth2 pos_9 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5519</p><!--googleon: all--><span>Gestão Financeira Municipal</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/gestao-financeira-municipal/documentos-previsionais-orcamento" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8384</p><!--googleon: all--><span>Documentos Previsionais - Orçamento</span></a></li><li class="depth3 pos_2 has_descendants"><a href="/municipio/gestao-financeira-municipal/prestacao-de-contas" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7612</p><!--googleon: all--><span>Prestação de Contas</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/gestao-financeira-municipal/prestacao-de-contas/individuais" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2946</p><!--googleon: all--><span>Individuais</span></a></li><li class="depth4 pos_2 last "><a href="/municipio/gestao-financeira-municipal/prestacao-de-contas/consolidadas" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4703</p><!--googleon: all--><span>Consolidadas</span></a></li></ul></li><li class="depth3 pos_3 "><a href="/municipio/gestao-financeira-municipal/subvencoes-e-beneficios-publicos-atribuidos" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4746</p><!--googleon: all--><span>Subvenções e Benefícios Públicos Atribuídos</span></a></li><li class="depth3 pos_4 has_descendants"><a href="/municipio/gestao-financeira-municipal/impostos" target="_self" class="depth3 pos_4 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>396</p><!--googleon: all--><span>Impostos</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/gestao-financeira-municipal/impostos/i-m-i" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9296</p><!--googleon: all--><span>I.M.I.</span></a></li><li class="depth4 pos_2 "><a href="/municipio/gestao-financeira-municipal/impostos/derrama" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5912</p><!--googleon: all--><span>Derrama</span></a></li><li class="depth4 pos_3 "><a href="/municipio/gestao-financeira-municipal/impostos/i-r-s" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8967</p><!--googleon: all--><span>I.R.S.</span></a></li><li class="depth4 pos_4 last "><a href="/municipio/gestao-financeira-municipal/impostos/t-m-d-p" target="_self" class="depth4 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8599</p><!--googleon: all--><span>T.M.D.P.</span></a></li></ul></li><li class="depth3 pos_5 "><a href="/municipio/gestao-financeira-municipal/lcpa-declaracoes" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8787</p><!--googleon: all--><span>LCPA - Declarações</span></a></li><li class="depth3 pos_6 has_descendants"><a href="/municipio/gestao-financeira-municipal/acordos-e-protocolos" target="_self" class="depth3 pos_6 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8484</p><!--googleon: all--><span>Acordos e Protocolos</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/municipio/gestao-financeira-municipal/acordos-e-protocolos/juntas-de-freguesia" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4092</p><!--googleon: all--><span>Juntas de Freguesia</span></a></li><li class="depth4 pos_2 last "><a href="/municipio/gestao-financeira-municipal/acordos-e-protocolos/outras-entidades" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4265</p><!--googleon: all--><span>Outras Entidades</span></a></li></ul></li><li class="depth3 pos_7 last "><a href="/municipio/gestao-financeira-municipal/norma-de-controlo-interno" target="_self" class="depth3 pos_7 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6801</p><!--googleon: all--><span>Norma de controlo interno</span></a></li></ul></li><li class="depth2 pos_10 has_descendants"><a href="/municipio/regime-geral-de-prevencao-da-corrupcao" target="_self" class="depth2 pos_10 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7676</p><!--googleon: all--><span>Regime Geral de Prevenção da Corrupção</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/canal-de-denuncias" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1716</p><!--googleon: all--><span>Canal de Denúncias</span></a></li><li class="depth3 pos_2 "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/responsavel-pelo-cumprimento-normativo" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4892</p><!--googleon: all--><span>Responsável pelo cumprimento normativo</span></a></li><li class="depth3 pos_3 "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/ppr" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5656</p><!--googleon: all--><span>PPR</span></a></li><li class="depth3 pos_4 "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/rgpc-rgpdi" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>697</p><!--googleon: all--><span>RGPC/RGPDI</span></a></li><li class="depth3 pos_5 "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/codigo-de-boa-conduta-para-a-prevencao-e-combate-ao-assedio-no-trabalho" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6342</p><!--googleon: all--><span>Código de Boa Conduta para a Prevenção e Combate ao Assédio no Trabalho</span></a></li><li class="depth3 pos_6 last "><a href="/municipio/regime-geral-de-prevencao-da-corrupcao/codigo-de-etica-e-boa-conduta-do-municipio-de-pedrogao-grande" target="_self" class="depth3 pos_6 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9132</p><!--googleon: all--><span>Código de Ética e Boa Conduta do Município de Pedrógão Grande</span></a></li></ul></li><li class="depth2 pos_11 last has_descendants"><a href="/municipio/regulamentos-municipais" target="_self" class="depth2 pos_11 last has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9981</p><!--googleon: all--><span>Regulamentos Municipais</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/municipio/regulamentos-municipais/regulamentos-em-vigor" target="_self" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4917</p><!--googleon: all--><span>Regulamentos em Vigor</span></a></li><li class="depth3 pos_2 last "><a href="/municipio/regulamentos-municipais/regulamentos-em-consulta-publica" target="_self" class="depth3 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9617</p><!--googleon: all--><span>Regulamentos em Consulta Pública</span></a></li></ul></li></ul></li><li class="depth1 pos_2 selected has_descendants"><a href="/viver" target="_self" class="depth1 pos_2 selected has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1780</p><!--googleon: all--><span>Viver</span></a><ul class="depth2 "><li class="depth2 pos_1 first has_descendants"><a href="/viver/gabinete-tecnico-florestal" target="_self" class="depth2 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2073</p><!--googleon: all--><span>Gabinete Técnico Florestal</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/viver/gabinete-tecnico-florestal/enquadramento" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4386</p><!--googleon: all--><span>Enquadramento</span></a></li><li class="depth3 pos_2 has_descendants"><a href="/viver/gabinete-tecnico-florestal/gestao-integrada-de-fogos-rurais-gifr" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8934</p><!--googleon: all--><span>Gestão Integrada de Fogos Rurais (GIFR)</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/gabinete-tecnico-florestal/gestao-integrada-de-fogos-rurais-gifr/planos-de-gestao-integrada-de-fogos-rurais" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7848</p><!--googleon: all--><span>Planos de Gestão Integrada de Fogos Rurais</span></a></li><li class="depth4 pos_2 "><a href="/viver/gabinete-tecnico-florestal/gestao-integrada-de-fogos-rurais-gifr/comissao-municipal-de-gestao-integrada-de-fogos-rurais" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5308</p><!--googleon: all--><span>Comissão Municipal de Gestão Integrada de Fogos Rurais</span></a></li><li class="depth4 pos_3 "><a href="/viver/gabinete-tecnico-florestal/gestao-integrada-de-fogos-rurais-gifr/faixas-de-gestao-de-combustivel" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8383</p><!--googleon: all--><span>Faixas de Gestão de Combustível</span></a></li><li class="depth4 pos_4 last "><a href="/viver/gabinete-tecnico-florestal/gestao-integrada-de-fogos-rurais-gifr/areas-prioritarias-de-prevencao-e-seguranca-apps" target="_self" class="depth4 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1524</p><!--googleon: all--><span>Áreas Prioritárias de Prevenção e Segurança (APPS)</span></a></li></ul></li><li class="depth3 pos_3 has_descendants"><a href="/viver/gabinete-tecnico-florestal/gestao-florestal" target="_self" class="depth3 pos_3 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6277</p><!--googleon: all--><span>Gestão Florestal</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/arborizacao-rearborizacao" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9958</p><!--googleon: all--><span>Arborização/Rearborização</span></a></li><li class="depth4 pos_2 "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/especies-protegidas" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3924</p><!--googleon: all--><span>Espécies Protegidas</span></a></li><li class="depth4 pos_3 "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/produtos-florestais" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6957</p><!--googleon: all--><span>Produtos Florestais</span></a></li><li class="depth4 pos_4 "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/exploracao-cinegetica" target="_self" class="depth4 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3229</p><!--googleon: all--><span>Exploração Cinegética</span></a></li><li class="depth4 pos_5 "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/invasoras" target="_self" class="depth4 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2748</p><!--googleon: all--><span>Invasoras</span></a></li><li class="depth4 pos_6 last has_descendants"><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/transformacao-da-paisagem" target="_self" class="depth4 pos_6 last has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1357</p><!--googleon: all--><span>Transformação da Paisagem</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/transformacao-da-paisagem/areas-integradas-de-gestao-da-paisagem" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5273</p><!--googleon: all--><span>Áreas Integradas de Gestão da Paisagem</span></a></li><li class="depth5 pos_2 last "><a href="/viver/gabinete-tecnico-florestal/gestao-florestal/transformacao-da-paisagem/programa-de-reordenamento-e-gestao-da-paisagem-da-serra-da-lousa-e-acor" target="_self" class="depth5 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4564</p><!--googleon: all--><span>Programa de Reordenamento e Gestão da Paisagem da Serra da Lousã e Açor</span></a></li></ul></li></ul></li><li class="depth3 pos_4 "><a href="/viver/gabinete-tecnico-florestal/informacoes-gerais" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4451</p><!--googleon: all--><span>Informações Gerais</span></a></li><li class="depth3 pos_5 last "><a href="/viver/gabinete-tecnico-florestal/aigp-2-0" target="_self" class="depth3 pos_5 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9536</p><!--googleon: all--><span>AIGP 2.0</span></a></li></ul></li><li class="depth2 pos_2 has_descendants"><a href="/viver/protecao-civil" target="_self" class="depth2 pos_2 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5934</p><!--googleon: all--><span>Proteção Civil</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/viver/protecao-civil/informacoes" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3206</p><!--googleon: all--><span>Informações</span></a></li><li class="depth3 pos_2 has_descendants"><a href="/viver/protecao-civil/avisos-e-comunicados-a-populacao" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9713</p><!--googleon: all--><span>Avisos e Comunicados à População</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/protecao-civil/avisos-e-comunicados-a-populacao/avisos-pedrogao-grande-sms" target="_self" class="depth4 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8048</p><!--googleon: all--><span>Avisos Pedrogão Grande SMS</span></a></li></ul></li><li class="depth3 pos_3 "><a href="/viver/protecao-civil/regulamentos-e-regimentos-municipais" target="_self" class="depth3 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6198</p><!--googleon: all--><span>Regulamentos e Regimentos Municipais</span></a></li><li class="depth3 pos_4 "><a href="/viver/protecao-civil/programa-aldeia-segura" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9624</p><!--googleon: all--><span>Programa &quot;Aldeia Segura&quot;</span></a></li><li class="depth3 pos_5 "><a href="/viver/protecao-civil/documentacao-e-cadernos-tecnicos" target="_self" class="depth3 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7822</p><!--googleon: all--><span>Documentação e Cadernos Técnicos</span></a></li><li class="depth3 pos_6 has_descendants"><a href="/viver/protecao-civil/unidades-locais-de-protecao-civil" target="_self" class="depth3 pos_6 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3305</p><!--googleon: all--><span>Unidades Locais de Proteção Civil</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/protecao-civil/unidades-locais-de-protecao-civil/vila-facaia" target="_self" class="depth4 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6984</p><!--googleon: all--><span>Vila Facaia</span></a></li></ul></li><li class="depth3 pos_7 "><a href="/viver/protecao-civil/legislacao" target="_self" class="depth3 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8539</p><!--googleon: all--><span>Legislação</span></a></li><li class="depth3 pos_8 "><a href="https://www.ipma.pt/pt/riscoincendio/?fbclid=IwAR0biHfz44aS2uX48sT2mN5EnT0z_2wW42WyQyhzsRgu1npTBzefLy6VUJE#0#1013" target="_blank" class="depth3 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7801</p><!--googleon: all--><span>Risco de Incêndio Rural</span></a></li><li class="depth3 pos_9 has_descendants"><a href="/viver/protecao-civil/planos-municipais" target="_self" class="depth3 pos_9 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7613</p><!--googleon: all--><span>Planos Municipais</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/protecao-civil/planos-municipais/plano-municipal-de-emergencia-de-protecao-civil" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8846</p><!--googleon: all--><span>Plano Municipal de Emergência de Proteção Civil</span></a></li><li class="depth4 pos_2 last "><a href="/viver/protecao-civil/planos-municipais/plano-municipal-de-defesa-da-floresta-contra-incendios" target="_self" class="depth4 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5675</p><!--googleon: all--><span>Plano Municipal de Defesa da Floresta Contra Incêndios</span></a></li></ul></li><li class="depth3 pos_10 "><a href="/viver/protecao-civil/participacao-de-ocorrencias-15" target="_self" class="depth3 pos_10 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9931</p><!--googleon: all--><span>Participação de Ocorrências</span></a></li><li class="depth3 pos_11 "><a href="/viver/protecao-civil/programa-de-dae" target="_self" class="depth3 pos_11 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4742</p><!--googleon: all--><span>Programa de DAE</span></a></li><li class="depth3 pos_12 has_descendants"><a href="/viver/protecao-civil/controlo-de-pragas" target="_self" class="depth3 pos_12 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4051</p><!--googleon: all--><span>Controlo de Pragas</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/protecao-civil/controlo-de-pragas/vespa-asiatica" target="_self" class="depth4 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6418</p><!--googleon: all--><span>Vespa Asiática</span></a></li></ul></li><li class="depth3 pos_13 "><a href="https://ema.ipma.pt/emas/pedrogao-grande/" target="_blank" class="depth3 pos_13 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4005</p><!--googleon: all--><span>Informação Meteorológica</span></a></li><li class="depth3 pos_14 "><a href="/viver/protecao-civil/perigo-de-incendio-rural" target="_self" class="depth3 pos_14 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7038</p><!--googleon: all--><span>Perigo de Incêndio Rural</span></a></li><li class="depth3 pos_15 "><a href="/viver/protecao-civil/riscos-do-concelho" target="_self" class="depth3 pos_15 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5771</p><!--googleon: all--><span>Riscos do Concelho</span></a></li><li class="depth3 pos_16 "><a href="/viver/protecao-civil/sensibilizacao-e-informacao-publica" target="_self" class="depth3 pos_16 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>798</p><!--googleon: all--><span>Sensibilização e Informação Pública</span></a></li><li class="depth3 pos_17 "><a href="/viver/protecao-civil/corpo-de-voluntarios-de-protecao-civil" target="_self" class="depth3 pos_17 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5219</p><!--googleon: all--><span>Corpo de Voluntarios de Proteção Civil</span></a></li><li class="depth3 pos_18 last "><a href="/viver/protecao-civil/contactos-uteis-de-emergencia" target="_self" class="depth3 pos_18 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7509</p><!--googleon: all--><span>Contactos Úteis de Emergência</span></a></li></ul></li><li class="depth2 pos_3 has_descendants"><a href="/viver/desporto-e-juventude" target="_self" class="depth2 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3515</p><!--googleon: all--><span>Desporto e Juventude</span></a><ul class="depth3 "><li class="depth3 pos_1 first has_descendants"><a href="/viver/desporto-e-juventude/piscina-municipal-e-ginasio" target="_self" class="depth3 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8920</p><!--googleon: all--><span>Piscina Municipal e Ginásio</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/desporto-e-juventude/piscina-municipal-e-ginasio/horario" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>299</p><!--googleon: all--><span>Horário</span></a></li><li class="depth4 pos_2 "><a href="/viver/desporto-e-juventude/piscina-municipal-e-ginasio/qualidade-de-agua" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2865</p><!--googleon: all--><span>Qualidade de Água</span></a></li><li class="depth4 pos_3 last "><a href="/viver/desporto-e-juventude/piscina-municipal-e-ginasio/regulamento" target="_self" class="depth4 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9961</p><!--googleon: all--><span>Regulamento</span></a></li></ul></li><li class="depth3 pos_2 has_descendants"><a href="/viver/desporto-e-juventude/estadio-municipal-s-mateus" target="_self" class="depth3 pos_2 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7930</p><!--googleon: all--><span>Estádio Municipal S. Mateus</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/desporto-e-juventude/estadio-municipal-s-mateus/horario" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2641</p><!--googleon: all--><span>Horário</span></a></li><li class="depth4 pos_2 last "><a href="/viver/desporto-e-juventude/estadio-municipal-s-mateus/regulamento" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5940</p><!--googleon: all--><span>Regulamento</span></a></li></ul></li><li class="depth3 pos_3 has_descendants"><a href="/viver/desporto-e-juventude/pavilhao-desportivo" target="_self" class="depth3 pos_3 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2169</p><!--googleon: all--><span>Pavilhão Desportivo</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/desporto-e-juventude/pavilhao-desportivo/horario" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6965</p><!--googleon: all--><span>Horário</span></a></li><li class="depth4 pos_2 last "><a href="/viver/desporto-e-juventude/pavilhao-desportivo/regulamento" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>120</p><!--googleon: all--><span>Regulamento</span></a></li></ul></li><li class="depth3 pos_4 "><a href="/viver/desporto-e-juventude/polidesportivos" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2868</p><!--googleon: all--><span>Polidesportivos</span></a></li><li class="depth3 pos_5 has_descendants"><a href="/viver/desporto-e-juventude/desporto-na-natureza" target="_self" class="depth3 pos_5 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7385</p><!--googleon: all--><span>Desporto na Natureza</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/visitar/percursos/percursos-pedestres" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7641</p><!--googleon: all--><span>Percursos Pedestres</span></a></li><li class="depth4 pos_2 last "><a href="/visitar/percursos/percursos-btt" target="_self" class="depth4 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2128</p><!--googleon: all--><span>Percursos de BTT</span></a></li></ul></li><li class="depth3 pos_6 has_descendants"><a href="/viver/desporto-e-juventude/verao-ativo" target="_self" class="depth3 pos_6 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7755</p><!--googleon: all--><span>Verão Ativo</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/desporto-e-juventude/verao-ativo/normas-de-funcionamento-e-formularios" target="_self" class="depth4 pos_1 first last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>753</p><!--googleon: all--><span>Normas de Funcionamento e Formulários</span></a></li></ul></li><li class="depth3 pos_7 last "><a href="/viver/desporto-e-juventude/conselho-municipal-da-juventude" target="_self" class="depth3 pos_7 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5792</p><!--googleon: all--><span>Conselho Municipal da Juventude</span></a></li></ul></li><li class="depth2 pos_4 has_descendants"><a href="/viver/acao-social-e-saude" target="_self" class="depth2 pos_4 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1028</p><!--googleon: all--><span>Ação Social e Saúde</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/viver/acao-social-e-saude/loja-social" target="_self" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2571</p><!--googleon: all--><span>Loja Social</span></a></li><li class="depth3 pos_2 has_descendants"><a href="/viver/acao-social-e-saude/servico-de-atendimento-e-acompanhamento-social-saas" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3820</p><!--googleon: all--><span>Serviço de Atendimento e Acompanhamento Social (SAAS)</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/servico-de-atendimento-e-acompanhamento-social-saas/horario-de-funcionamento" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6407</p><!--googleon: all--><span>Horário de Funcionamento</span></a></li><li class="depth4 pos_2 "><a href="/viver/acao-social-e-saude/servico-de-atendimento-e-acompanhamento-social-saas/regulamento-servico-de-atendimento-e-acompanhamento-social-saas-e-regulamento-do-nucleo-local-de-insercao-nli" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3581</p><!--googleon: all--><span>Regulamento Serviço de Atendimento e Acompanhamento Social SAAS e Regulamento do Nucleo Local de Inserção (NLI)</span></a></li><li class="depth4 pos_3 last "><a href="/viver/acao-social-e-saude/servico-de-atendimento-e-acompanhamento-social-saas/regulamento-municipal-de-atribuicao-de-prestacoes-de-carater-eventual-em-situacoes-de-emergencia-social-e-comprovada-insuficiencia-economica-de-pedrogao-grande" target="_self" class="depth4 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2359</p><!--googleon: all--><span>Regulamento Municipal de Atribuição de Prestações de Caráter Eventual em Situações de Emergência Social e Comprovada Insuficiência Económica de Pedrógão Grande</span></a></li></ul></li><li class="depth3 pos_3 has_descendants"><a href="/viver/acao-social-e-saude/acao-social-escolar" target="_self" class="depth3 pos_3 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1013</p><!--googleon: all--><span>Ação Social Escolar</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/acao-social-escolar/informacoes-gerais" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7527</p><!--googleon: all--><span>Informações Gerais</span></a></li><li class="depth4 pos_2 "><a href="/viver/acao-social-e-saude/acao-social-escolar/requerimento" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5306</p><!--googleon: all--><span>Requerimento</span></a></li><li class="depth4 pos_3 last "><a href="/viver/acao-social-e-saude/acao-social-escolar/legislacao" target="_self" class="depth4 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6809</p><!--googleon: all--><span>Legislação</span></a></li></ul></li><li class="depth3 pos_4 has_descendants"><a href="/viver/acao-social-e-saude/apoio-a-natalidade-e-infancia" target="_self" class="depth3 pos_4 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8304</p><!--googleon: all--><span>Apoio à Natalidade e Infância</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/apoio-a-natalidade-e-infancia/regulamento-de-apoio-a-natalidade-e-a-infancia-do-municipio-de-pedrogao-grande" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7731</p><!--googleon: all--><span>Regulamento de Apoio à Natalidade e à Infância do Município de Pedrógão Grande</span></a></li><li class="depth4 pos_2 last "><a href="/viver/acao-social-e-saude/apoio-a-natalidade-e-infancia/requerimento" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1947</p><!--googleon: all--><span>Requerimento</span></a></li></ul></li><li class="depth3 pos_5 has_descendants"><a href="/viver/acao-social-e-saude/cpcj" target="_self" class="depth3 pos_5 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7806</p><!--googleon: all--><span>CPCJ</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/cpcj/composicao" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9617</p><!--googleon: all--><span>Composição</span></a></li><li class="depth4 pos_2 "><a href="/viver/acao-social-e-saude/cpcj/legislacao" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6565</p><!--googleon: all--><span>Legislação</span></a></li><li class="depth4 pos_3 "><a href="/viver/acao-social-e-saude/cpcj/regulamento-interno" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8284</p><!--googleon: all--><span>Regulamento Interno</span></a></li><li class="depth4 pos_4 "><a href="/viver/acao-social-e-saude/cpcj/iniciativas" target="_self" class="depth4 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6523</p><!--googleon: all--><span>Iniciativas</span></a></li><li class="depth4 pos_5 "><a href="/viver/acao-social-e-saude/cpcj/plano-de-acao" target="_self" class="depth4 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7778</p><!--googleon: all--><span>Plano de Ação</span></a></li><li class="depth4 pos_6 last "><a href="/viver/acao-social-e-saude/cpcj/contactos" target="_self" class="depth4 pos_6 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4474</p><!--googleon: all--><span>Contactos</span></a></li></ul></li><li class="depth3 pos_6 has_descendants"><a href="/viver/acao-social-e-saude/habitacao-social" target="_self" class="depth3 pos_6 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9271</p><!--googleon: all--><span>Habitação Social</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/habitacao-social/regulamento-de-habitacao-social-do-municipio-de-pedrogao-grande" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6762</p><!--googleon: all--><span>Regulamento de Habitação Social do Município de Pedrógão Grande</span></a></li><li class="depth4 pos_2 last "><a href="/viver/acao-social-e-saude/habitacao-social/concursos" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8259</p><!--googleon: all--><span>Concursos</span></a></li></ul></li><li class="depth3 pos_7 has_descendants"><a href="/viver/acao-social-e-saude/programa-de-apoio-ao-acesso-a-habitacao-1-direito" target="_self" class="depth3 pos_7 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7932</p><!--googleon: all--><span>Programa de Apoio ao Acesso à habitação – 1º direito</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/programa-de-apoio-ao-acesso-a-habitacao-1-direito/legislacao" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1987</p><!--googleon: all--><span>Legislação</span></a></li><li class="depth4 pos_2 last "><a href="/viver/acao-social-e-saude/programa-de-apoio-ao-acesso-a-habitacao-1-direito/estrategia-local-de-habitacao-de-pedrogao-grande" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6499</p><!--googleon: all--><span>Estratégia Local de Habitação de Pedrógão Grande</span></a></li></ul></li><li class="depth3 pos_8 has_descendants"><a href="/viver/acao-social-e-saude/rede-social" target="_self" class="depth3 pos_8 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4111</p><!--googleon: all--><span>Rede Social</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/acao-social-e-saude/rede-social/legislacao" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4949</p><!--googleon: all--><span>Legislação</span></a></li><li class="depth4 pos_2 "><a href="/viver/acao-social-e-saude/rede-social/composicao-do-clas-de-pedrogao-grande" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8922</p><!--googleon: all--><span>Composição do CLAS de Pedrógão Grande</span></a></li><li class="depth4 pos_3 "><a href="/viver/acao-social-e-saude/rede-social/diagnostico-social" target="_self" class="depth4 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2843</p><!--googleon: all--><span>Diagnóstico Social</span></a></li><li class="depth4 pos_4 "><a href="/viver/acao-social-e-saude/rede-social/plano-de-desenvolvimento-social" target="_self" class="depth4 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6937</p><!--googleon: all--><span>Plano de Desenvolvimento Social</span></a></li><li class="depth4 pos_5 "><a href="/viver/acao-social-e-saude/rede-social/plano-de-acao" target="_self" class="depth4 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8712</p><!--googleon: all--><span>Plano de Ação</span></a></li><li class="depth4 pos_6 "><a href="/viver/acao-social-e-saude/rede-social/nucleo-local-de-garantia-para-a-infancia" target="_self" class="depth4 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6129</p><!--googleon: all--><span>Núcleo Local de Garantia para a Infância </span></a></li><li class="depth4 pos_7 last "><a href="/viver/acao-social-e-saude/rede-social/carta-social" target="_self" class="depth4 pos_7 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>229</p><!--googleon: all--><span>Carta Social</span></a></li></ul></li><li class="depth3 pos_9 "><a href="https://bicsp.min-saude.pt/pt/biufs/2/20021/2101403/Pages/default.aspx" target="_blank" class="depth3 pos_9 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7216</p><!--googleon: all--><span>Saúde</span></a></li><li class="depth3 pos_10 last "><a href="/viver/acao-social-e-saude/radar-social" target="_self" class="depth3 pos_10 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4007</p><!--googleon: all--><span>Radar Social</span></a></li></ul></li><li class="depth2 pos_5 has_descendants"><a href="/viver/ambiente" target="_self" class="depth2 pos_5 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>315</p><!--googleon: all--><span>Ambiente</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="https://www.apin.pt/" target="_blank" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>736</p><!--googleon: all--><span>Água, Saneamento e Resíduos</span></a></li><li class="depth3 pos_2 has_descendants"><a href="/viver/ambiente/recolha-seletiva" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8448</p><!--googleon: all--><span>Recolha Seletiva</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/ambiente/recolha-seletiva/ecopontos" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5613</p><!--googleon: all--><span>Ecopontos</span></a></li><li class="depth4 pos_2 "><a href="/viver/ambiente/recolha-seletiva/oleoes" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3213</p><!--googleon: all--><span>Oleões</span></a></li><li class="depth4 pos_3 "><a href="/viver/ambiente/recolha-seletiva/texteis" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3271</p><!--googleon: all--><span>Têxteis</span></a></li><li class="depth4 pos_4 "><a href="/viver/ambiente/recolha-seletiva/residuos-volumosos" target="_self" class="depth4 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6618</p><!--googleon: all--><span>Resíduos Volumosos</span></a></li><li class="depth4 pos_5 last "><a href="/viver/ambiente/recolha-seletiva/residuos-de-construcao-e-demolicao-resultantes-de-pequenas-reparacoes-e-obras-de-bricolage-em-habitacoes" target="_self" class="depth4 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5808</p><!--googleon: all--><span>Resíduos de Construção e Demolição Resultantes de Pequenas Reparações e Obras de Bricolage em Habitações</span></a></li></ul></li><li class="depth3 pos_3 has_descendants"><a href="/viver/ambiente/alteracoes-climaticas" target="_self" class="depth3 pos_3 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1455</p><!--googleon: all--><span>Alterações Climáticas</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="https://cimregiaodeleiria.pt/gabinete-tecnico-florestal/estrategia-intermunicipal-de-adaptacao-as-alteracoes-climaticas-da-regiao-de-leiria-eiaac/" target="_blank" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8041</p><!--googleon: all--><span>Plano Intermunicipal de Combate às Alterações Climáticas</span></a></li><li class="depth4 pos_2 last "><a href="/viver/ambiente/alteracoes-climaticas/plano-municipal-de-combate-as-alteracoes-climaticas" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4816</p><!--googleon: all--><span>Plano Municipal de Combate às Alterações Climáticas</span></a></li></ul></li><li class="depth3 pos_4 "><a href="/viver/ambiente/cadastro-do-arvoredo-urbano" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6602</p><!--googleon: all--><span>Cadastro do Arvoredo Urbano</span></a></li><li class="depth3 pos_5 last "><a href="/viver/ambiente/avaliacao-fitossanitaria-de-arvoredo" target="_self" class="depth3 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6062</p><!--googleon: all--><span>Avaliação Fitossanitária de Arvoredo</span></a></li></ul></li><li class="depth2 pos_6 selected selected_descendant has_descendants"><a href="/viver/cultura" target="_self" class="depth2 pos_6 selected selected_descendant has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5672</p><!--googleon: all--><span>Cultura</span></a><ul class="depth3 "><li class="depth3 pos_1 first has_descendants"><a href="/viver/cultura/arquivo-historico-municipal" target="_self" class="depth3 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9518</p><!--googleon: all--><span>Arquivo Histórico Municipal</span></a><ul class="depth4 "><li class="depth4 pos_1 first has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/historia-administrativa" target="_self" class="depth4 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9436</p><!--googleon: all--><span>História Administrativa</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/cultura/arquivo-historico-municipal/historia-administrativa/missao" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4503</p><!--googleon: all--><span>Missão</span></a></li><li class="depth5 pos_2 last "><a href="/viver/cultura/arquivo-historico-municipal/historia-administrativa/competencias" target="_self" class="depth5 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2429</p><!--googleon: all--><span>Competências</span></a></li></ul></li><li class="depth4 pos_2 has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes" target="_self" class="depth4 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2982</p><!--googleon: all--><span>Fundos e Coleções</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/fundo-documental" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5714</p><!--googleon: all--><span>Fundo Documental</span></a></li><li class="depth5 pos_2 has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/colecoes" target="_self" class="depth5 pos_2 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1477</p><!--googleon: all--><span>Coleções</span></a><ul class="depth6 "><li class="depth6 pos_1 first "><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/colecoes/galeria" target="_self" class="depth6 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1441</p><!--googleon: all--><span>Postais</span></a></li><li class="depth6 pos_2 last "><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/colecoes/galeria-57" target="_self" class="depth6 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8015</p><!--googleon: all--><span>Fotografias</span></a></li></ul></li><li class="depth5 pos_3 last has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/publicacoes-periodicas" target="_self" class="depth5 pos_3 last has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3337</p><!--googleon: all--><span>Publicações Periódicas</span></a><ul class="depth6 "><li class="depth6 pos_1 first last "><a href="/viver/cultura/arquivo-historico-municipal/fundos-e-colecoes/publicacoes-periodicas/jornal-voz-da-graca" target="_self" class="depth6 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5025</p><!--googleon: all--><span>Jornal Voz da Graça </span></a></li></ul></li></ul></li><li class="depth4 pos_3 has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/extensao-educativa" target="_self" class="depth4 pos_3 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7264</p><!--googleon: all--><span>Extensão Educativa</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/cultura/arquivo-historico-municipal/extensao-educativa/visitar-o-arquivo-historico" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1288</p><!--googleon: all--><span>Visitar o Arquivo Histórico</span></a></li><li class="depth5 pos_2 last "><a href="/viver/cultura/arquivo-historico-municipal/extensao-educativa/visitar-o-patrimonio-historico" target="_self" class="depth5 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7813</p><!--googleon: all--><span>Visitar o Património Histórico</span></a></li></ul></li><li class="depth4 pos_4 "><a href="/viver/cultura/arquivo-historico-municipal/documentos-em-destaque" target="_self" class="depth4 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>144</p><!--googleon: all--><span>Documentos em destaque</span></a></li><li class="depth4 pos_5 last has_descendants"><a href="/viver/cultura/arquivo-historico-municipal/servico-e-informacoes" target="_self" class="depth4 pos_5 last has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>501</p><!--googleon: all--><span>Serviço e Informações</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/cultura/arquivo-historico-municipal/servico-e-informacoes/regulamento-interno-e-normas-de-consulta" target="_self" class="depth5 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>931</p><!--googleon: all--><span>Regulamento Interno e Normas de Consulta</span></a></li><li class="depth5 pos_2 "><a href="/viver/cultura/arquivo-historico-municipal/servico-e-informacoes/horario-de-funcionamento" target="_self" class="depth5 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5847</p><!--googleon: all--><span>Horário de Funcionamento</span></a></li><li class="depth5 pos_3 "><a href="/viver/cultura/arquivo-historico-municipal/servico-e-informacoes/requisicao-de-documentos" target="_self" class="depth5 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3765</p><!--googleon: all--><span>Requisição de Documentos</span></a></li><li class="depth5 pos_4 last "><a href="/viver/cultura/arquivo-historico-municipal/servico-e-informacoes/localizacao-endereco" target="_self" class="depth5 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6895</p><!--googleon: all--><span>Localização/Endereço</span></a></li></ul></li></ul></li><li class="depth3 pos_2 has_descendants"><a href="/viver/cultura/biblioteca-municipal" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7965</p><!--googleon: all--><span>Biblioteca Municipal</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/cultura/biblioteca-municipal/historia" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5957</p><!--googleon: all--><span>História</span></a></li><li class="depth4 pos_2 "><a href="/viver/cultura/biblioteca-municipal/espaco" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6053</p><!--googleon: all--><span>Espaço</span></a></li><li class="depth4 pos_3 "><a href="/viver/cultura/biblioteca-municipal/rede-de-bibliotecas-de-monsalude" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2839</p><!--googleon: all--><span>Rede de Bibliotecas de Monsalude</span></a></li><li class="depth4 pos_4 "><a href="/viver/cultura/biblioteca-municipal/regulamento" target="_self" class="depth4 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3153</p><!--googleon: all--><span>Regulamento</span></a></li><li class="depth4 pos_5 last "><a href="/viver/cultura/biblioteca-municipal/faq-s" target="_self" class="depth4 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1326</p><!--googleon: all--><span>FAQ&#39;s</span></a></li></ul></li><li class="depth3 pos_3 "><a href="/viver/cultura/casa-municipal-da-cultura" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4598</p><!--googleon: all--><span>Casa Municipal da Cultura</span></a></li><li class="depth3 pos_4 last current-page selected"><a href="/viver/cultura/agenda-de-eventos" target="_self" class="depth3 pos_4 last current-page selected" aria-current="page"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1192</p><!--googleon: all--><span>Agenda de Eventos</span></a></li></ul></li><li class="depth2 pos_7 has_descendants"><a href="/viver/educacao" target="_self" class="depth2 pos_7 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9248</p><!--googleon: all--><span>Educação</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/viver/educacao/estabelecimentos-de-ensino" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1859</p><!--googleon: all--><span>Estabelecimentos de Ensino</span></a></li><li class="depth3 pos_2 "><a href="https://www.cm-pedrogaogrande.pt/viver/acao-social-e-saude/acao-social-escolar" target="_self" class="depth3 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9255</p><!--googleon: all--><span>Ação Social Escolar </span></a></li><li class="depth3 pos_3 "><a href="/viver/educacao/carta-educativa" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9354</p><!--googleon: all--><span>Carta Educativa</span></a></li><li class="depth3 pos_4 "><a href="/viver/educacao/projeto-educativo-local-pel" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7847</p><!--googleon: all--><span>Projeto Educativo Local (PEL)</span></a></li><li class="depth3 pos_5 "><a href="/viver/educacao/premios-de-merito-escolar" target="_self" class="depth3 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6343</p><!--googleon: all--><span>Prémios de Mérito Escolar</span></a></li><li class="depth3 pos_6 "><a href="/viver/educacao/plano-de-transportes-escolares" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5923</p><!--googleon: all--><span>Plano de Transportes Escolares</span></a></li><li class="depth3 pos_7 has_descendants"><a href="/viver/educacao/prolongamento-em-tempos-letivos-e-interrupcoes-letivas-aaaf-etl-e-etl" target="_self" class="depth3 pos_7 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4004</p><!--googleon: all--><span>Prolongamento em Tempos Letivos e Interrupções Letivas (AAAF, ETL e ETL+)</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/educacao/prolongamento-em-tempos-letivos-e-interrupcoes-letivas-aaaf-etl-e-etl/normas-de-funcionamento-e-formularios" target="_self" class="depth4 pos_1 first last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9357</p><!--googleon: all--><span>Normas de Funcionamento e Formulários</span></a></li></ul></li><li class="depth3 pos_8 has_descendants"><a href="/viver/desporto-e-juventude" target="_self" class="depth3 pos_8 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8223</p><!--googleon: all--><span>Férias Desportivas</span></a><ul class="depth4 "><li class="depth4 pos_1 first last "><a href="/viver/educacao/ferias-desportivas/normas-de-funcionamento-e-formularios" target="_self" class="depth4 pos_1 first last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4921</p><!--googleon: all--><span>Normas de Funcionamento e Formulários</span></a></li></ul></li><li class="depth3 pos_9 last "><a href="/viver/educacao/conselho-municipal-de-educacao" target="_self" class="depth3 pos_9 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>300</p><!--googleon: all--><span>Conselho Municipal de Educação</span></a></li></ul></li><li class="depth2 pos_8 "><a href="/viver/feiras-e-mercados" target="_self" class="depth2 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7826</p><!--googleon: all--><span>Feiras e Mercados</span></a></li><li class="depth2 pos_9 has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio" target="_self" class="depth2 pos_9 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7568</p><!--googleon: all--><span>Urbanismo e Ordenamento de Território</span></a><ul class="depth3 "><li class="depth3 pos_1 first has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares" target="_self" class="depth3 pos_1 first has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5359</p><!--googleon: all--><span>Obras Particulares</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/comunicacao-previa" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3745</p><!--googleon: all--><span>Comunicação Prévia</span></a></li><li class="depth4 pos_2 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/diversos" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8906</p><!--googleon: all--><span>Diversos</span></a></li><li class="depth4 pos_3 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/licenciamento-de-obras-e-edificacao" target="_self" class="depth4 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9477</p><!--googleon: all--><span>Licenciamento de Obras e Edificação</span></a></li><li class="depth4 pos_4 has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/incentivos-zona-historica" target="_self" class="depth4 pos_4 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8397</p><!--googleon: all--><span>Incentivos Zona Histórica</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/incentivos-zona-historica/candidatura-fase-de-aprovacao" target="_self" class="depth5 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1711</p><!--googleon: all--><span>Candidatura - Fase de Aprovação</span></a></li><li class="depth5 pos_2 last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/incentivos-zona-historica/candidatura-auto-de-medicao-dos-trabalhos-executados" target="_self" class="depth5 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3735</p><!--googleon: all--><span>Candidatura – Auto de Medição Dos Trabalhos Executados</span></a></li></ul></li><li class="depth4 pos_5 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/informacao-previa" target="_self" class="depth4 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>828</p><!--googleon: all--><span>Informação Prévia</span></a></li><li class="depth4 pos_6 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/titulo-urbanistico" target="_self" class="depth4 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9066</p><!--googleon: all--><span>Titulo Urbanistico</span></a></li><li class="depth4 pos_7 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/utilizacao" target="_self" class="depth4 pos_7 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5694</p><!--googleon: all--><span>Utilização</span></a></li><li class="depth4 pos_8 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares/comunicacao-inicio-dos-trabalhos" target="_self" class="depth4 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6345</p><!--googleon: all--><span>Comunicação Inicio dos Trabalhos</span></a></li><li class="depth4 pos_9 last "><a href="https://www.cm-pedrogaogrande.pt/cmpedrogaogrande/uploads/document/file/1818/20241122_protecao_de_dados_rev01.pdf" target="_self" class="depth4 pos_9 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8118</p><!--googleon: all--><span>Disclaimer Proteção de Dados</span></a></li></ul></li><li class="depth3 pos_2 has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>960</p><!--googleon: all--><span>Planeamento Urbanístico</span></a><ul class="depth4 "><li class="depth4 pos_1 first has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/planos-de-ordenamento" target="_self" class="depth4 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4330</p><!--googleon: all--><span>Planos de ordenamento</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/planos-de-ordenamento/enquadramento-pdm" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7651</p><!--googleon: all--><span>Enquadramento PDM</span></a></li><li class="depth5 pos_2 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/planos-de-ordenamento/estudos-e-planos-do-pdm" target="_self" class="depth5 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3305</p><!--googleon: all--><span>Estudos e Planos do PDM</span></a></li><li class="depth5 pos_3 last has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/planos-de-ordenamento/planos-em-alteracao" target="_self" class="depth5 pos_3 last has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6426</p><!--googleon: all--><span>Planos em Alteração</span></a><ul class="depth6 "><li class="depth6 pos_1 first last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/planos-de-ordenamento/planos-em-alteracao/4-alteracao-a-1-revisao-do-pdm" target="_self" class="depth6 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9238</p><!--googleon: all--><span>4ª Alteração à 1ª Revisão do PDM</span></a></li></ul></li></ul></li><li class="depth4 pos_2 has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru" target="_self" class="depth4 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>871</p><!--googleon: all--><span>ARU</span></a><ul class="depth5 "><li class="depth5 pos_1 first "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-pedrogao-grande" target="_self" class="depth5 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8366</p><!--googleon: all--><span>ARU Pedrógão Grande</span></a></li><li class="depth5 pos_2 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/oru-pedrogao-grande" target="_self" class="depth5 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9068</p><!--googleon: all--><span>ORU Pedrógão Grande</span></a></li><li class="depth5 pos_3 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-atalaias" target="_self" class="depth5 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7890</p><!--googleon: all--><span>ARU Atalaias</span></a></li><li class="depth5 pos_4 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-mega-fundeira" target="_self" class="depth5 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9779</p><!--googleon: all--><span>ARU Mega Fundeira</span></a></li><li class="depth5 pos_5 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-mosteiro" target="_self" class="depth5 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6299</p><!--googleon: all--><span>ARU Mosteiro</span></a></li><li class="depth5 pos_6 "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-picha-e-venda-da-gaita" target="_self" class="depth5 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9186</p><!--googleon: all--><span>ARU Picha e Venda da Gaita</span></a></li><li class="depth5 pos_7 last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/aru/aru-vila-facaia" target="_self" class="depth5 pos_7 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9704</p><!--googleon: all--><span>ARU Vila Facaia</span></a></li></ul></li><li class="depth4 pos_3 last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/planeamento-urbanistico/mapa-ruido" target="_self" class="depth4 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5707</p><!--googleon: all--><span>Mapa Ruído</span></a></li></ul></li><li class="depth3 pos_3 last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/websig-pdm-e-toponimia" target="_self" class="depth3 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2845</p><!--googleon: all--><span>WEBSIG – PDM e Toponímia</span></a></li></ul></li><li class="depth2 pos_10 "><a href="/viver/cemiterios" target="_self" class="depth2 pos_10 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9478</p><!--googleon: all--><span>Cemitérios</span></a></li><li class="depth2 pos_11 has_descendants"><a href="/viver/obras-publicas" target="_self" class="depth2 pos_11 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2064</p><!--googleon: all--><span>Obras Públicas</span></a><ul class="depth3 "><li class="depth3 pos_1 first last "><a href="/viver/obras-publicas/obras-cofinanciadas" target="_self" class="depth3 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3911</p><!--googleon: all--><span>Obras Cofinanciadas</span></a></li></ul></li><li class="depth2 pos_12 "><a href="/viver/transporte-a-pedido" target="_self" class="depth2 pos_12 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4510</p><!--googleon: all--><span>Transporte a Pedido</span></a></li><li class="depth2 pos_13 "><a href="/viver/elaboracao-da-carta-municipal-de-habitacao" target="_self" class="depth2 pos_13 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2740</p><!--googleon: all--><span>Elaboração da Carta Municipal de Habitação</span></a></li><li class="depth2 pos_14 has_descendants"><a href="/viver/servico-medico-veterinario" target="_self" class="depth2 pos_14 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6184</p><!--googleon: all--><span>Serviço Médico-Veterinário</span></a><ul class="depth3 "><li class="depth3 pos_1 first has_descendants"><a href="/viver/servico-medico-veterinario/saude-e-bem-estar-animal" target="_self" class="depth3 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2144</p><!--googleon: all--><span>Saúde e Bem-Estar Animal</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/viver/servico-medico-veterinario/saude-e-bem-estar-animal/animais-de-companhia" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3066</p><!--googleon: all--><span>Animais de Companhia</span></a></li><li class="depth4 pos_2 last "><a href="/viver/servico-medico-veterinario/saude-e-bem-estar-animal/animais-de-producao" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1416</p><!--googleon: all--><span>Animais de Produção</span></a></li></ul></li><li class="depth3 pos_2 "><a href="/viver/servico-medico-veterinario/seguranca-alimentar" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2785</p><!--googleon: all--><span>Segurança Alimentar</span></a></li><li class="depth3 pos_3 last "><a href="/viver/servico-medico-veterinario/editais" target="_self" class="depth3 pos_3 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2747</p><!--googleon: all--><span>Editais</span></a></li></ul></li><li class="depth2 pos_15 "><a href="/viver/carta-municipal-de-habitacao" target="_self" class="depth2 pos_15 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9309</p><!--googleon: all--><span>Carta Municipal de Habitação</span></a></li><li class="depth2 pos_16 "><a href="https://obairro.cm-pedrogaogrande.pt/" target="_blank" class="depth2 pos_16 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7805</p><!--googleon: all--><span>Bairro Comercial Digital</span></a></li><li class="depth2 pos_17 last "><a href="/viver/espaco-energia" target="_self" class="depth2 pos_17 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7782</p><!--googleon: all--><span>Espaço Energia</span></a></li></ul></li><li class="depth1 pos_3 has_descendants"><a href="/visitar" target="_self" class="depth1 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8809</p><!--googleon: all--><span>Visitar</span></a><ul class="depth2 "><li class="depth2 pos_1 first "><a href="/visitar/centro-de-interpretacao-turistica-espaco-arqueologico-jose-costa-santos" target="_self" class="depth2 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9844</p><!--googleon: all--><span>Centro de Interpretação Turística / Espaço Arqueologico José Costa Santos</span></a></li><li class="depth2 pos_2 "><a href="/visitar/posto-de-turismo-n2" target="_self" class="depth2 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>584</p><!--googleon: all--><span>Posto de Turismo N2</span></a></li><li class="depth2 pos_3 has_descendants"><a href="/visitar/percursos" target="_self" class="depth2 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6207</p><!--googleon: all--><span>Percursos</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/visitar/percursos/percursos-pedestres" target="_self" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4102</p><!--googleon: all--><span>Percursos Pedestres</span></a></li><li class="depth3 pos_2 last "><a href="/visitar/percursos/percursos-btt" target="_self" class="depth3 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4565</p><!--googleon: all--><span>Percursos BTT</span></a></li></ul></li><li class="depth2 pos_4 "><a href="/visitar/parques-de-merendas" target="_self" class="depth2 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3087</p><!--googleon: all--><span>Parques de Merendas</span></a></li><li class="depth2 pos_5 "><a href="/visitar/praias-fluviais" target="_self" class="depth2 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9147</p><!--googleon: all--><span>Praias Fluviais</span></a></li><li class="depth2 pos_6 "><a href="/visitar/rota-da-n2" target="_self" class="depth2 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>800</p><!--googleon: all--><span>Rota da N2</span></a></li><li class="depth2 pos_7 has_descendants"><a href="/visitar/gastronomia" target="_self" class="depth2 pos_7 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9555</p><!--googleon: all--><span>Gastronomia</span></a><ul class="depth3 "><li class="depth3 pos_1 first last "><a href="/visitar/gastronomia/restauracao" target="_self" class="depth3 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2063</p><!--googleon: all--><span>Restauração</span></a></li></ul></li><li class="depth2 pos_8 "><a href="/visitar/patrimonio-historico" target="_self" class="depth2 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3271</p><!--googleon: all--><span>Património Histórico</span></a></li><li class="depth2 pos_9 has_descendants"><a href="/visitar/museus" target="_self" class="depth2 pos_9 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5198</p><!--googleon: all--><span>Museus</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="https://www.facebook.com/museuacordeaoconcertina/?locale=pt_PT" target="_blank" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3192</p><!--googleon: all--><span>Núcleo Museológico de Acordéons e Concertinas</span></a></li><li class="depth3 pos_2 "><a href=" https://www.facebook.com/juntagraca/?locale=pt_BR" target="_blank" class="depth3 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6926</p><!--googleon: all--><span>Núcleo Museológico da Graça</span></a></li><li class="depth3 pos_3 "><a href="https://roteiromuseus.ccdrc.pt/museu_fichaGeo.aspx?tipologia=1&amp;idMuseu=148&amp;regiao=164" target="_blank" class="depth3 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4941</p><!--googleon: all--><span>Museu Pedro Cruz</span></a></li><li class="depth3 pos_4 "><a href="https://roteiromuseus.ccdrc.pt/museu_ficha.aspx?tipologia=6&amp;idMuseu=149" target="_blank" class="depth3 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3853</p><!--googleon: all--><span>Casa Museu Comendador Manuel Nunes Correia</span></a></li><li class="depth3 pos_5 "><a href="https://roteiromuseus.ccdrc.pt/museu_ficha.aspx?tipologia=1&amp;idMuseu=147" target="_blank" class="depth3 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7386</p><!--googleon: all--><span>Igreja da Misericórdia e Museu de Arte Sacra</span></a></li><li class="depth3 pos_6 "><a href="https://www.rotan2.pt/entity/1435" target="_blank" class="depth3 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9118</p><!--googleon: all--><span>Museu da República e da Maçonaria</span></a></li><li class="depth3 pos_7 "><a href="/visitar/museus/museu-escolar" target="_self" class="depth3 pos_7 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>683</p><!--googleon: all--><span>Museu Escolar</span></a></li><li class="depth3 pos_8 last "><a href="/visitar/museus/espaco-arqueologico-jose-costa-santos" target="_self" class="depth3 pos_8 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7287</p><!--googleon: all--><span>Espaço Arqueológico José Costa Santos</span></a></li></ul></li><li class="depth2 pos_10 has_descendants"><a href="/visitar/estacao-nautica" target="_self" class="depth2 pos_10 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9409</p><!--googleon: all--><span>Estação Náutica</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/visitar/estacao-nautica/conselho-da-estacao-nautica" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8211</p><!--googleon: all--><span>Conselho da Estação Náutica</span></a></li><li class="depth3 pos_2 "><a href="/visitar/estacao-nautica/entidade-coordenador" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2139</p><!--googleon: all--><span>Entidade Coordenador</span></a></li><li class="depth3 pos_3 "><a href="/viver/cultura/agenda-de-eventos" target="_self" class="depth3 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1757</p><!--googleon: all--><span>Agenda de Eventos</span></a></li><li class="depth3 pos_4 "><a href="/visitar/estacao-nautica/espacos-de-atividades-nauticas" target="_self" class="depth3 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3015</p><!--googleon: all--><span>Espaços de Atividades Náuticas</span></a></li><li class="depth3 pos_5 "><a href="/visitar/estacao-nautica/parceiros" target="_self" class="depth3 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3426</p><!--googleon: all--><span>Parceiros</span></a></li><li class="depth3 pos_6 last "><a href="/visitar/estacao-nautica/atividades-nauticas" target="_self" class="depth3 pos_6 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8036</p><!--googleon: all--><span> Atividades Náuticas</span></a></li></ul></li><li class="depth2 pos_11 has_descendants"><a href="/visitar/visitas-realidade-virtual" target="_self" class="depth2 pos_11 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3157</p><!--googleon: all--><span>Visitas Realidade Virtual</span></a><ul class="depth3 "><li class="depth3 pos_1 first "><a href="/visitar/visitas-realidade-virtual/audio-guia-igreja-matriz" target="_self" class="depth3 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8442</p><!--googleon: all--><span>Áudio Guia Igreja Matriz</span></a></li><li class="depth3 pos_2 last "><a href="https://vip360.pt/pedrogaogrande/" target="_blank" class="depth3 pos_2 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1966</p><!--googleon: all--><span>VIP 360</span></a></li></ul></li><li class="depth2 pos_12 "><a href="/visitar/restaurantes" target="_self" class="depth2 pos_12 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9822</p><!--googleon: all--><span>Restaurantes</span></a></li><li class="depth2 pos_13 "><a href="/viver/cultura/agenda-de-eventos" target="_self" class="depth2 pos_13 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9601</p><!--googleon: all--><span>Agenda de Eventos</span></a></li><li class="depth2 pos_14 has_descendants"><a href="/visitar/patrimonio-imaterial" target="_self" class="depth2 pos_14 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6025</p><!--googleon: all--><span>Património Imaterial</span></a><ul class="depth3 "><li class="depth3 pos_1 first last "><a href="/visitar/patrimonio-imaterial/semana-santa" target="_self" class="depth3 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4183</p><!--googleon: all--><span>Semana Santa</span></a></li></ul></li><li class="depth2 pos_15 "><a href="/visitar/festas-de-verao" target="_self" class="depth2 pos_15 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9156</p><!--googleon: all--><span>Festas de Verão</span></a></li><li class="depth2 pos_16 "><a href="/visitar/empreendimentos" target="_self" class="depth2 pos_16 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3977</p><!--googleon: all--><span>Empreendimentos</span></a></li><li class="depth2 pos_17 "><a href="/visitar/asa-graca" target="_self" class="depth2 pos_17 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6465</p><!--googleon: all--><span>ASA-GRAÇA</span></a></li><li class="depth2 pos_18 last "><a href="/visitar/alojamento-local" target="_self" class="depth2 pos_18 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6814</p><!--googleon: all--><span>Alojamento Local</span></a></li></ul></li><li class="depth1 pos_4 has_descendants"><a href="/investir" target="_self" class="depth1 pos_4 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1749</p><!--googleon: all--><span>Investir</span></a><ul class="depth2 "><li class="depth2 pos_1 first "><a href="/investir/area-de-localizacao-empresarial-de-pedrogao-grande" target="_self" class="depth2 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>420</p><!--googleon: all--><span>Área de Localização Empresarial de Pedrógão Grande</span></a></li><li class="depth2 pos_2 "><a href="/investir/zona-industrial-de-pedrogao-grande" target="_self" class="depth2 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8126</p><!--googleon: all--><span>Zona Industrial de Pedrógão Grande</span></a></li><li class="depth2 pos_3 "><a href="/investir/galeria-7" target="_self" class="depth2 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6133</p><!--googleon: all--><span>Zona Industrial do Pinheiro Bordalo</span></a></li><li class="depth2 pos_4 "><a href="/investir/regulamento-de-acesso-aos-incentivos-municipais-a-instalacao-de-industrias" target="_self" class="depth2 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5212</p><!--googleon: all--><span>Regulamento de acesso aos incentivos Municipais à instalação de indústrias</span></a></li><li class="depth2 pos_5 "><a href="/investir/galeria" target="_self" class="depth2 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3798</p><!--googleon: all--><span>Razões para Investir em Pedrógão Grande</span></a></li><li class="depth2 pos_6 "><a href="/investir/hastas-publicas-procedimentos" target="_self" class="depth2 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8908</p><!--googleon: all--><span>Hastas Públicas / Procedimentos</span></a></li><li class="depth2 pos_7 "><a href="https://incentro.ccdrc.pt/Territorios/DadosAbertos?munId=1013" target="_blank" class="depth2 pos_7 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5144</p><!--googleon: all--><span>inCentro</span></a></li><li class="depth2 pos_8 "><a href="/investir/centro-2030" target="_self" class="depth2 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>9661</p><!--googleon: all--><span>Centro 2030</span></a></li><li class="depth2 pos_9 last "><a href="/investir/consulta-publica" target="_self" class="depth2 pos_9 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2748</p><!--googleon: all--><span>Consulta Pública</span></a></li></ul></li><li class="depth1 pos_5 last has_descendants"><a href="/balcao-virtual" target="_self" class="depth1 pos_5 last has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7515</p><!--googleon: all--><span>Balcão Virtual</span></a><ul class="depth2 "><li class="depth2 pos_1 first has_descendants"><a href="/balcao-virtual/atendimento-ao-municipe" target="_self" class="depth2 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>616</p><!--googleon: all--><span>Atendimento ao Munícipe</span></a><ul class="depth3 "><li class="depth3 pos_1 first has_descendants"><a href="/balcao-virtual/atendimento-ao-municipe/atendimento" target="_self" class="depth3 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5708</p><!--googleon: all--><span>Atendimento</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/balcao-virtual/atendimento-ao-municipe/atendimento/bupi" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1988</p><!--googleon: all--><span>BUPi</span></a></li><li class="depth4 pos_2 last "><a href="/balcao-virtual/atendimento-ao-municipe/atendimento/contactos-e-horarios" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8579</p><!--googleon: all--><span>Contactos e Horários</span></a></li></ul></li><li class="depth3 pos_2 has_descendants"><a href="/balcao-virtual/atendimento-ao-municipe/formularios" target="_self" class="depth3 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7031</p><!--googleon: all--><span>Formulários</span></a><ul class="depth4 "><li class="depth4 pos_1 first "><a href="/balcao-virtual/atendimento-ao-municipe/formularios/formulario-operacoes-de-exploracao-florestal" target="_self" class="depth4 pos_1 first " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1420</p><!--googleon: all--><span>Formulário Operações de Exploração Florestal</span></a></li><li class="depth4 pos_2 "><a href="/balcao-virtual/atendimento-ao-municipe/formularios/formulario-participacao-por-ausencia-de-limpeza-de-terrenos" target="_self" class="depth4 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5534</p><!--googleon: all--><span>Formulário Participação por Ausência de Limpeza de Terrenos</span></a></li><li class="depth4 pos_3 "><a href="/balcao-virtual/atendimento-ao-municipe/formularios/formulario-de-envio-de-conteudos-para-a-agenda-cultural" target="_self" class="depth4 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5251</p><!--googleon: all--><span>Formulário de envio de conteúdos para a Agenda Cultural</span></a></li><li class="depth4 pos_4 last has_descendants"><a href="/balcao-virtual/atendimento-ao-municipe/formularios/radar-social" target="_self" class="depth4 pos_4 last has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2589</p><!--googleon: all--><span>Radar Social</span></a><ul class="depth5 "><li class="depth5 pos_1 first last "><a href="/balcao-virtual/atendimento-ao-municipe/formularios/radar-social/formulario-radar-social" target="_self" class="depth5 pos_1 first last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5711</p><!--googleon: all--><span>Formulário - Radar Social</span></a></li></ul></li></ul></li><li class="depth3 pos_3 "><a href="/balcao-virtual/atendimento-ao-municipe/taxas-e-licencas" target="_self" class="depth3 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4115</p><!--googleon: all--><span>Taxas e Licenças</span></a></li><li class="depth3 pos_4 last "><a href="/balcao-virtual/atendimento-ao-municipe/certificado-de-registo-de-cidadao-da-uniao-europeia-crue" target="_self" class="depth3 pos_4 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6481</p><!--googleon: all--><span>Certificado de Registo de Cidadão da União Europeia (CRUE)</span></a></li></ul></li><li class="depth2 pos_2 "><a href="https://fogos.icnf.pt:8443/queimasqueimadas/QueimaSeguraRapidaadd.asp " target="_blank" class="depth2 pos_2 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8199</p><!--googleon: all--><span>Participação de Queimas e Queimadas</span></a></li><li class="depth2 pos_3 "><a href="https://eportugal.gov.pt/ " target="_blank" class="depth2 pos_3 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>563</p><!--googleon: all--><span>Balcão do Empreendedor</span></a></li><li class="depth2 pos_4 "><a href="/municipio/revista-municipal" target="_self" class="depth2 pos_4 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7935</p><!--googleon: all--><span>Revista Municipal</span></a></li><li class="depth2 pos_5 "><a href="https://memorias.rbmonsalude.pt/?page_id=57 " target="_blank" class="depth2 pos_5 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>551</p><!--googleon: all--><span>Memórias de Monsalude</span></a></li><li class="depth2 pos_6 "><a href="https://eportugal.gov.pt/a-minha-rua " target="_blank" class="depth2 pos_6 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>836</p><!--googleon: all--><span>A Minha Rua</span></a></li><li class="depth2 pos_7 "><a href="/balcao-virtual/faturacao-eletronica" target="_self" class="depth2 pos_7 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8518</p><!--googleon: all--><span>Faturação Eletrónica</span></a></li><li class="depth2 pos_8 "><a href="/balcao-virtual/protecao-civil-participacao-de-ocorrencias" target="_self" class="depth2 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8704</p><!--googleon: all--><span>Proteção Civil - Participação de Ocorrências</span></a></li><li class="depth2 pos_9 "><a href="http://geopgrande.cimregiaodeleiria.pt/index.php/view/map/" target="_blank" class="depth2 pos_9 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3337</p><!--googleon: all--><span>Geoportal</span></a></li><li class="depth2 pos_10 last "><a href="/viver/urbanismo-e-ordenamento-de-territorio/obras-particulares" target="_blank" class="depth2 pos_10 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>603</p><!--googleon: all--><span>Obras Particulares</span></a></li></ul></li></ul>
+
+</div>
+
+
+                  </div>
+                </div>
+            </nav>
+            <div class="tools_area_into hidden-post xxsmall-9 medium-6 xlarge-3 ">  
+  
+<div id="html_block_124" class="widget html_block" data-id="124" data-content_type="HtmlBlock">
+
+  <ul class="infoButtons">
+  <!--<li class="whiteIcon"><a href="#" target="_blank" title="Informação"><img src="/cmpedrogaogrande/layout/icon_infos.svg" alt="botão de informação" /></a></li>-->
+  <li class="whiteIcon"><a href="/perguntas-frequentes" target="_blank" title="Perguntas Frequentes"><img src="/cmpedrogaogrande/layout/icon_faqs.svg" alt="botão de perguntas frequentes" /></a></li>
+ 
+  <!--<li class="whiteBlue"><a href="#" target="_blank" title="Informação"><img src="/cmpedrogaogrande/layout/contactos_blue.svg" alt="botão de informação" /></a></li>-->
+  <li class="whiteBlue"><a href="/perguntas-frequentes" target="_blank" title="Perguntas Frequentes"><img src="/cmpedrogaogrande/layout/faqs_blue.svg" alt="botão de perguntas frequentes" /></a></li>
+  <li>
+   <div class="googleTranslate">
+      <div id="google_translate_element"></div>
+      <script type="text/javascript">    
+        var translate = null;
+        function googleTranslateElementInit() {
+          translate = googleTranslate = new google.translate.TranslateElement({
+            pageLanguage: 'pt',
+            includedLanguages: 'pt-PT,es,en,fr,it,de,nl,ru,ja,zh-CN',
+            autoDisplay: false,
+            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+          }, 'google_translate_element');
+          
+          fixGoogleAcessibility(googleTranslate);
+        }
+        $(window).on('load', function(){
+          var $head = $(".goog-te-menu-frame").contents().find("head");
+
+          $head.append($("<link/>",
+                         { rel: "stylesheet", href: "/cmpedrogaogrande/layout/googletranslate.css", type: "text/css" }
+                        ));
+        })
+        
+        function fixGoogleAcessibility(elem) {
+        	let a = $("#goog-gt-tt .original-text");
+            a.removeClass("original-text");
+          	a = a[0];
+         
+          
+          $('img[src*="cleardot"]').prop("alt", "Google Clear Dot");
+        }
+      </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    </div>
+  </li>
+  <li class="searchButton"></li>
+</ul>
+
+</div>
+  <div id="mega_search_3" class="widget mega_search" data-id="3" data-content_type="MegaSearch">
+  <div class="SearchWrap xsmall-12">
+    <div class="home-banner-search" id="home-banner-search">
+      <div class="home-search-wrapper" id="home-search-wrapper">
+        <div class="mega_pesquisa_search_form">
+          <label class="hidden" for="mega_pesquisa_input_3">
+            Pesquisar
+          </label>
+          <input id="mega_pesquisa_input_3"
+            name="search"
+            type="search"
+            value=""
+            data-core="cmpedrogaogrande"
+            data-wmso_url=""
+            data-results_per_page="10"
+            data-show_results_from_service_directory="false"
+            data-show_results_from_wmso="false"
+            data-show_results_from_wm="true"
+            data-show_results_from_ai="false"
+            data-show_results_from_sites="[&quot;www.cm-pedrogaogrande.pt&quot;]"
+            data-show_results_from_pa="true"
+            data-number_of_questions="3"
+            class="mega_pesquisa_input"
+            placeholder="Pesquisar">
+
+          <label class="hidden" for="mega_pesquisa_button">
+            Pesquisar
+          </label>
+           <input id="mega_pesquisa_button" name="mega_pesquisa" type="submit"  alt="Pesquisar..." class="mega_pesquisa_button search_button">
+        </div>
+      </div>
+        <div id="search-modal" class="modal" style="">
+          <div class="modal-body">
+            <div class="home-modal-close-wrapper"><a href="#" id="home-modal-close-button"><span class="icone fecharModal">Fechar</span></a></div>
+            <div class="search-home-results-header">
+
+                <div class="home-wm-search-results-header columns">
+                  <div class="search-label">Pesquisa Geral</div>
+                  <div class="search-home-results-panel home-wm-search-results"></div>
+                  <div id="cover-spin"></div>
+                </div>
+                <div class="home-wmfaqs-search-results-header columns">
+                  <div class="search-label">Procedimentos de Ajuda</div>
+                  <div class="search-home-results-panel home-wmfaqs-search-results"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+    <div id="template_container">
+
+        <script id="wm-search-results-template" type="text/x-handlebars-template">
+          {{#if this}}
+            <ul class="search-results-buffer" style="display:block">
+              {{#each this}}
+                <li>
+                  <a href="{{url}}" title="{{title.[0]}}">
+                    <div class="search-result-title">
+                      {{#each title}}
+                        {{{.}}}
+                      {{/each}}
+                    </div>
+                    <div class="search-result-snippet">
+                      {{#each maincontent}}
+                        {{{.}}} ...
+                      {{/each}}
+                    </div>
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1"></li>
+            </ul>
+            <div class="paginator page-paginator"></div>
+          {{else}}
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1">
+                <ul class="search-results-buffer">
+                  <li class="sem-resultados pages">
+                    Sem Resultados
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          {{/if}}
+        </script>
+
+
+
+        <script id="wmfaqs-search-results-template" type="text/x-handlebars-template">
+          {{#if dados}}
+            <ul class="search-results-buffer" style="display:block">
+              {{#each dados}}
+                <li class="site-help-link">
+                  <div class="title" data-id="shl{{id}}"><span class="wmIcon icone colapsed"></span>{{title}}</div>
+                  <div class="text" data-id="shl{{id}}" style="display:none">{{{text}}}</div>
+                  {{#if more_page_id}}
+                    <div class="more-info" data-id="shl{{id}}" style="display:none">
+                      <a href="{{url}}">Mais</a>
+                    </div>
+                  {{/if}}
+                  {{#if more_page_url}}
+                    <div class="more-info externa" data-id="shl{{id}}" style="display:none">
+                      <a href="{{url}}">Mais</a>
+                    </div>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+
+            <ul class="search-results-placeholder site-help-link-list">
+              <li class="search-page" data-paginator-page="1"></li>
+            </ul>
+            <div class="paginator page-paginator"></div>
+
+          {{else}}
+
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1">
+                <ul class="search-results-buffer">
+                  <li class="sem-resultados site-help-link">
+                    Sem Resultados
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+          {{/if}}
+        </script>
+    </div>
+</div>
+
+</div>
+       </div>
+       </div>
+       
+    </header>
+    
+    <!-------------------------------------------------------------------------------------------------------------->
+    <!-- MAIN -->
+    <!-------------------------------------------------------------------------------------------------------------->
+    <main class="siteContents grid-container">
+      <div class="grid-x grid-margin-x">
+        <nav class="verticalMenu_AREA show-for-xlarge xsmall-3 cell hidden-post">  
+  <div id="vertical_menu_1" class="widget vertical_menu no-wm-idx" data-id="1" data-content_type="VerticalMenu">
+
+
+      <a class='current_menu' href="/viver">
+        Viver
+      </a>
+
+
+    <ul class="depth1 "><li class="depth1 pos_1 first has_descendants"><a href="/viver/gabinete-tecnico-florestal" target="_self" class="depth1 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5267</p><!--googleon: all--><span>Gabinete Técnico Florestal</span></a></li><li class="depth1 pos_2 has_descendants"><a href="/viver/protecao-civil" target="_self" class="depth1 pos_2 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>8324</p><!--googleon: all--><span>Proteção Civil</span></a></li><li class="depth1 pos_3 has_descendants"><a href="/viver/desporto-e-juventude" target="_self" class="depth1 pos_3 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>828</p><!--googleon: all--><span>Desporto e Juventude</span></a></li><li class="depth1 pos_4 has_descendants"><a href="/viver/acao-social-e-saude" target="_self" class="depth1 pos_4 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3013</p><!--googleon: all--><span>Ação Social e Saúde</span></a></li><li class="depth1 pos_5 has_descendants"><a href="/viver/ambiente" target="_self" class="depth1 pos_5 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5561</p><!--googleon: all--><span>Ambiente</span></a></li><li class="depth1 pos_6 selected selected_descendant has_descendants"><a href="/viver/cultura" target="_self" class="depth1 pos_6 selected selected_descendant has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6136</p><!--googleon: all--><span>Cultura</span></a><ul class="depth2 "><li class="depth2 pos_1 first has_descendants"><a href="/viver/cultura/arquivo-historico-municipal" target="_self" class="depth2 pos_1 first has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1186</p><!--googleon: all--><span>Arquivo Histórico Municipal</span></a></li><li class="depth2 pos_2 has_descendants"><a href="/viver/cultura/biblioteca-municipal" target="_self" class="depth2 pos_2 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6675</p><!--googleon: all--><span>Biblioteca Municipal</span></a></li><li class="depth2 pos_3 "><a href="/viver/cultura/casa-municipal-da-cultura" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4480</p><!--googleon: all--><span>Casa Municipal da Cultura</span></a></li><li class="depth2 pos_4 last current-page selected"><a href="/viver/cultura/agenda-de-eventos" target="_self" class="depth2 pos_4 last current-page selected" aria-current="page"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>6586</p><!--googleon: all--><span>Agenda de Eventos</span></a></li></ul></li><li class="depth1 pos_7 has_descendants"><a href="/viver/educacao" target="_self" class="depth1 pos_7 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>821</p><!--googleon: all--><span>Educação</span></a></li><li class="depth1 pos_8 "><a href="/viver/feiras-e-mercados" target="_self" class="depth1 pos_8 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>7823</p><!--googleon: all--><span>Feiras e Mercados</span></a></li><li class="depth1 pos_9 "><a href="/viver/cemiterios" target="_self" class="depth1 pos_9 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5262</p><!--googleon: all--><span>Cemitérios</span></a></li><li class="depth1 pos_10 has_descendants"><a href="/viver/urbanismo-e-ordenamento-de-territorio" target="_self" class="depth1 pos_10 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>2354</p><!--googleon: all--><span>Urbanismo e Ordenamento de Território</span></a></li><li class="depth1 pos_11 has_descendants"><a href="/viver/obras-publicas" target="_self" class="depth1 pos_11 has_descendants" title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5451</p><!--googleon: all--><span>Obras Públicas</span></a></li><li class="depth1 pos_12 "><a href="/viver/transporte-a-pedido" target="_self" class="depth1 pos_12 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4746</p><!--googleon: all--><span>Transporte a Pedido</span></a></li><li class="depth1 pos_13 has_descendants"><a href="/viver/servico-medico-veterinario" target="_self" class="depth1 pos_13 has_descendants"><!--googleoff: all--><p style="display:none" hidden data-nosnippet>4983</p><!--googleon: all--><span>Serviço Médico-Veterinário</span></a></li><li class="depth1 pos_14 "><a href="/viver/elaboracao-da-carta-municipal-de-habitacao" target="_self" class="depth1 pos_14 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5683</p><!--googleon: all--><span>Elaboração da Carta Municipal de Habitação</span></a></li><li class="depth1 pos_15 "><a href="/viver/carta-municipal-de-habitacao" target="_self" class="depth1 pos_15 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>3729</p><!--googleon: all--><span>Carta Municipal de Habitação</span></a></li><li class="depth1 pos_16 "><a href="https://obairro.cm-pedrogaogrande.pt/" target="_blank" class="depth1 pos_16 " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>5226</p><!--googleon: all--><span>Bairro Comercial Digital</span></a></li><li class="depth1 pos_17 last "><a href="/viver/espaco-energia" target="_self" class="depth1 pos_17 last " title=""><!--googleoff: all--><p style="display:none" hidden data-nosnippet>1537</p><!--googleon: all--><span>Espaço Energia</span></a></li></ul>
+
+
+</div>
+
+</nav>
+        <section class="mainContents large-12 xlarge-9 cell hidden-post">
+          <div class="breadCrumb_AREA"><span class="BO-only shared"></span>  
+  <div id="breadcrumb_1" class="widget breadcrumb" data-id="1" data-content_type="Breadcrumb">
+  <ul>
+
+      <li>
+        <a href="/inicio">Início<img alt="_" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        <a href="/viver">Viver<img alt="_" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        <a href="/viver/cultura">Cultura<img alt="_" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        Agenda de Eventos
+      </li>
+  </ul>
+</div>
+
+</div>
+          <div class="central_AREA commonContent"><span class="BO-only"></span>
+            <h1 class="pageTitle">Agenda de Eventos</h1>  
+  <div id="events_list_78" class="widget events_list no-wm-idx" data-id="78" data-content_type="EventsList">
+    <div class="search "><div class="fields"><div class="widget_form"><form id="events_list_78_search_xneyblmc" class="generic_search" role="search" action="/viver/cultura/agenda-de-eventos" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="IBLPIzp/76QLlsP2ueIgpkM2GkfWdlM6+GeZF8EtiSC8ZeTSBMxYN0YINeh7Rvu/MSpjNgLqkPom3Y141tIOpg==" /><label class="hidden" for="events_list_78_all">Pesquisar</label><input type="text" name="events_list_78_all" id="events_list_78_all" class=" events-list-search-field input-ajax-submit-form" autocomplete="off" placeholder="" role="searchbox" /><span class="search_buttons"><label class="hidden" for="events_list_78_search_button">Pesquisar</label><input type="image" src="/s.gif" alt="Pesquisar" id="events_list_78_search_button" class="search_button" /></span><input type="hidden" name="widget_id" id="widget_id_78_EventsList_uspjgwql" value="78" /><input type="hidden" name="widget_type" id="widget_type_78_EventsList_cowyqmnl" value="EventsList" /><input type="hidden" name="widget_action" id="widget_action_78_EventsList_rkzxjbno" value="search" /></form></div></div></div>
+
+    <ul class="grid-x grid-margin-x grid-margin-y xsmall-up-1 small-up-2 medium-up-2 large-up-2">
+        <li class="cell pos_1 first" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Passeio Sénior: Belmonte" href="/viver/cultura/agenda-de-eventos/evento/passeio-senior-belmonte"><div class="linl_hidden">Passeio Sénior: Belmonte</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="psenior_belmonte_2026_final__grande_" src="/imgcrop/cmpedrogaogrande/uploads/event/image/131/psenior_belmonte_2026_final__grande__1_600_849.png" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>03</span> <span class='separador_dias'>a</span> <span class=dia>30</span> <span class=mes_curto>Set</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2>Passeio Sénior: Belmonte</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>| Passeio Sénior: Belmonte | 🚌
+📅 O Município de Pedrógão Grande convida todos os seniores — maiores de 65 anos — a embarcarem ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Swiper de Eventos - Homepage</span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="cell pos_2" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Noites de Cinema - Mutiny: Código de Vingança" href="/viver/cultura/agenda-de-eventos/evento/noites-de-cinema-mutiny-codigo-de-vinganca"><div class="linl_hidden">Noites de Cinema - Mutiny: Código de Vingança</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="4_mutiny" src="/imgcrop/cmpedrogaogrande/uploads/event/image/119/4_mutiny_1_600_849.png" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>03</span> <span class='separador_dias'>a</span> <span class=dia>06</span> <span class=mes_curto>Set</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2>Noites de Cinema - Mutiny: Código de Vingança</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>| Noites de Cinema - Mutiny: Código de Vingança’ | 📽
+📽 As suas Noites de Cinema estão aí, como sempre, às sextas-feiras.
+🎬 ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Swiper de Eventos - Homepage</span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="cell pos_3" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Exposição Fotográfica no Jardim da Devesa" href="/viver/cultura/agenda-de-eventos/evento/exposicao-fotografica-no-jardim-da-devesa"><div class="linl_hidden">Exposição Fotográfica no Jardim da Devesa</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="exposicao_feliciano" src="/imgcrop/cmpedrogaogrande/uploads/event/image/134/exposicao_feliciano_1_600_849.jpg" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>07</span> <span class=mes_curto>Ago</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2>Exposição Fotográfica no Jardim da Devesa</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>Exposição Fotográfica no Jardim da Devesa
+O Município de Pedrógão Grande convida toda a comunidade a visitar a Exposição ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Swiper de Eventos - Homepage</span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="cell pos_4" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label=" 𝗔𝗴𝗲𝗻𝗱𝗮 𝗩𝗶𝘃𝗮: 𝗔𝗴𝗼𝘀𝘁𝗼 𝗲 𝗦𝗲𝘁𝗲𝗺𝗯𝗿𝗼" href="/viver/cultura/agenda-de-eventos/evento/46"><div class="linl_hidden"> 𝗔𝗴𝗲𝗻𝗱𝗮 𝗩𝗶𝘃𝗮: 𝗔𝗴𝗼𝘀𝘁𝗼 𝗲 𝗦𝗲𝘁𝗲𝗺𝗯𝗿𝗼</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="agenda_viva_agosto" src="/imgcrop/cmpedrogaogrande/uploads/event/image/135/agenda_viva_agosto_1_600_849.jpg" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>01</span> <span class=mes_curto>Ago</span> <span class='separador_dias'>a</span> <span class=dia>30</span> <span class=mes_curto>Set</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2> 𝗔𝗴𝗲𝗻𝗱𝗮 𝗩𝗶𝘃𝗮: 𝗔𝗴𝗼𝘀𝘁𝗼 𝗲 𝗦𝗲𝘁𝗲𝗺𝗯𝗿𝗼</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>Apresentamos a edição da Agenda Viva para os meses de agosto e setembro! Este documento reúne os principais momentos de ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Destaque de Eventos - Homepage </span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="cell pos_5" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Nautical Seasons" href="/viver/cultura/agenda-de-eventos/evento/nautical-seasons"><div class="linl_hidden">Nautical Seasons</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="nautical_seasons" src="/imgcrop/cmpedrogaogrande/uploads/event/image/125/nautical_seasons_1_600_849.jpg" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>11</span> <span class=mes_curto>Abr</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2>Nautical Seasons</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>| 𝗡𝗮𝘂𝘁𝗶𝗰𝗮𝗹 𝗦𝘂𝗺𝗺𝗲𝗿: 𝗢𝗽𝗲𝗻 𝗦𝘂𝗺𝗺𝗲𝗿 | 
+Com o fecho do Nautical Spring, damos oficialmente as boas-vindas ao verão e damos início à ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Swiper de Eventos - Homepage</span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="cell pos_6 last" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Agenda Viva - Cultura, Desporto e Comunidade" href="/viver/cultura/agenda-de-eventos/evento/agenda-viva-cultura-desporto-e-comunidade-57"><div class="linl_hidden">Agenda Viva - Cultura, Desporto e Comunidade</div></a><div class="linl_inner">
+
+
+                    <div class="thumbnail widget_field "><div class="widget_value"><img data-description="" alt="viva_abr_jun" src="/imgcrop/cmpedrogaogrande/uploads/event/image/122/viva_abr_jun_1_600_849.jpg" /></div></div>
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class=dia>01</span> <span class=mes_curto>Abr</span> <span class='separador_dias'>a</span> <span class=dia>30</span> <span class=mes_curto>Jun</span></div></div></div>
+
+
+
+                  <div class="title widget_field "><div class="widget_value"><h2>Agenda Viva - Cultura, Desporto e Comunidade</h2></div></div>
+
+
+
+                  <div class="summary widget_field "><div class="widget_value"><div>Apresentamos a nossa "Agenda Viva": uma agenda trimestral, que reunirá num só espaço os principais momentos relacionados com ...</div></div></div>
+
+
+
+                  <div class="categories widget_field "><div class="widget_value"><div><span>Destaque de Eventos - Homepage </span><span>Viver | Cultura | Agenda de Eventos</span></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+    </ul>
+
+    
+
+    <div class="map-records" data-records="[{&quot;map_lat&quot;:&quot;39.917768549422895&quot;,&quot;map_icon&quot;:{&quot;url&quot;:null,&quot;thumb&quot;:{&quot;url&quot;:null},&quot;tiny_thumb&quot;:{&quot;url&quot;:null}}}]"></div>
+</div>
+
+
+          </div>
+          <div class="postMenu_AREA"><span class="BO-only shared"></span>  
+  <div id="vertical_menu_15" class="widget vertical_menu no-wm-idx" data-id="15" data-content_type="VerticalMenu"></div>
+
+</div>
+          <div class="bottomButtons">
+            <div class="backButton">
+              <a href="javascript:history.back()">Voltar</a>
+            </div>
+            <div class="bloco_partilha">
+             <!-- <span>partilhar</span> -->
+             <button class="ui facebook button" title="Partilhar no Facebook">Facebook</button>
+             <button class="ui copy_butoon" title="Copiar endereço da página">Copiar endereço da página</button>
+            </div>
+           
+          </div>
+
+        </section>
+        <div class="clearfix"></div>
+      </div>
+
+      <!-- LAST UPDATE DATE -->
+     <!--<div class="lastUpdateDate">
+<div><span class="wmPageUpdateTitle">Conteúdo atualizado em</span><span class="wmPageUpdateDate">2024/10/02</span><span class="wmPageUpdateTime">17:21</span></div>
+</div> -->
+
+    </main>
+
+  </div>
+  <!--end stickyFooter -->
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- FOOTER -->
+  <!-------------------------------------------------------------------------------------------------------------->
+   <footer>
+    
+    <div class="grid-container">
+      <div class="grid-x grid-margin-x align-top">
+        <div class="contactos_AREA xxsmall-12 small-6 large-9 cell hidden-post">  
+  
+<div id="html_block_54" class="widget html_block" data-id="54" data-content_type="HtmlBlock">
+
+  <div class="containerLogo"><a href="/" title="Voltar ao início"><img src="/cmpedrogaogrande/layout/logo_pedrogao_footer.svg" alt="Logótipo" /></a></div>
+<div class="contactosContainer">
+  <ul>
+  <li class="contactosMorada">Largo da Devesa, nº14</li>
+  <li class="contactosLocalidade">3270 – 101 Pedrógão Grande</li>
+  </ul>
+  <ul>
+  <li class="contactosTelefone">Telefone <a href="tel:236 480 150">236 480 150</a></li>
+  <li class="contactosEmail">e-mail <a href="mailto:geral@cm-pedrogaogrande.pt">geral@cm-pedrogaogrande.pt</a></li>
+  </ul>
+  <button><a class="btnMaisContactos" href="pages/1705">Todos os contactos</a></button>
+</div>
+
+</div>
+
+</div>
+        <div class="linksGerais_AREA xxsmall-12 large-3 cell hidden-post">  
+  
+<div id="html_block_53" class="widget html_block" data-id="53" data-content_type="HtmlBlock">
+
+  <!-- se for redesign, deixar os links todos com # -->
+
+<ul class="linksUteisFooter">
+  <li><a href="/perguntas-frequentes">Perguntas Frequentes</a></li>
+  <li><a href="/municipio/revista-municipal">Revista Municipal</a></li>
+  <li><a href="/contactos-uteis">Contactos Úteis</a></li>
+  <li><a href="https://eportugal.gov.pt/a-minha-rua">Reportar ocorrência</a></li>
+  <li><a href="/sugestoes-reclamacoes-elogios">Fale connosco (Chatbot) </a></li>
+</ul>
+<div class="socialContainer">
+<h2>Siga-nos</h2>
+<ul class="socialButtons">
+  <li><a href="https://www.facebook.com/MunicipioPedrogaoGrande" target="_blank" title="Facebook"><img src="/cmpedrogaogrande/layout/social/icon_face.svg" alt="botão Facebook" /></a></li>
+  <li><a href="https://www.instagram.com/pedrogaogrande" target="_blank" title="Instagram"><img src="/cmpedrogaogrande/layout/social/icon_insta.svg" alt="botão Instagram" /></a></li>
+  <li><a href="https://www.youtube.com/@municipiopedrogaogrande3730" target="_blank" title="Youtube"><img src="/cmpedrogaogrande/layout/social/icon_youtube.svg" alt="botão Youtube" /></a></li>
+  </ul>
+</div>
+
+</div>
+
+</div>
+      </div>
+    </div>
+    <div class="linksGovernoWrap grid-container full">
+        <div class="grid-container">
+            <div class="grid-x grid-margin-x">
+                <div class="acessibilidade xxsmall-12 large-10 cell hidden-post">
+                  <div class="acessibilidade_AREA">  
+  
+<div id="html_block_102" class="widget html_block" data-id="102" data-content_type="HtmlBlock">
+
+  <a class="logoReclamacoes" href="https://www.livroreclamacoes.pt/inicio" title="Livro de Reclamações Online" target="_blank">Livro de Reclamações</a>
+<a href="/acessibilidade" class="logoAcessibilidade" title="Acessibilidade do Site">Acessibilidade</a>
+
+</div>
+  
+<div id="html_block_103" class="widget html_block" data-id="103" data-content_type="HtmlBlock">
+
+  <!-- se for redesign, deixar os links todos com # -->
+<ul class="linksPrivacidade">
+  <li><a href="/mapa-do-site">Mapa do Site</a></li>
+  <li><a href="/politica-de-privacidade">Política de Privacidade</a></li>
+  <li><a href="/ficha-tecnica">Ficha Técnica</a></li>
+  <li><a href="/contactos-da-autarquia-e-servicos">Contactos da Autarquia e Serviços</a></li>
+  <li><a href="/rss-feed">Feed RSS</a></li>
+</ul>
+<ul class="linksObrigatorios">
+  <li><a href="/acessibilidade">Acessibilidade</a></li>
+  <li><a href="/conformidade">Conformidade</a></li>
+  <li><a href="/transparencia-e-dados-abertos">Transparência e Dados Abertos</a></li>
+  <li><a href="/avisos-legais">Avisos Legais</a></li>
+</ul>
+
+</div>
+
+</div>
+                </div>
+                <div class="poweredBy xxsmall-12 large-2 cell hidden-post">
+                  <div class="poweredBy_AREA">  
+  
+<div id="html_block_104" class="widget html_block" data-id="104" data-content_type="HtmlBlock">
+
+  <div class="logoWiremaze">
+  <a href="http://www.wiremaze.com" title="Powered by Wiremaze" target="_blank"></a>
+  
+</div>
+
+</div>
+
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  </footer>
+  
+   <!-- wireChat -->
+   <section class="chatbot_AREA">  
+  <div id="aida_bot_2" class="widget aida_bot" data-id="2" data-content_type="AidaBot">
+    <div id="aida-mount"></div>
+    <script>
+      $(document).ready(function () {
+        if (typeof AidaClient === "undefined") {
+          return;
+        }
+
+        AidaClient.init({
+          tenant: "cmpedrogaogrande",
+          apiUrl: "https://aida.wiremaze.com",
+          botName: "CM Pedrógão Grande",
+          imageUrl: "/thumbs/cmpedrogaogrande/uploads/aida_bot/image/2/flor_logo_1_1000_1000.png",
+          slabHello: "Fale connosco",
+          slabIntro: "Precisa de ajuda?",
+          presentationMsg: "Olá, sou um assistente virtual. Em que posso ser útil?",
+          hasFileUpload: "false" == "true",
+          currentUserId: "",
+          terms: '{}',
+          openOnFirstTime: 'false' == 'true',
+          appointmentInfo: null
+        });
+      });
+    </script>
+</div>
+
+</section>
+
+  <!-- NAO APAGAR ISTO --> 
+  <!-- OLD BROWSER WARNING -->
+<script>
+var $buoop = {required:{e:-3,f:-2,o:-2,s:-2,c:-2},
+reminder: 24,
+insecure:true,
+l: false,
+test:false,
+text: "O seu browser ({brow_name}) está desatualizado. Atualize o seu browser para usufruir de maior segurança e rapidez, para além de uma melhor experiência neste site.",
+api:2021.11 };
+function $buo_f(){
+ var e = document.createElement("script"); 
+ e.src = "//browser-update.org/update.min.js"; 
+ document.body.appendChild(e);
+};
+try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+catch(e){window.attachEvent("onload", $buo_f)}
+</script>
+  <script>
+    // please review google_analytics settings
+</script>
+  <!-- NAO APAGAR ISTO -->
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SCRIPTS -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/vendor/picturefill-aea404604a.min.js"></script><!-- contain image -->
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/vendor/ofi-d15e158094.browser.min.js"></script><!-- contain image for IE -->
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/vendor/responsiveTables-68f8bdb74f.min.js"></script><!-- Tabelas com scroll em mobile -->
+  <script src="/assets/cmpedrogaogrande/cm_pedrogaogrande/javascripts/wire_forms-083320498e.min.js"></script><!-- Caixa de Contacto-->
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SHARE FACEBOOK UI -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+    $(".ui.facebook.button").click(function() {
+        FB.ui({
+            method: 'share',
+            href: 'https://base.saas.labs.wiremaze.com//viver/cultura/agenda-de-eventos',
+        }, function(response){});
+    })
+  </script>
+ <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SCROLL CAIXA DE CONTACTO -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+        $(document).ready(function() {
+      try {   
+        resetBoxProperties();}
+      catch(e)
+      {
+        console.log("error", e);
+      }
+    });
+    var el = document.querySelector('.stickyForm_AREA .form_placement');
+    if(el) {
+      SimpleScrollbar.initEl(el);
+      }
+  </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- OBJECT FIT PARA IE -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+   objectFitImages('img.OF-cover');
+  </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- MOBILE MENU -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+    $(function () {
+      resetBoxProperties();
+      if ($(window).width() <= 1024) { // colocar menu "normal" dentro da div do menu na versao mobile
+        $('nav#menu').append($(".widget.horizontal_menu").html());
+        $('nav#menu').mmenu({
+          navbar: {
+            title: ''
+          },
+          navbars: [{
+            position: 'top',
+            content: [
+              'prev',
+              'title'
+            ]
+          }]
+        }, {
+            classNames: {
+              selected: 'selected'
+            }
+          });
+      }
+    });
+  </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- LABELS DAS AREAS - so aparece em backoffice -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- AREA CENTRAL COM ALTURA E AREAS PARTILHADAS A CINZA - so aparece em backoffice -->
+  <!-------------------------------------------------------------------------------------------------------------->
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- WIREFORMS - necessario para que seja feito o render dos formularios -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  
+
+  <script>
+        $(function(){
+          if(jQuery.cookieBar) {
+            $.cookieBar({"message":"Este site utiliza cookies para melhorar a sua experiência.","policyURL":"/pages/721","acceptText":"Aceitar todos os cookies","policyText":"Política de cookies","declineText":"Desativar cookies não essenciais","policyButton":true,"declineButton":true})
+            $("#wm-cookie-bar p, #wm-cookie-bar a").attr("tabindex",1)
+            $("#wm-cookie-bar p").focus()
+          }
+        });
+      </script></body>
+</html>
