@@ -13,7 +13,7 @@ import {
 	Rss,
 	Sparkles,
 } from "lucide-react";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/calendario")({
 	validateSearch: (search) => ({
@@ -104,7 +104,7 @@ function CalendarComponent() {
 
 	const navigate = useNavigate();
 
-	const query = useQuery(trpc.events.calendar.queryOptions({ year, month }));
+	const query = useQuery(api.events.calendar.queryOptions({ year, month }));
 
 	const events = query.data ?? [];
 
@@ -198,7 +198,7 @@ function CalendarComponent() {
 							Agenda
 						</Link>
 						<a
-							href="http://localhost:3301/events.ics"
+							href="/events.ics"
 							target="_blank"
 							rel="noreferrer"
 							className="inline-flex items-center gap-1.5 rounded-[2px] bg-[var(--p443-primary)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-on-primary)] uppercase tracking-[0.6px] transition-colors hover:bg-[var(--p443-primary-hover)]"

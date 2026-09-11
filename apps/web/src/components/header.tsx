@@ -105,7 +105,7 @@ export default function Header() {
 				{/* Actions */}
 				<div className="flex items-center gap-2">
 					<a
-						href="http://localhost:3301/events.ics"
+						href="/events.ics"
 						target="_blank"
 						rel="noreferrer"
 						className="hidden sm:inline-flex"

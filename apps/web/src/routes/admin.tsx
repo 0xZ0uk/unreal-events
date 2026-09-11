@@ -23,7 +23,7 @@ import {
 	Sparkles,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/admin")({
 	component: AdminComponent,
@@ -107,7 +107,7 @@ function StatCard({
 }
 
 function AdminComponent() {
-	const runs = useQuery(trpc.admin.runs.queryOptions({ limit: 50 }));
+	const runs = useQuery(api.admin.runs.queryOptions({ limit: 50 }));
 
 	const rows: RunRow[] = runs.data ?? [];
 
@@ -154,7 +154,7 @@ function AdminComponent() {
 							<ArrowUpRight className="size-3.5" />
 						</Link>
 						<a
-							href="http://localhost:3301/events.ics"
+							href="/events.ics"
 							target="_blank"
 							rel="noreferrer"
 							className="hidden items-center gap-1.5 rounded-[2px] bg-[var(--p443-primary)] px-4 py-2 font-bold font-mono text-[11px] text-[var(--p443-on-primary)] uppercase tracking-[0.6px] hover:bg-[var(--p443-primary-hover)] sm:inline-flex"

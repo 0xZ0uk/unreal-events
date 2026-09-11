@@ -19,7 +19,7 @@ import {
 	X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/")({
 	validateSearch: (search) => ({
@@ -443,10 +443,10 @@ function DayGroups({ groups }: { groups: [string, Event[]][] }) {
 
 function HomeComponent() {
 	const search = Route.useSearch();
-	const byDay = useQuery(trpc.events.byDay.queryOptions());
-	const stats = useQuery(trpc.events.stats.queryOptions());
-	const venuesQuery = useQuery(trpc.events.venues.queryOptions());
-	const undatedQuery = useQuery(trpc.events.undated.queryOptions());
+	const byDay = useQuery(api.events.byDay.queryOptions());
+	const stats = useQuery(api.events.stats.queryOptions());
+	const venuesQuery = useQuery(api.events.venues.queryOptions());
+	const undatedQuery = useQuery(api.events.undated.queryOptions());
 
 	const [venueSlug, setVenueSlug] = useState("");
 	const [category, setCategory] = useState("");
@@ -467,7 +467,7 @@ function HomeComponent() {
 		city !== "";
 
 	const listQuery = useQuery(
-		trpc.events.list.queryOptions({
+		api.events.list.queryOptions({
 			venueSlug: venueSlug || undefined,
 			category: category || undefined,
 			dateFrom: dateFrom ? lisbonMidnightEpoch(dateFrom) : undefined,
@@ -586,7 +586,7 @@ function HomeComponent() {
 							</Button>
 						</Link>
 						<a
-							href="http://localhost:3301/events.ics"
+							href="/events.ics"
 							className="inline-flex items-center justify-center gap-2 rounded-[4px] border border-[var(--p443-hairline)] bg-transparent px-6 py-3 font-bold font-mono text-[11px] text-[var(--p443-ink)] uppercase tracking-[0.6px] transition-colors hover:border-[var(--p443-ink-muted)] hover:text-[var(--p443-ink-muted)]"
 						>
 							Subscrever ICS
@@ -776,10 +776,7 @@ function HomeComponent() {
 						<Link to="/admin" className="hover:text-[var(--p443-ink)]">
 							Runs
 						</Link>
-						<a
-							href="http://localhost:3301/events.ics"
-							className="hover:text-[var(--p443-ink)]"
-						>
+						<a href="/events.ics" className="hover:text-[var(--p443-ink)]">
 							ICS
 						</a>
 					</div>
