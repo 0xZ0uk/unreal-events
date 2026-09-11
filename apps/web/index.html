@@ -1,15 +1,30 @@
 <!doctype html>
-<html lang="pt">
+<html lang="pt" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unreal 443 — o que se passa em Leiria</title>
+    <meta
+      name="description"
+      content="Agenda de Leiria: concertos, teatro, exposições, festas e mercados do distrito, recolhidos todos os dias das fontes originais."
+    />
+    <meta name="theme-color" content="#0a0a0a" />
+    <script>
+      // Set the theme before first paint: dark unless this visitor asked for light.
+      try {
+        var stored = localStorage.getItem("unreal443-theme") || localStorage.getItem("theme");
+        var theme = stored === "light" ? "light" : "dark";
+        document.documentElement.classList.add(theme);
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", theme === "light" ? "#ffffff" : "#0a0a0a");
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@700;800&family=Karla:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <title>Unreal 443 — Eventos de Leiria</title>
   </head>
 
   <body>

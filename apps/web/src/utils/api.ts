@@ -1,85 +1,71 @@
-import type { ListInput } from "@events-tracker/api/queries/events";
-import {
-	eventStats,
-	eventsByDay,
-	listEvents,
-	listInput,
-	undatedEvents,
-	venues,
-} from "@events-tracker/api/queries/events";
+import { eventStats, listEvents, listInput, undatedEvents } from "@events-tracker/api/queries/events";
 import { createBrowserDb } from "@events-tracker/db/browser";
 import { env } from "@events-tracker/env/web";
-import { QueryCache, QueryClient, queryOptions } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { QueryClient, queryOptions } from "@tanstack/react-query";
 
 /**
- * Read API for the static SPA (SLICE_8).
+ * Read API for the static page (SLICE_8/9).
  *
- * There is no server in production: this module opens a libSQL-over-HTTP client
+ * There is no server in production: this opens a libSQL-over-HTTP client
  * straight to Turso in the browser and hands react-query plain `queryOptions`.
- * The query functions come from `@events-tracker/api/queries/events`, which the
- * tRPC router also uses — so the browser and the (dev-only) server run identical
- * SQL. tRPC itself is absent from this bundle: `@trpc/server` throws when it is
- * imported in a browser.
+ * The query functions come from `@events-tracker/api/queries/events`, the same
+ * module the tRPC router wraps, so the browser and the (dev-only) server run
+ * identical SQL.
+ *
+ * Three reads, and the agenda window is the only one that carries rows.
  */
-export const db = createBrowserDb(
-	env.VITE_TURSO_URL,
-	env.VITE_TURSO_AUTH_TOKEN,
-);
+export const db = createBrowserDb(env.VITE_TURSO_URL, env.VITE_TURSO_AUTH_TOKEN);
 
 export const queryClient = new QueryClient({
-	queryCache: new QueryCache({
-		onError: (error, query) => {
-			toast.error(error.message, {
-				action: {
-					label: "retry",
-					onClick: () => {
-						query.invalidate();
-					},
-				},
-			});
-		},
-	}),
-});
-
-export const api = {
-	events: {
-		list: {
-			queryOptions: (input?: Partial<ListInput>) =>
-				queryOptions({
-					queryKey: ["events", "list", input ?? null],
-					// Parse through the same schema the router used so defaults
-					// (limit/offset/includeUndated) apply exactly as before.
-					queryFn: () => listEvents(db, listInput.parse(input ?? {})),
-				}),
-		},
-		byDay: {
-			queryOptions: () =>
-				queryOptions({
-					queryKey: ["events", "byDay"],
-					queryFn: () => eventsByDay(db),
-				}),
-		},
-		undated: {
-			queryOptions: () =>
-				queryOptions({
-					queryKey: ["events", "undated"],
-					queryFn: () => undatedEvents(db),
-				}),
-		},
-		venues: {
-			queryOptions: () =>
-				queryOptions({
-					queryKey: ["events", "venues"],
-					queryFn: () => venues(db),
-				}),
-		},
-		stats: {
-			queryOptions: () =>
-				queryOptions({
-					queryKey: ["events", "stats"],
-					queryFn: () => eventStats(db),
-				}),
+	defaultOptions: {
+		queries: {
+			staleTime: 5 * 60_000,
+			// A failed read should admit it quickly rather than retrying for
+			// half a minute behind a skeleton.
+			retry: 1,
+			refetchOnWindowFocus: false,
 		},
 	},
+});
+
+export type PublicEvent = Awaited<ReturnType<typeof listEvents>>[number];
+export type UndatedEvent = Awaited<ReturnType<typeof undatedEvents>>[number];
+export type EventStats = Awaited<ReturnType<typeof eventStats>>;
+
+export const api = {
+	/** Every event starting inside the window, oldest first. */
+	window: {
+		queryOptions: (from: number, to: number) =>
+			queryOptions({
+				queryKey: ["agenda", "window", from, to],
+				queryFn: () =>
+					listEvents(
+						db,
+						listInput.parse({
+							dateFrom: from,
+							dateTo: to,
+							includeUndated: false,
+							limit: 500,
+						}),
+					),
+			}),
+	},
+	/** Announced but undated — shown separately, never mixed into the days. */
+	undated: {
+		queryOptions: () =>
+			queryOptions({
+				queryKey: ["agenda", "undated"],
+				queryFn: () => undatedEvents(db),
+			}),
+	},
+	stats: {
+		queryOptions: () =>
+			queryOptions({
+				queryKey: ["agenda", "stats"],
+				queryFn: () => eventStats(db),
+			}),
+	},
 };
+
+/** The window query caps at 500 rows; beyond that the page says so. */
+export const WINDOW_LIMIT = 500;
