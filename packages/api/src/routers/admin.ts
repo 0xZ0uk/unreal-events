@@ -1,31 +1,10 @@
-import { schema } from "@events-tracker/db/browser";
-import { desc } from "drizzle-orm";
-import { z } from "zod";
-
 import { publicProcedure, router } from "../index";
+import { runsInput, scrapeRuns } from "../queries/events";
 
-const runsInput = z.object({
-	limit: z.number().int().min(1).max(500).default(50),
-});
-
+/** Thin tRPC wrapper over `../queries/events#scrapeRuns` (SLICE_8). */
 export const adminRouter = router({
 	/** Latest scrape runs, newest first. */
-	runs: publicProcedure.input(runsInput).query(async ({ ctx, input }) => {
-		const rows = await ctx.db
-			.select()
-			.from(schema.scrapeRuns)
-			.orderBy(desc(schema.scrapeRuns.started_at))
-			.limit(input.limit);
-
-		return rows.map((r) => ({
-			id: r.id,
-			source: r.source,
-			startedAt: r.started_at,
-			finishedAt: r.finished_at,
-			found: r.items_found,
-			new: r.items_new,
-			failed: r.items_failed,
-			error: r.error,
-		}));
-	}),
+	runs: publicProcedure
+		.input(runsInput)
+		.query(({ ctx, input }) => scrapeRuns(ctx.db, input)),
 });
