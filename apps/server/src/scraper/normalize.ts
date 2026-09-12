@@ -89,6 +89,20 @@ export function decodeEntities(s: string): string {
 		);
 }
 
+/**
+ * Strip CMS markup down to readable text: tags dropped, entities decoded,
+ * whitespace collapsed. Shared by the sources that keep a prose description
+ * (WP `content.rendered` blobs, com_djevents intros) so a description is
+ * cleaned one way instead of per adapter.
+ */
+export function plainText(html: string): string {
+	return decodeEntities(html.replace(/<[^>]*>/g, " "))
+		.replace(/\s+/g, " ")
+		.replace(/\s+([,.;:!?%)\]])/g, "$1")
+		.replace(/([([])\s+/g, "$1")
+		.trim();
+}
+
 /** Lowercase, strip diacritics (NFD), strip punctuation, collapse whitespace. */
 export function normalizeTitle(input: string): string {
 	return input

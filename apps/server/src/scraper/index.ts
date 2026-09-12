@@ -10,12 +10,15 @@ import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
 import { isLeiriaDistrict } from "./district";
 import { scrape as scrapeEventbrite } from "./eventbrite";
 import { scrape as scrapeFestasearraiais } from "./festasearraiais";
+import { scrape as scrapeFigueiro } from "./figueiro";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
 import { scrape as scrapeMunicipal } from "./municipal";
+import { scrape as scrapeNocartaz } from "./nocartaz";
 import { scrape as scrapeObidos } from "./obidos";
 import { scrape as scrapeRegiaoleiria } from "./regiaoleiria";
 import { scrape as scrapeShotgun } from "./shotgun";
 import { scrape as scrapeTicketline } from "./ticketline";
+import { scrape as scrapeTurismodocentro } from "./turismodocentro";
 import { scrape as scrapeViralagenda } from "./viralagenda";
 
 /** Shotgun: the Centro region page mixes all "Centro" Portugal events —
@@ -46,6 +49,21 @@ const scrapeObidosDistrict = async () =>
 const scrapeCaldasDistrict = async () =>
 	scrapeCaldas(undefined, (place) => isLeiriaDistrict(place));
 
+/** SLICE_10: nocartaz is a venue-hub aggregator. Its Leiria district hub mixes
+ * in rows filed from outside the district (Bandsintown/3cket gigs), so the gate
+ * runs on the resolved locality, not on the hub route. */
+const scrapeNocartazDistrict = async () =>
+	scrapeNocartaz(undefined, (place) => isLeiriaDistrict(place));
+
+/** SLICE_10 tier-2 coverage sources. figueiro is a municipal agenda (its city
+ * chip is the concelho); turismodocentro gates on the concelho terms of the
+ * event board, filing a region-wide row under its first in-district concelho. */
+const scrapeFigueiroDistrict = async () =>
+	scrapeFigueiro(undefined, (place) => isLeiriaDistrict(place));
+
+const scrapeTurismodocentroDistrict = async () =>
+	scrapeTurismodocentro(undefined, (place) => isLeiriaDistrict(place));
+
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
@@ -60,6 +78,9 @@ export const sources = {
 	obidos: scrapeObidosDistrict,
 	regiaoleiria: scrapeRegiaoleiriaDistrict,
 	caldas: scrapeCaldasDistrict,
+	nocartaz: scrapeNocartazDistrict,
+	figueiro: scrapeFigueiroDistrict,
+	turismodocentro: scrapeTurismodocentroDistrict,
 } as const;
 
 export type SourceId = keyof typeof sources;
