@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && node scripts/prerender-events.mjs",
+		"concelhos:build": "bun run scripts/build-concelhos.ts",
 		"serve": "vite preview",
 		"start": "vite",
 		"check-types": "vite build && tsc --noEmit"
@@ -19,6 +20,7 @@
 		"@tanstack/react-query": "^5.101.4",
 		"better-auth": "1.7.4",
 		"dotenv": "catalog:",
+		"leaflet": "^1.9.4",
 		"lucide-react": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:"
@@ -28,6 +30,7 @@
 		"@libsql/client": "0.17.4",
 		"@resvg/resvg-js": "^2.6.2",
 		"@types/bun": "catalog:",
+		"@types/leaflet": "^1.9.22",
 		"@types/node": "^26.2.0",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
