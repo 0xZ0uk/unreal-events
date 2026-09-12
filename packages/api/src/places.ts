@@ -200,3 +200,56 @@ export function municipalityOf(
 		municipalityByNorm.get(norm) ?? parishMunicipalityByNorm.get(norm) ?? null
 	);
 }
+
+/** What a venue record actually stands for on the ground. */
+export type PlaceScope = "venue" | "lugar" | "concelho";
+
+const ENTITIES: Record<string, string> = {
+	amp: "&",
+	apos: "'",
+	gt: ">",
+	lt: "<",
+	nbsp: " ",
+	quot: '"',
+};
+
+/** Source names arrive with HTML in them ("Nicho &#x2F; Moita"). */
+function decodeEntities(raw: string): string {
+	const codePoint = (n: number) =>
+		Number.isFinite(n) && n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "";
+	return raw
+		.replace(/&#x([0-9a-f]+);/gi, (_, hex: string) =>
+			codePoint(Number.parseInt(hex, 16)),
+		)
+		.replace(/&#(\d+);/g, (_, dec: string) => codePoint(Number(dec)))
+		.replace(
+			/&([a-z]+);/gi,
+			(whole: string, name: string) => ENTITIES[name.toLowerCase()] ?? whole,
+		);
+}
+
+/**
+ * Read a scope off the record's own name.
+ *
+ * A source that never named a venue files the event under the place instead,
+ * and the place arrives dressed as a venue name: "Óbidos", "Alcobaça (cidade)",
+ * "Marinha Grande, Marinha Grande", "Vieira de Leiria", "Póvoa, União das
+ * freguesias de Coz, Alpedriz e Montes".
+ *
+ * Those are not buildings, so they must never be pinned like one. A município
+ * is an area, a freguesia or vila is a dot that says "somewhere in here", and
+ * everything else is read as a real place and geocoded as a venue. The test is
+ * deliberately name-based: it uses the same municipality table the ingest gate
+ * uses, so a name this package cannot place stays a venue rather than being
+ * guessed into a category.
+ */
+export function scopeOfName(name: string): PlaceScope {
+	const cleaned = decodeEntities(name)
+		.split(/[,/]/)[0]
+		?.replace(/\s*\([^)]*\)\s*$/, "")
+		.trim();
+	const norm = normalizePlace(cleaned ?? "");
+	if (municipalityByNorm.has(norm)) return "concelho";
+	if (parishMunicipalityByNorm.has(norm)) return "lugar";
+	return "venue";
+}

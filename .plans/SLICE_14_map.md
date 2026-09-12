@@ -45,16 +45,70 @@ selected window; clicking a concelho applies the existing `city` filter.
 
 ## Layer 2 — Venue pins + heat (needs geocoding first)
 
-1. Run `geocode:venues` (Nominatim, 1 req/s, idempotent, already written) against
-   the local.db of the pipeline copy. 214 venues outstanding; the script caps at
-   `MAX_REQUESTS=100` → raise or batch it (~4 min per 100).
-2. Add a `scope` column to `venues` (`venue` | `municipality`) so the 36
-   pseudo-venues are drawn as concelho markers, never as precise pins. Needs one
-   migration + a backfill rule (name == city, or name contains the city).
-3. Runtime: Leaflet + heat layer (~50 KB gz) or deck.gl (heavier). Tile source is
-   the open decision — see below.
-4. Gate the heat layer on coverage: it is honest above ~80% of the *visible*
-   window; below that, show pins with a "sem localização" count.
+Status 2026-09-12: steps 1–2 built on `feat/slice15-venue-geo`. The runtime layer
+(step 3) is not started.
+
+### Step 1 — coordinates, with the check that used to be missing
+
+`geocode:venues` (Nominatim, ~1 req/s, idempotent) took the first hit and wrote
+it. That is how an "Auditório Municipal" in Gaia ends up pinned inside Leiria:
+the string matched something, the something was elsewhere, nothing checked. It
+now keeps only hits that land **inside the concelho the venue's own `city`
+belongs to** — `concelhoAt()` in `packages/api/src/geo.ts` runs ray-casting
+point-in-polygon against the same `concelhos.json` the map draws. A candidate
+that cannot be drawn in the right concelho is a miss with a reason, not a row.
+
+Three query shapes per venue, tried in order: `name, city, Portugal`;
+`name, Portugal` bounded to the concelho's own box; `name, Portugal` unbounded
+(validated like the rest). Note the codec: Nominatim wants
+`viewbox=<west>,<north>,<east>,<south>`, and `boundsOf()` returns `[W,S,E,N]`.
+
+`geocode:venues --verify` re-tests every coordinate already in the database
+against its own concelho — no network, no writes, exit 1 on a mismatch. The ten
+rows that already had coordinates pass; that is the only reason to trust the new
+ones.
+
+`--dry-run --report=<path>` writes the whole outcome list — what was found, by
+which query shape, in which concelho, and why the rest were refused — so the run
+is reviewable before it touches a row.
+
+### Step 2 — `scope`, three values rather than two
+
+`venues.scope` is `venue` | `lugar` | `concelho` (migration
+`0002_fixed_sally_floyd.sql`, not null, default `venue`). Two of the three are
+not buildings, and the difference decides how Layer 2 draws them:
+
+- `concelho` — the record is the municipality's own name ("Óbidos", "Marinha
+  Grande"). Drawn as the area. Never geocoded, never pinned.
+- `lugar` — a freguesia or vila ("Vieira de Leiria", "São Bento (Porto de Mós)",
+  "Benedita (Vila)"). Honest as a dot at the settlement, dishonest as a building.
+- `venue` — everything else, including a real venue that has a place name inside
+  it ("Castelo de Porto de Mós", "Museu Escolar de Marrazes"). Pins live here.
+
+`scopeOfName()` in `packages/api/src/places.ts` reads the scope off the name:
+decode HTML entities (one source ships `Marinha Grande &#x2F; Marinha Grande`),
+take the segment before `,` or `/`, drop a trailing `(qualifier)`, then match
+against the município and freguesia tables. One judgement it deliberately does
+not make: `Moleanos (Alcobaça)` is a lugar the parish table does not list, so the
+name reads as `venue` — the geocoder downgrades it to `lugar` when OSM answers
+with a settlement instead of a building, which is the only place that call can be
+made honestly.
+
+### The 214, measured (local.db, 2026-09-12)
+
+| kind | rows | upcoming events | what happens |
+| --- | --- | --- | --- |
+| município's own name | 13 | 248 | `scope=concelho`, no coordinates |
+| listed freguesia/vila | 16 | 36 | `scope=lugar`, dot at the settlement |
+| everything else | 185 | 125 | geocoded as a venue, validated by concelho |
+
+The third bucket is not all venues. It carries out-of-district rows
+("Auditório Municipal De Vila Nova De Gaia | Leiria", "Alfândega Do Porto |
+Leiria", "Auditório Municipal Beatriz Costa (Mafra)"), the source's own label
+("Agenda Cultural Óbidos"), and place-with-concelho strings ("Vimeiro, Vimeiro",
+"Vila Cã, Vila Cã"). Point-in-polygon is what keeps every one of those unpinned.
+97 of the 214 carry upcoming activity (409 events); the other 117 are silent
+today, which is why the coverage gate in step 4 still applies.
 
 ## Open decision (needs Pedro)
 

@@ -20,6 +20,17 @@ export const venues = sqliteTable(
 		lat: real("lat"),
 		lng: real("lng"),
 		city: text("city").notNull().default("Leiria"),
+		/**
+		 * What the record stands for on the ground, read off its own name by
+		 * `scopeOfName` in @events-tracker/api. Sources that never named a
+		 * venue file the event under the place: "Óbidos" carries every Óbidos
+		 * listing nobody located, "Vieira de Leiria" every one in that vila.
+		 * Only `venue` is a building you can walk into, so only `venue` may be
+		 * drawn as a pin.
+		 */
+		scope: text("scope", { enum: ["venue", "lugar", "concelho"] })
+			.notNull()
+			.default("venue"),
 	},
 	(table) => [uniqueIndex("venues_slug_unique").on(table.slug)],
 );

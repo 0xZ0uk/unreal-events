@@ -1,0 +1,1 @@
+ALTER TABLE `venues` ADD `scope` text DEFAULT 'venue' NOT NULL;

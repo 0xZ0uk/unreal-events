@@ -1,124 +1,324 @@
+/**
+ * Backfill coordinates for venues that have none — and mark what each record
+ * actually is while we are here.
+ *
+ *   bun run src/scraper/geocode.ts                 → write
+ *   bun run src/scraper/geocode.ts --dry-run       → report, touch nothing
+ *   bun run src/scraper/geocode.ts --verify        → re-check the coordinates
+ *                                                    already in the database
+ *   bun run src/scraper/geocode.ts --limit=20      → first 20
+ *   bun run src/scraper/geocode.ts --report=/tmp/x → where the JSON report goes
+ *
+ * The first version of this script took Nominatim's first answer and trusted
+ * it. That is how "Auditório Municipal de Vila Nova de Gaia", filed by a source
+ * under `city = Leiria`, would be pinned in Gaia, 180 km away, and how
+ * "Auditório Paroquial" would be pinned in whatever parish Nominatim liked
+ * best. Every candidate here now has to land *inside* the concelho the venue's
+ * own city belongs to, tested against the same district outlines the map
+ * draws. A coordinate that cannot be placed in the right concelho is not
+ * written, and the venue stays unmapped — which is honest, and visible.
+ *
+ * Records whose name is a município ("Óbidos", 113 events) are not geocoded at
+ * all: they are areas, not buildings, and a pin in the middle of Óbidos would
+ * claim a venue that does not exist. `scopeOfName` decides, and the scope is
+ * written with the coordinates in one pass so the two can never disagree.
+ *
+ * One request per second, as Nominatim asks. Re-running is free: only venues
+ * with a null `lat` are considered.
+ */
+import { readFileSync } from "node:fs";
+
+import { municipalityOf, scopeOfName } from "@events-tracker/api/places";
+import {
+	boundsOf,
+	boundsOfAll,
+	concelhoAt,
+	type Shape,
+} from "@events-tracker/api/geo";
 import { db, schema } from "@events-tracker/db";
-import { eq, isNull } from "drizzle-orm";
+import { eq, isNotNull, isNull } from "drizzle-orm";
 
 const NOMINATIM = "https://nominatim.openstreetmap.org/search";
-const USER_AGENT = "events-tracker/0.1 (pedro@porta443.com)";
+const USER_AGENT = "findleiria/0.1 (pedro@porta443.com)";
 const MIN_DELAY_MS = 1100; // Nominatim policy: max 1 req/sec
-const MAX_REQUESTS = 100;
 const TIMEOUT_MS = 15_000;
+const DEFAULT_LIMIT = 250;
+
+/**
+ * The district outlines the map draws. They live in the web app because that is
+ * where they are rendered; this script only reads them, and reading them by
+ * path beats keeping a second copy of 100 KB of geometry that can drift.
+ */
+const SHAPES = JSON.parse(
+	readFileSync(
+		new URL("../../../../apps/web/src/assets/concelhos.json", import.meta.url),
+		"utf8",
+	),
+).features as Shape[];
+
+/** OSM classes that mean "a settlement", not "a building you can enter". */
+const PLACE_CLASSES = new Set([
+	"hamlet",
+	"isolated_dwelling",
+	"locality",
+	"neighbourhood",
+	"quarter",
+	"suburb",
+	"town",
+	"village",
+]);
 
 type NominatimHit = {
 	lat: string;
 	lon: string;
 	display_name: string;
+	class?: string;
+	type?: string;
 };
+
+type Status = "ok" | "lugar" | "outside" | "no-hit" | "skipped" | "bad-coords";
+
+type Outcome = {
+	id: number;
+	name: string;
+	city: string | null;
+	status: Status;
+	scope: "venue" | "lugar" | "concelho";
+	variant?: string;
+	concelho?: string | null;
+	lat?: number;
+	lng?: number;
+	address?: string;
+	note?: string;
+};
+
+const args = process.argv.slice(2);
+const dryRun = args.includes("--dry-run");
+const limit =
+	Number(args.find((a) => a.startsWith("--limit="))?.split("=")[1]) ||
+	DEFAULT_LIMIT;
+const reportPath =
+	args.find((a) => a.startsWith("--report="))?.split("=")[1] ??
+	"/tmp/venue-geocode-report.json";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function geocode(query: string): Promise<NominatimHit | null> {
-	const url = `${NOMINATIM}?q=${encodeURIComponent(query)}&format=json&limit=1`;
+async function search(
+	query: string,
+	viewbox?: [number, number, number, number],
+): Promise<NominatimHit[]> {
+	// Nominatim wants viewbox as left,top,right,bottom — lng/lat, north first.
+	const box = viewbox
+		? `&viewbox=${viewbox[0]},${viewbox[3]},${viewbox[2]},${viewbox[1]}&bounded=1`
+		: "";
+	const url = `${NOMINATIM}?q=${encodeURIComponent(query)}&format=json&limit=3&countrycodes=pt&addressdetails=0${box}`;
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 	try {
 		const res = await fetch(url, {
-			headers: {
-				"User-Agent": USER_AGENT,
-				"Accept-Language": "pt",
-			},
+			headers: { "User-Agent": USER_AGENT, "Accept-Language": "pt" },
 			signal: controller.signal,
 		});
 		if (!res.ok) {
 			console.error(`  HTTP ${res.status} for "${query}"`);
-			return null;
+			return [];
 		}
-		const data = (await res.json()) as NominatimHit[];
-		return data[0] ?? null;
+		return (await res.json()) as NominatimHit[];
 	} catch (err) {
 		console.error(
-			`  Nominatim request failed for "${query}": ${(err as Error).message}`,
+			`  request failed for "${query}": ${(err as Error).message}`,
 		);
-		return null;
+		return [];
 	} finally {
 		clearTimeout(timer);
 	}
 }
 
-const needs = await db.query.venues.findMany({
+const byName = new Map(SHAPES.map((shape) => [shape.properties.name, shape]));
+const districtBox = boundsOfAll(SHAPES);
+
+/**
+ * `--verify` is the check without the writing: every coordinate the database
+ * already holds, re-tested against the concelho its own city belongs to, no
+ * network and no changes. A backfill is only as good as the next time someone
+ * distrusts it, and this is how they find out in one command.
+ */
+if (args.includes("--verify")) {
+	const placed = await db.query.venues.findMany({
+		where: isNotNull(schema.venues.lat),
+	});
+	let wrong = 0;
+	for (const venue of placed) {
+		const concelho = concelhoAt(venue.lng ?? 0, venue.lat ?? 0, SHAPES);
+		const expected = municipalityOf(venue.city);
+		const ok = expected ? concelho === expected : concelho !== null;
+		if (!ok) {
+			wrong += 1;
+			console.log(
+				`  MISMATCH ${venue.name} — city ${venue.city} (${expected ?? "no município"}), point lands in ${concelho ?? "no concelho"}`,
+			);
+		}
+	}
+	console.log(
+		`\n${placed.length} venues carry coordinates, ${wrong} outside their own concelho.`,
+	);
+	process.exit(wrong === 0 ? 0 : 1);
+}
+
+const pending = await db.query.venues.findMany({
 	where: isNull(schema.venues.lat),
+	orderBy: (venues, { asc }) => [asc(venues.name)],
 });
 
-if (needs.length === 0) {
-	console.log(
-		JSON.stringify({ venues: 0, geocoded: 0, missed: [], requests: 0 }),
-	);
-	process.exit(0);
-}
+const work = pending.slice(0, limit);
+const skipped = pending.length - work.length;
 
-if (needs.length > MAX_REQUESTS) {
+if (pending.length > limit) {
 	console.error(
-		`Refusing to run: ${needs.length} venues exceeds MAX_REQUESTS=${MAX_REQUESTS}`,
+		`Only ${limit} of ${pending.length} venues this run (--limit). Re-run to continue; each run is idempotent.`,
 	);
-	process.exit(1);
 }
 
-console.log(`Geocoding ${needs.length} venues…`);
+console.log(
+	`${dryRun ? "DRY RUN — " : ""}geocoding ${work.length} venues, ${skipped} left for later…\n`,
+);
 
-const geocoded: { name: string; lat: number; lng: number }[] = [];
-const missed: { name: string; reason: string }[] = [];
-let requests = 0;
+const outcomes: Outcome[] = [];
 
-for (const venue of needs) {
-	const city = venue.city ?? "Leiria";
-	const query = `${venue.name}, ${city}, Portugal`;
-	requests += 1;
+for (const venue of work) {
+	// A venue with no city is not a reason to assume Leiria: `expected` stays
+	// null, so any hit inside the district is allowed and the concelho it
+	// landed in is recorded next to it.
+	const city = venue.city ?? null;
+	const fromName = scopeOfName(venue.name);
 
-	const hit = await geocode(query);
-	if (hit) {
-		const lat = Number(hit.lat);
-		const lng = Number(hit.lon);
-		if (Number.isFinite(lat) && Number.isFinite(lng)) {
+	if (fromName === "concelho") {
+		outcomes.push({
+			id: venue.id,
+			name: venue.name,
+			city,
+			status: "skipped",
+			scope: "concelho",
+			note: "named after its município: an area, not a building — the map draws it from the concelho outline",
+		});
+		if (!dryRun) {
 			await db
 				.update(schema.venues)
-				.set({
-					lat,
-					lng,
-					...(venue.address ? {} : { address: hit.display_name }),
-				})
+				.set({ scope: "concelho" })
 				.where(eq(schema.venues.id, venue.id));
-			geocoded.push({ name: venue.name, lat, lng });
-			console.log(`  ok: ${venue.name} → ${lat}, ${lng}`);
-		} else {
-			missed.push({
-				name: venue.name,
-				reason: `non-numeric coords (${hit.lat},${hit.lon})`,
-			});
-			console.log(`  MISS (bad coords): ${venue.name}`);
 		}
-	} else {
-		missed.push({
-			name: venue.name,
-			reason: "no matching place or request error",
-		});
-		console.log(`  MISS: ${venue.name}`);
+		console.log(`  skip (município): ${venue.name}`);
+		continue;
 	}
 
-	await sleep(MIN_DELAY_MS);
+	const expected = municipalityOf(city);
+	const shape = expected ? byName.get(expected) : undefined;
+	const viewbox = shape ? boundsOf(shape) : districtBox;
+
+	// Three questions, most specific first. The bounded one is what rescues a
+	// venue name that means nothing outside its own concelho.
+	const attempts: { label: string; query: string; viewbox?: typeof viewbox }[] =
+		[
+			...(city
+				? [{ label: "name+city", query: `${venue.name}, ${city}, Portugal` }]
+				: []),
+			{ label: "bounded", query: `${venue.name}, Portugal`, viewbox },
+			{ label: "plain", query: `${venue.name}, Portugal` },
+		];
+
+	let landed: Outcome | null = null;
+	let outsideNote = "";
+
+	for (const attempt of attempts) {
+		const hits = await search(attempt.query, attempt.viewbox);
+		await sleep(MIN_DELAY_MS);
+		if (hits.length === 0) continue;
+
+		for (const hit of hits) {
+			const lat = Number(hit.lat);
+			const lng = Number(hit.lon);
+			if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+				outsideNote = "non-numeric coordinates";
+				continue;
+			}
+			const concelho = concelhoAt(lng, lat, SHAPES);
+			if (concelho === null) {
+				outsideNote = `${hit.display_name} is outside the district`;
+				continue;
+			}
+			if (expected && concelho !== expected) {
+				outsideNote = `${hit.display_name} is in ${concelho}, not ${expected}`;
+				continue;
+			}
+			// A bare settlement is a place standing in for "somewhere in
+			// here", not a building: the name said venue, OSM says otherwise.
+			const isPlace =
+				hit.class === "place" && PLACE_CLASSES.has(hit.type ?? "");
+			landed = {
+				id: venue.id,
+				name: venue.name,
+				city,
+				status: isPlace ? "lugar" : "ok",
+				scope: isPlace ? "lugar" : "venue",
+				variant: attempt.label,
+				concelho,
+				lat,
+				lng,
+				address: venue.address ? undefined : hit.display_name,
+			};
+			break;
+		}
+		if (landed) break;
+	}
+
+	if (!landed) {
+		outcomes.push({
+			id: venue.id,
+			name: venue.name,
+			city,
+			status: "no-hit",
+			scope: "venue",
+			note: outsideNote || "Nominatim knew nothing that fit",
+		});
+		console.log(`  MISS: ${venue.name} (${outsideNote || "no hit"})`);
+		continue;
+	}
+
+	outcomes.push(landed);
+	console.log(
+		`  ${landed.status}: ${venue.name} → ${landed.lat?.toFixed(5)}, ${landed.lng?.toFixed(5)} [${landed.concelho}] via ${landed.variant}`,
+	);
+
+	if (!dryRun) {
+		await db
+			.update(schema.venues)
+			.set({
+				lat: landed.lat as number,
+				lng: landed.lng as number,
+				scope: landed.scope,
+				...(landed.address ? { address: landed.address } : {}),
+			})
+			.where(eq(schema.venues.id, venue.id));
+	}
 }
 
-const result = {
-	venues: needs.length,
-	geocoded: geocoded.length,
-	missed: missed.map((m) => m.name),
-	requests,
+const tally = outcomes.reduce<Record<string, number>>((acc, o) => {
+	acc[o.status] = (acc[o.status] ?? 0) + 1;
+	return acc;
+}, {});
+
+const report = {
+	startedAt: new Date().toISOString(),
+	dryRun,
+	venues: work.length,
+	remaining: skipped,
+	wrote: dryRun ? 0 : outcomes.filter((o) => o.lat != null).length,
+	tally,
+	outcomes,
 };
 
-console.log(JSON.stringify(result, null, 2));
+Bun.write(reportPath, JSON.stringify(report, null, 2));
 
-if (geocoded.length > 0) {
-	console.log(
-		"\nSamples:",
-		geocoded
-			.slice(0, 3)
-			.map((g) => `${g.name} → ${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}`),
-	);
-}
+console.log(`\n${JSON.stringify(tally)}`);
+console.log(`report → ${reportPath}`);
+if (dryRun) console.log("nothing written (--dry-run)");
