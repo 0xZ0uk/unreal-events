@@ -1,6 +1,6 @@
 import type { createBrowserDb } from "@events-tracker/db/browser";
 import { schema } from "@events-tracker/db/browser";
-import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { mergeSameDaySessions } from "../grouping";
@@ -191,6 +191,29 @@ function toPublicEventDetail(row: EventDetailRow) {
 		description: row.description,
 		updatedAt: row.updated_at,
 	};
+}
+
+/**
+ * The saved page's event hydration: every slug a reader saved, resolved to its
+ * current row shape in one query.
+ *
+ * Slugs that no longer resolve simply drop out of the result, so the page can
+ * render the leftover ones as muted "já não está disponível" rows with a remove
+ * action instead of a blank page. Deliberately no same-day session merging —
+ * each saved slug keeps its own identity, unlike the agenda. Empty `slugs`
+ * short-circuits to `[]` with no query at all.
+ */
+export async function eventsBySlugs(db: Db, slugs: string[]) {
+	if (slugs.length === 0) return [];
+
+	const rows = await db
+		.select(eventSelect)
+		.from(schema.events)
+		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+		.where(inArray(schema.events.slug, slugs))
+		.orderBy(schema.events.start_at);
+
+	return rows.map(toPublicEvent);
 }
 
 /**

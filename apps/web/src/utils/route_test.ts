@@ -1,10 +1,15 @@
 import { describe, expect, test } from "bun:test";
 
-import { eventHref, pathnameToRoute } from "./route";
+import { eventHref, pathnameToRoute, savedHref } from "./route";
 
 describe("pathnameToRoute", () => {
 	test("root is the agenda", () => {
 		expect(pathnameToRoute("/")).toEqual({ kind: "agenda" });
+	});
+
+	test("/guardados is the saved events page", () => {
+		expect(pathnameToRoute("/guardados")).toEqual({ kind: "saved" });
+		expect(pathnameToRoute("/guardados/")).toEqual({ kind: "saved" });
 	});
 
 	test("an event slug is an event route", () => {
@@ -57,5 +62,11 @@ describe("eventHref", () => {
 
 	test("encodes slugs that need it", () => {
 		expect(eventHref("fo bar/concerto")).toBe("/evento/fo%20bar%2Fconcerto");
+	});
+});
+
+describe("savedHref", () => {
+	test("points at the saved events page", () => {
+		expect(savedHref()).toBe("/guardados");
 	});
 });

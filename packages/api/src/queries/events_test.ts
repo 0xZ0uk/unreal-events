@@ -4,6 +4,7 @@ import {
 	type Db,
 	eventBySlug,
 	eventDirectory,
+	eventsBySlugs,
 	listEvents,
 	listInput,
 	WINDOW_MAX,
@@ -135,5 +136,57 @@ describe("eventDirectory", () => {
 
 	test("is empty rather than throwing on an empty database", async () => {
 		expect(await eventDirectory(stubDb([]))).toEqual([]);
+	});
+});
+
+describe("eventsBySlugs", () => {
+	test("returns [] without running for an empty slug list", async () => {
+		// The stub chain resolves rows for anything, so a non-[]
+		// result here would mean the query ran despite the shortcut.
+		expect(await eventsBySlugs(stubDb([]), [])).toEqual([]);
+	});
+
+	test("maps matched slugs to the public row shape", async () => {
+		const events = await eventsBySlugs(stubDb([detailRow]), [
+			"concerto-de-verao",
+		]);
+
+		expect(events).toHaveLength(1);
+		expect(events[0]).toMatchObject({
+			slug: "concerto-de-verao",
+			title: "Concerto de Verão",
+			venueName: "Teatro José Lúcio da Silva",
+			categories: ["Música"],
+		});
+		// Shed descriptions exactly like the agenda list payload.
+		expect("description" in (events[0] as object)).toBe(false);
+	});
+
+	/**
+	 * Unlike the agenda, same-day sessions keep their own identity here — the
+	 * saved page must count two saved sessions as two rows, not glue them.
+	 */
+	test("does not merge same-day sessions", async () => {
+		const second = {
+			...detailRow,
+			id: 8,
+			slug: "concerto-de-verao-2",
+			title: "Concerto de Verão — sessão 2",
+		};
+		const events = await eventsBySlugs(stubDb([detailRow, second]), [
+			"concerto-de-verao",
+			"concerto-de-verao-2",
+		]);
+
+		expect(events).toHaveLength(2);
+	});
+
+	test("lets slugs that no longer resolve drop out of the result", async () => {
+		const events = await eventsBySlugs(stubDb([detailRow]), [
+			"concerto-de-verao",
+			"nao-existe",
+		]);
+
+		expect(events.map((e) => e.slug)).toEqual(["concerto-de-verao"]);
 	});
 });

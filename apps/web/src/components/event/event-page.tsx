@@ -4,6 +4,7 @@ import { BUTTON, MICRO, SHELL } from "@/components/agenda/layout";
 import { AgendaError } from "@/components/agenda/states";
 import { track } from "@/components/analytics";
 import { EventNotFound } from "@/components/event/not-found";
+import { SaveButton } from "@/components/saved/save-button";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useEvent } from "@/hooks/use-event";
 import { clock, dayMonth, hasClock, weekday } from "@/utils/format";
@@ -117,6 +118,12 @@ export function EventPage({ slug }: { slug: string }) {
 							</span>
 						</span>
 					) : null}
+					{/* The one action this page offers: `sm:ml-auto` parks it at
+					    the end of the row on a wide screen, and on a phone it
+					    wraps under the date and place, where a thumb reaches it. */}
+					<span className="sm:ml-auto">
+						<SaveButton slug={slug} layout="detail" />
+					</span>
 				</div>
 
 				{data.categories.length > 0 ? (
