@@ -1,10 +1,10 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 
-import type { createAuthDb } from "./db";
-import { authDb } from "./db";
-import { authEnv, getTrustedOrigins } from "./env";
-import * as schema from "./schema";
+import type { createAuthDb } from "./db.js";
+import { authDb } from "./db.js";
+import { authEnv, getTrustedOrigins } from "./env.js";
+import * as schema from "./schema.js";
 
 type AuthDb = ReturnType<typeof createAuthDb>;
 

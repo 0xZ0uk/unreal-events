@@ -1,9 +1,13 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"buildCommand": "pnpm --filter ./apps/web build",
+	"buildCommand": "pnpm --filter ./packages/auth build && pnpm --filter ./apps/web build",
 	"installCommand": "pnpm install --frozen-lockfile",
 	"outputDirectory": "apps/web/dist",
 	"rewrites": [
+		{
+			"source": "/api/auth/:path*",
+			"destination": "/api/auth?path=:path*"
+		},
 		{
 			"source": "/evento/:slug",
 			"destination": "/evento/:slug/index.html"
@@ -13,7 +17,7 @@
 			"destination": "/evento/:slug/index.html"
 		},
 		{
-			"source": "/(.*)",
+			"source": "/((?!api/).*)",
 			"destination": "/index.html"
 		}
 	],

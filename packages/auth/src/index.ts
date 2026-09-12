@@ -1,5 +1,5 @@
-export { type Auth, auth, createAuth } from "./auth";
-export { authDb, createAuthDb } from "./db";
-export { authEnv, getTrustedOrigins } from "./env";
-export { authRoutes } from "./routes";
-export * as authSchema from "./schema";
+export { type Auth, auth, createAuth } from "./auth.js";
+export { authDb, createAuthDb } from "./db.js";
+export { authEnv, getTrustedOrigins } from "./env.js";
+export { authRoutes } from "./routes.js";
+export * as authSchema from "./schema.js";
