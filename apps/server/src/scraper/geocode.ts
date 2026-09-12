@@ -7,6 +7,7 @@
  *   bun run src/scraper/geocode.ts --verify        → re-check the coordinates
  *                                                    already in the database
  *   bun run src/scraper/geocode.ts --limit=20      → first 20
+ *   bun run src/scraper/geocode.ts --only="Vieira" → only venues matching text
  *   bun run src/scraper/geocode.ts --report=/tmp/x → where the JSON report goes
  *
  * The first version of this script took Nominatim's first answer and trusted
@@ -165,10 +166,39 @@ if (args.includes("--verify")) {
 	process.exit(wrong === 0 ? 0 : 1);
 }
 
-const pending = await db.query.venues.findMany({
+const pendingAll = await db.query.venues.findMany({
 	where: isNull(schema.venues.lat),
-	orderBy: (venues, { asc }) => [asc(venues.name)],
+	orderBy: (venues, { desc }) => [desc(venues.id)],
 });
+// Newest first, on purpose. The corpus grows at the edge — today's sources bring
+// today's venues — while the venues that never resolve (a source's own
+// "VÁRIOS LOCAIS", a club OSM has never heard of) never leave the queue at all.
+// Oldest-first would spend the daily budget on the names that will never be
+// placed and let the new ones wait behind them.
+
+/**
+ * `--only=<text>` is for the second look: one venue the gate refused because
+ * the source filed it under the wrong município, a name that has since been
+ * corrected. Without it, retrying that one venue means walking every venue
+ * still waiting — one Nominatim request per second, for hours.
+ */
+const only = args
+	.find((a) => a.startsWith("--only="))
+	?.split("=")
+	.slice(1)
+	.join("=")
+	.trim();
+const pending = only
+	? pendingAll.filter((venue) =>
+			venue.name.toLowerCase().includes(only.toLowerCase()),
+		)
+	: pendingAll;
+
+if (only) {
+	console.log(
+		`${pending.length} of ${pendingAll.length} venues still without coordinates match "${only}".`,
+	);
+}
 
 const work = pending.slice(0, limit);
 const skipped = pending.length - work.length;
