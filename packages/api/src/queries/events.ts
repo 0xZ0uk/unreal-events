@@ -169,6 +169,65 @@ export async function undatedEvents(db: Db) {
 	return rows.map(toPublicEvent);
 }
 
+/**
+ * Detail rows carry what the list deliberately drops: the description and the
+ * row's update time (used as sitemap `lastmod`, so it must be the row's own
+ * timestamp rather than build time).
+ */
+const eventDetailSelect = {
+	...eventSelect,
+	description: schema.events.description,
+	updated_at: schema.events.updated_at,
+};
+
+type EventDetailRow = EventRow & {
+	description: string | null;
+	updated_at: number;
+};
+
+function toPublicEventDetail(row: EventDetailRow) {
+	return {
+		...toPublicEvent(row),
+		description: row.description,
+		updatedAt: row.updated_at,
+	};
+}
+
+/**
+ * One event by its URL slug — null when the slug is unknown, so callers can
+ * render a real not-found instead of an empty page.
+ *
+ * Returns the row as stored, not the merged view: same-day sessions stay
+ * separate rows, and the agenda is where sessions are folded together.
+ */
+export async function eventBySlug(db: Db, slug: string) {
+	const rows = await db
+		.select(eventDetailSelect)
+		.from(schema.events)
+		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+		.where(eq(schema.events.slug, slug))
+		.limit(1);
+
+	const row = rows[0];
+	return row ? toPublicEventDetail(row) : null;
+}
+
+/**
+ * Every event, with description, in one query — the input to the build-time
+ * prerender step and the sitemap. Deliberately unfiltered and unpaginated:
+ * the prerender must cover the whole corpus (a past event still deserves a
+ * page), and one query beats 585 lookups.
+ */
+export async function eventDirectory(db: Db) {
+	const rows = await db
+		.select(eventDetailSelect)
+		.from(schema.events)
+		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
+		.orderBy(desc(schema.events.start_at));
+
+	return rows.map(toPublicEventDetail);
+}
+
 export async function venues(db: Db) {
 	return db
 		.select({
