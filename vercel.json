@@ -13,7 +13,7 @@
 			"destination": "/evento/:slug/index.html"
 		},
 		{
-			"source": "/((?!assets/|evento/|og/|sitemap\\.xml|robots\\.txt|events\\.ics|favicon\\.(ico|svg)).*)",
+			"source": "/(.*)",
 			"destination": "/index.html"
 		}
 	],
