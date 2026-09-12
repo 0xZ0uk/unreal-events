@@ -5,7 +5,7 @@
 	"outputDirectory": "apps/web/dist",
 	"rewrites": [
 		{
-			"source": "/((?!assets/|events\\.ics|favicon\\.ico).*)",
+			"source": "/((?!assets/|evento/|og/|sitemap\\.xml|robots\\.txt|events\\.ics|favicon\\.(ico|svg)).*)",
 			"destination": "/index.html"
 		}
 	],
@@ -16,6 +16,15 @@
 				{
 					"key": "Cache-Control",
 					"value": "public, max-age=31536000, immutable"
+				}
+			]
+		},
+		{
+			"source": "/og/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "public, max-age=86400"
 				}
 			]
 		}
