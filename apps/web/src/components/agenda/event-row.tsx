@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { Fragment, type ReactNode, useState } from "react";
+import { meshGradient } from "@/utils/mesh-gradient";
 import { MICRO } from "./layout";
 
 export type RowProps = {
@@ -12,6 +13,8 @@ export type RowProps = {
 	 */
 	detailHref: string | null;
 	imageUrl: string | null;
+	/** Identity for the poster-less tile. Falls back to the title. */
+	seed?: string;
 	/** `19:30`, a dash, or the source's own date text — decided by the caller. */
 	time: ReactNode;
 	/** ISO instant, so the clock is a real `<time>`; omitted for announcements. */
@@ -33,6 +36,10 @@ export type RowProps = {
  * characters. From `sm` up the row opens into thumb + clock + text, where the
  * posters earn their space.
  *
+ * That slot is never empty: every row carries a seeded mesh gradient, so a
+ * source that published no poster — or a poster that has since stopped serving
+ * — shows its own tile instead of a hole in the list.
+ *
  * The row is no longer wrapped in a single anchor — an event has two
  * destinations (its page, and the source) and anchors cannot nest. Instead the
  * primary target is a stretched link behind the content, and the source link
@@ -44,6 +51,7 @@ export function EventRow({
 	href,
 	detailHref,
 	imageUrl,
+	seed,
 	time,
 	dateTime,
 	note,
@@ -53,6 +61,7 @@ export function EventRow({
 	extraSessions,
 }: RowProps) {
 	const [broken, setBroken] = useState(false);
+	const tile = meshGradient(seed ?? title);
 
 	const timeClass =
 		"col-start-1 row-start-1 pt-0.5 font-mono text-[13px] leading-tight tabular-nums text-muted-foreground sm:col-start-2 sm:text-[14px]";
@@ -75,7 +84,10 @@ export function EventRow({
 
 	const body = (
 		<>
-			<span className="col-start-1 row-start-1 hidden size-16 overflow-hidden rounded-[4px] bg-card outline-1 outline-border -outline-offset-1 sm:block">
+			<span
+				style={tile}
+				className="col-start-1 row-start-1 hidden size-16 overflow-hidden rounded-[4px] bg-card outline-1 outline-border -outline-offset-1 sm:block"
+			>
 				{imageUrl && !broken ? (
 					<img
 						src={imageUrl}
