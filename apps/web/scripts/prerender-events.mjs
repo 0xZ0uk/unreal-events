@@ -49,6 +49,31 @@ function loadCredentials() {
 	return { url, token };
 }
 
+// ---------------------------------------------------- client bundle env guard
+// `vercel pull` writes sensitive project vars as EMPTY strings, so a prebuilt
+// deploy can inline nothing and ship a page that throws at boot. Assert the
+// client bundle actually carries the URL before calling the build good.
+function assertClientBundleHasCredentials(url) {
+	const assetsDir = path.join(DIST, "assets");
+	if (!fs.existsSync(assetsDir)) {
+		throw new Error(`Missing ${assetsDir} — run this after vite build.`);
+	}
+	const host = new URL(url.replace(/^libsql:/, "https:")).hostname;
+	const carrier = fs
+		.readdirSync(assetsDir)
+		.filter((f) => f.endsWith(".js"))
+		.find((f) =>
+			fs.readFileSync(path.join(assetsDir, f), "utf8").includes(host),
+		);
+	if (!carrier) {
+		throw new Error(
+			`Client bundle does not contain ${host}: VITE_TURSO_URL was not inlined at build time. ` +
+				`Deploying this would serve a blank page (the app throws "Invalid environment variables").`,
+		);
+	}
+	console.log(`client env guard: ${host} inlined in ${carrier}`);
+}
+
 // ------------------------------------------------------------------ entities
 // Decode common HTML entities + numeric references BEFORE any escaping.
 const NAMED = {
@@ -241,6 +266,7 @@ function buildJsonLd(row) {
 async function main() {
 	const t0 = Date.now();
 	const { url: dbUrl, token } = loadCredentials();
+	assertClientBundleHasCredentials(dbUrl);
 	const client = createClient({ url: dbUrl, authToken: token });
 
 	const SQL = `SELECT e.slug, e.title, e.description, e.start_at, e.end_at, e.date_text,
