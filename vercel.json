@@ -5,6 +5,14 @@
 	"outputDirectory": "apps/web/dist",
 	"rewrites": [
 		{
+			"source": "/evento/:slug",
+			"destination": "/evento/:slug/index.html"
+		},
+		{
+			"source": "/evento/:slug/",
+			"destination": "/evento/:slug/index.html"
+		},
+		{
 			"source": "/((?!assets/|evento/|og/|sitemap\\.xml|robots\\.txt|events\\.ics|favicon\\.(ico|svg)).*)",
 			"destination": "/index.html"
 		}
