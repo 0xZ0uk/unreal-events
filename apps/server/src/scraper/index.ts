@@ -12,6 +12,7 @@ import { scrape as scrapeEventbrite } from "./eventbrite";
 import { scrape as scrapeFestasearraiais } from "./festasearraiais";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
 import { scrape as scrapeMunicipal } from "./municipal";
+import { scrape as scrapeNocartaz } from "./nocartaz";
 import { scrape as scrapeObidos } from "./obidos";
 import { scrape as scrapeRegiaoleiria } from "./regiaoleiria";
 import { scrape as scrapeShotgun } from "./shotgun";
@@ -46,6 +47,12 @@ const scrapeObidosDistrict = async () =>
 const scrapeCaldasDistrict = async () =>
 	scrapeCaldas(undefined, (place) => isLeiriaDistrict(place));
 
+/** SLICE_10: nocartaz is a venue-hub aggregator. Its Leiria district hub mixes
+ * in rows filed from outside the district (Bandsintown/3cket gigs), so the gate
+ * runs on the resolved locality, not on the hub route. */
+const scrapeNocartazDistrict = async () =>
+	scrapeNocartaz(undefined, (place) => isLeiriaDistrict(place));
+
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
@@ -60,6 +67,7 @@ export const sources = {
 	obidos: scrapeObidosDistrict,
 	regiaoleiria: scrapeRegiaoleiriaDistrict,
 	caldas: scrapeCaldasDistrict,
+	nocartaz: scrapeNocartazDistrict,
 } as const;
 
 export type SourceId = keyof typeof sources;
