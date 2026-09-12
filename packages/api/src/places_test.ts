@@ -4,6 +4,7 @@ import {
 	DISTRICT_MUNICIPALITIES,
 	municipalityOf,
 	normalizePlace,
+	scopeOfName,
 } from "./places";
 
 describe("normalizePlace", () => {
@@ -143,5 +144,62 @@ describe("the concelho facet", () => {
 		expect(leiria).toContain("Caranguejeira");
 		expect(leiria).toContain("Carvide");
 		expect(leiria.length).toBeGreaterThan(1);
+	});
+});
+
+/**
+ * Venue names from the live rows that had no coordinates. A source that never
+ * located an event files it under the place, and the place arrives looking like
+ * a venue: "Óbidos" (113 events), "Marinha Grande, Marinha Grande",
+ * "Vieira de Leiria", "Marinha Grande &#x2F; Marinha Grande".
+ *
+ * Scope is what stops those from ever being drawn as a pin, so these are the
+ * assertions that matter: a município is an area, a listed freguesia is a dot,
+ * and a real venue — even one with a place in its name — stays a venue.
+ */
+describe("scopeOfName", () => {
+	test("a município is an area, however the source spelled it", () => {
+		expect(scopeOfName("Óbidos")).toBe("concelho");
+		expect(scopeOfName("Leiria")).toBe("concelho");
+		expect(scopeOfName("Alcobaça (cidade)")).toBe("concelho");
+		expect(scopeOfName("Marinha Grande, Marinha Grande")).toBe("concelho");
+		expect(scopeOfName("Marinha Grande &#x2F; Marinha Grande")).toBe("concelho");
+		// The source's spelling, without the circumflex, still folds.
+		expect(scopeOfName("Castanheira de Pera")).toBe("concelho");
+	});
+
+	test("a listed freguesia or vila is a dot, not a building", () => {
+		expect(scopeOfName("Vieira de Leiria")).toBe("lugar");
+		expect(scopeOfName("Colmeias")).toBe("lugar");
+		expect(scopeOfName("São Pedro de Moel")).toBe("lugar");
+		expect(scopeOfName("Benedita (Vila)")).toBe("lugar");
+		expect(scopeOfName("São Bento (Porto de Mós)")).toBe("lugar");
+		expect(scopeOfName("Bidoeira de Cima, Bidoeira de Cima")).toBe("lugar");
+	});
+
+	test("a real venue stays a venue, place name and all", () => {
+		expect(scopeOfName("BLACK BOX")).toBe("venue");
+		expect(scopeOfName("Castelo de Porto de Mós")).toBe("venue");
+		expect(scopeOfName("Museu Escolar de Marrazes")).toBe("venue");
+		expect(scopeOfName("Teatro Eduardo Brazão")).toBe("venue");
+		expect(
+			scopeOfName("CCC Centro Cultural e de Congressos das Caldas da Rainha"),
+		).toBe("venue");
+	});
+
+	test("a source label is not a place anyone can stand in", () => {
+		// Both are real rows: one is the source's own name, the other says
+		// outright that the event happens across the whole city.
+		expect(scopeOfName("Agenda Cultural Óbidos")).toBe("venue");
+		expect(scopeOfName("Vários Locais da Cidade de Leiria")).toBe("venue");
+	});
+
+	test("an unlisted lugar stays a venue rather than being guessed", () => {
+		// Moleanos is a lugar of Alcobaça that the table does not list. Rather
+		// than invent a category, the name reads as a venue; the geocoder then
+		// downgrades it to `lugar` when OSM answers with a settlement and not a
+		// building, which is the only place that judgement can honestly be
+		// made.
+		expect(scopeOfName("Moleanos (Alcobaça)")).toBe("venue");
 	});
 });
