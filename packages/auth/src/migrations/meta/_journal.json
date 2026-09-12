@@ -1,13 +1,20 @@
 {
-	"version": "7",
-	"dialect": "sqlite",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "6",
-			"when": 1789207418838,
-			"tag": "0000_faulty_strong_guy",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789207418838,
+      "tag": "0000_faulty_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789213442598,
+      "tag": "0001_tough_snowbird",
+      "breakpoints": true
+    }
+  ]
 }

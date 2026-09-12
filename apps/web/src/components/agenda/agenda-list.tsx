@@ -1,3 +1,4 @@
+import { SaveButton } from "@/components/saved/save-button";
 import type { Agenda, AgendaRow } from "@/hooks/use-agenda";
 import { clock, dayKey, hasClock, plural, shortDay } from "@/utils/format";
 import { eventHref } from "@/utils/route";
@@ -101,6 +102,7 @@ export function AgendaList({ agenda }: { agenda: Agenda }) {
 									.filter(hasClock)
 									.sort((a, b) => a - b)
 									.map(clock)}
+								saveSlot={<SaveButton slug={event.slug} layout="row" />}
 							/>
 						))}
 					</ul>

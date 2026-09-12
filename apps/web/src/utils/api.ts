@@ -1,6 +1,7 @@
 import {
 	eventBySlug,
 	eventStats,
+	eventsBySlugs,
 	listEvents,
 	listInput,
 	undatedEvents,
@@ -39,6 +40,13 @@ export const queryClient = new QueryClient({
 });
 
 export type PublicEvent = Awaited<ReturnType<typeof listEvents>>[number];
+
+/**
+ * One row of the reader's saved list. Narrower than `PublicEvent`: the agenda
+ * merges a day's sessions into one row, while a saved slug is always a single
+ * event, so there is no `sessionStarts` to fold in.
+ */
+export type SavedListEvent = Awaited<ReturnType<typeof eventsBySlugs>>[number];
 export type UndatedEvent = Awaited<ReturnType<typeof undatedEvents>>[number];
 export type EventStats = Awaited<ReturnType<typeof eventStats>>;
 export type EventDetail = Awaited<ReturnType<typeof eventBySlug>>;
@@ -81,6 +89,20 @@ export const api = {
 			queryOptions({
 				queryKey: ["event", slug],
 				queryFn: () => eventBySlug(db, slug),
+			}),
+	},
+	/**
+	 * The events behind the reader's saved slugs. The list itself is not an
+	 * event read — it comes from `/api/saved` — so this is keyed by the slugs
+	 * it was handed and stays disabled until there are any, which is also what
+	 * keeps a signed-out visit from querying Turso at all.
+	 */
+	saved: {
+		queryOptions: (slugs: string[]) =>
+			queryOptions({
+				queryKey: ["saved", "events", ...slugs],
+				queryFn: () => eventsBySlugs(db, slugs),
+				enabled: slugs.length > 0,
 			}),
 	},
 };

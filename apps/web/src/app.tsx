@@ -8,6 +8,8 @@ import { Analytics } from "@/components/analytics";
 import { SignInPage } from "@/components/auth/sign-in-page";
 import { EventPage } from "@/components/event/event-page";
 import { EventNotFound } from "@/components/event/not-found";
+import { AppChrome } from "@/components/nav/chrome";
+import { SavedPage } from "@/components/saved/saved-page";
 import { useAgenda } from "@/hooks/use-agenda";
 import { queryClient } from "@/utils/api";
 import { pathnameToRoute } from "@/utils/route";
@@ -85,10 +87,30 @@ function usePathname(): string {
 function Routes() {
 	const route = pathnameToRoute(usePathname());
 
-	if (route.kind === "signin") return <SignInPage />;
-	if (route.kind === "event") return <EventPage slug={route.slug} />;
-	if (route.kind === "notFound") return <EventNotFound />;
-	return <AgendaShell />;
+	const page =
+		route.kind === "signin" ? (
+			<SignInPage />
+		) : route.kind === "event" ? (
+			<EventPage slug={route.slug} />
+		) : route.kind === "saved" ? (
+			<SavedPage />
+		) : route.kind === "notFound" ? (
+			<EventNotFound />
+		) : (
+			<AgendaShell />
+		);
+
+	// `/entrar` is a focused, single-purpose screen with its own wordmark row,
+	// so it is the one route that keeps its own chrome.
+	if (route.kind === "signin") return page;
+
+	return (
+		<>
+			<AppChrome />
+			{/* The phone tab bar is fixed, so the page carries its height. */}
+			<div className="pb-24 sm:pb-0">{page}</div>
+		</>
+	);
 }
 
 export function App() {

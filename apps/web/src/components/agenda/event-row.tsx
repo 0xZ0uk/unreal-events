@@ -26,6 +26,12 @@ export type RowProps = {
 	chips: string[];
 	/** Other session clocks on the same day, already formatted. */
 	extraSessions: string[];
+	/**
+	 * The save control, owned by the caller: the agenda and the saved list
+	 * both ride the same row, and only they know the slug the control needs.
+	 * It sits above the stretched link (z-20) or it would never receive a tap.
+	 */
+	saveSlot?: ReactNode;
 };
 
 /**
@@ -59,6 +65,7 @@ export function EventRow({
 	city,
 	chips,
 	extraSessions,
+	saveSlot,
 }: RowProps) {
 	const [broken, setBroken] = useState(false);
 	const tile = meshGradient(seed ?? title);
@@ -145,11 +152,17 @@ export function EventRow({
 						"relative z-20 col-start-4 row-start-1 mt-1 hidden items-center justify-center text-muted-foreground/60 group-hover:text-foreground motion-safe:transition-colors sm:flex",
 					)
 				: null}
+
+			{saveSlot ? (
+				<div className="relative z-20 col-start-3 row-start-1 flex justify-end sm:col-start-5">
+					{saveSlot}
+				</div>
+			) : null}
 		</>
 	);
 
 	const shape =
-		"group relative -mx-2 grid scroll-mt-16 grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem] sm:gap-x-4";
+		"group relative -mx-2 grid scroll-mt-16 grid-cols-[2.5rem_minmax(0,1fr)_auto] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem_auto] sm:gap-x-4";
 	// Joined, not concatenated: a missing space silently merged two classes and
 	// dropped `relative`, which sent every stretched link to the viewport corner.
 	const rowClass = [

@@ -1,6 +1,6 @@
 import { createContext } from "@events-tracker/api/context";
 import { appRouter } from "@events-tracker/api/routers/index";
-import { authRoutes } from "@events-tracker/auth";
+import { authRoutes, savedRoutes } from "@events-tracker/auth";
 import { db } from "@events-tracker/db";
 import { env } from "@events-tracker/env/server";
 import { trpcServer } from "@hono/trpc-server";
@@ -29,6 +29,7 @@ app.use(
 );
 
 app.route("/", authRoutes);
+app.route("/", savedRoutes);
 app.route("/", digestRoutes);
 
 app.get("/", (c) => {

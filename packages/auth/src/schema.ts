@@ -1,4 +1,10 @@
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+	index,
+	integer,
+	sqliteTable,
+	text,
+	uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 /**
  * better-auth's four tables, hand-written to match the field set better-auth
@@ -63,6 +69,30 @@ export const account = sqliteTable(
 		updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 	},
 	(table) => [index("account_user_id_idx").on(table.userId)],
+);
+
+/**
+ * A reader's saved event, keyed by user and event slug.
+ *
+ * Lives in the auth database on purpose: the events DB is mirrored to a Turso
+ * token baked into the browser bundle, so user data can never land there. The
+ * unique (user, slug) pair makes `saveEvent` idempotent — saving twice stays
+ * one row — and the slug alone keeps the row hydratable after the event passes.
+ */
+export const savedEvent = sqliteTable(
+	"saved_event",
+	{
+		id: text("id").primaryKey(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		eventSlug: text("event_slug").notNull(),
+		createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+	},
+	(table) => [
+		uniqueIndex("saved_event_user_slug_idx").on(table.userId, table.eventSlug),
+		index("saved_event_user_idx").on(table.userId),
+	],
 );
 
 export const verification = sqliteTable(

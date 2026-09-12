@@ -5,10 +5,11 @@
  * 404 rendered in-place.
  */
 
-/** One of the three real routes, or a miss. */
+/** One of the real routes, or a miss. */
 export type Route =
 	| { kind: "agenda" }
 	| { kind: "event"; slug: string }
+	| { kind: "saved" }
 	| { kind: "signin" }
 	| { kind: "notFound" };
 
@@ -17,9 +18,15 @@ export function eventHref(slug: string): string {
 	return `/evento/${encodeURIComponent(slug)}`;
 }
 
+/** Internal link to the page of events the reader saved. */
+export function savedHref(): string {
+	return "/guardados";
+}
+
 /** Internal link to the sign-in page, optionally back to where the reader was. */
 export function signInHref(redirectTo?: string): string {
-	if (!redirectTo || !redirectTo.startsWith("/") || redirectTo.startsWith("//")) return "/entrar";
+	if (!redirectTo || !redirectTo.startsWith("/") || redirectTo.startsWith("//"))
+		return "/entrar";
 	return `/entrar?redirect=${encodeURIComponent(redirectTo)}`;
 }
 
@@ -32,7 +39,10 @@ export function signInHref(redirectTo?: string): string {
  */
 export function pathnameToRoute(pathname: string): Route {
 	if (pathname === "/") return { kind: "agenda" };
-	if (pathname === "/entrar" || pathname === "/entrar/") return { kind: "signin" };
+	if (pathname === "/guardados" || pathname === "/guardados/")
+		return { kind: "saved" };
+	if (pathname === "/entrar" || pathname === "/entrar/")
+		return { kind: "signin" };
 
 	const match = /^\/evento\/([^/]+)\/?$/.exec(pathname);
 	if (match) {
