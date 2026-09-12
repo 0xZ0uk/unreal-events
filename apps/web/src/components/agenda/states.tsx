@@ -77,7 +77,11 @@ export function AgendaEmpty({ agenda }: { agenda: Agenda }) {
 	);
 }
 
-/** The window query stops at 500 rows; say so rather than silently cutting. */
+/**
+ * The window query stops at its row cap; say so rather than silently cutting.
+ * With headroom restored this fires only when the window genuinely outgrows
+ * the cap, which is the signal to page instead of raise it again.
+ */
 export function TruncationNote({ count, days }: { count: number; days: number }) {
 	return (
 		<p className="mb-4 text-sm text-muted-foreground">

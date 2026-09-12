@@ -1,4 +1,10 @@
-import { eventStats, listEvents, listInput, undatedEvents } from "@events-tracker/api/queries/events";
+import {
+	eventStats,
+	listEvents,
+	listInput,
+	undatedEvents,
+	WINDOW_MAX,
+} from "@events-tracker/api/queries/events";
 import { createBrowserDb } from "@events-tracker/db/browser";
 import { env } from "@events-tracker/env/web";
 import { QueryClient, queryOptions } from "@tanstack/react-query";
@@ -14,7 +20,10 @@ import { QueryClient, queryOptions } from "@tanstack/react-query";
  *
  * Three reads, and the agenda window is the only one that carries rows.
  */
-export const db = createBrowserDb(env.VITE_TURSO_URL, env.VITE_TURSO_AUTH_TOKEN);
+export const db = createBrowserDb(
+	env.VITE_TURSO_URL,
+	env.VITE_TURSO_AUTH_TOKEN,
+);
 
 export const queryClient = new QueryClient({
 	defaultOptions: {
@@ -45,7 +54,7 @@ export const api = {
 							dateFrom: from,
 							dateTo: to,
 							includeUndated: false,
-							limit: 500,
+							limit: WINDOW_MAX,
 						}),
 					),
 			}),
@@ -67,5 +76,9 @@ export const api = {
 	},
 };
 
-/** The window query caps at 500 rows; beyond that the page says so. */
-export const WINDOW_LIMIT = 500;
+/**
+ * The window query's row cap, shared with the query itself so the truncation
+ * notice can only fire when the safety valve really trips — not while the page
+ * is simply showing everything the window holds.
+ */
+export const WINDOW_LIMIT = WINDOW_MAX;
