@@ -2,9 +2,8 @@ import { db, schema } from "@events-tracker/db";
 import { and, asc, eq, gte, isNull } from "drizzle-orm";
 
 /**
- * Shared digest/ICS core (SLICE_3). Used by the /digest + /events.ics Hono
- * routes and by digest-cli.ts (cron runs the CLI directly against the DB —
- * no server needed).
+ * Shared digest core (SLICE_3). Used by the /digest Hono route and by
+ * digest-cli.ts (cron runs the CLI directly against the DB — no server needed).
  */
 
 export function parseKeywords(raw: string | undefined | null): string[] {
@@ -126,74 +125,4 @@ export async function buildDigest(opts: DigestOptions): Promise<{
 		hits: events.filter((e) => e.match).length,
 		events,
 	};
-}
-
-/** RFC 5545 text calendar of upcoming events (undated rows excluded). */
-export async function buildIcs(keywords: string[]): Promise<string> {
-	const rows = await db
-		.select({
-			id: schema.events.id,
-			title: schema.events.title,
-			description: schema.events.description,
-			start_at: schema.events.start_at,
-			end_at: schema.events.end_at,
-			url: schema.events.url,
-			venueName: schema.venues.name,
-		})
-		.from(schema.events)
-		.leftJoin(schema.venues, eq(schema.events.venue_id, schema.venues.id))
-		.where(
-			and(
-				gte(schema.events.start_at, Date.now() / 1000),
-				isNull(schema.events.date_text),
-			),
-		)
-		.orderBy(asc(schema.events.start_at))
-		.limit(1000);
-
-	const esc = (s: string) =>
-		s
-			.replace(/\\/g, "\\\\")
-			.replace(/;/g, "\\;")
-			.replace(/,/g, "\\,")
-			.replace(/\n/g, "\\n");
-
-	// RFC 5545 UTC form: yyyymmddThhmmssZ (toISOString already ends in Z).
-	const fmt = (epoch: number) =>
-		new Date(epoch * 1000)
-			.toISOString()
-			.replace(/[-:]/g, "")
-			.replace(/\.\d{3}/, "");
-
-	const ics: string[] = [
-		"BEGIN:VCALENDAR",
-		"VERSION:2.0",
-		"PRODID:-//events-tracker//Leiria//PT",
-		"CALSCALE:GREGORIAN",
-	];
-	for (const r of rows) {
-		const venue = r.venueName ?? "Local desconhecido";
-		if (
-			keywords.length > 0 &&
-			!matchesKeywords(`${r.title} ${venue} ${r.description ?? ""}`, keywords)
-		) {
-			continue;
-		}
-		ics.push(
-			"BEGIN:VEVENT",
-			`UID:event-${r.id}@events-tracker.local`,
-			`DTSTAMP:${fmt(Math.floor(Date.now() / 1000))}`,
-			`DTSTART:${fmt(r.start_at)}`,
-			...(r.end_at ? [`DTEND:${fmt(r.end_at)}`] : []),
-			`SUMMARY:${esc(r.title)}`,
-			`LOCATION:${esc(venue)}`,
-			...(r.url ? [`URL:${r.url}`] : []),
-			...(r.description
-				? [`DESCRIPTION:${esc(r.description.slice(0, 300))}`]
-				: []),
-			"END:VEVENT",
-		);
-	}
-	ics.push("END:VCALENDAR");
-	return ics.join("\r\n");
 }

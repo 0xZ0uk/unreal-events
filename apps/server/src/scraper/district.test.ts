@@ -33,18 +33,19 @@ describe("isLeiriaDistrict (the 16 municipalities)", () => {
 		expect(isLeiriaDistrict("Figueiró dos Vinhos")).toBe(true);
 	});
 
-	// SLICE_10: the roster shipped with 14 entries — Ansião and Peniche were
-	// missing, so both municipal agendas gated themselves out and the DB never
-	// carried a single row for either concelho.
-	test("Ansião and Peniche are district (the roster is 16, not 14)", () => {
+	test("accepts Ansião and Peniche (roster shipped without them)", () => {
+		// Both have a configured municipal source; while they were missing from
+		// the roster, every event they parsed was gated out on `city`.
 		expect(isLeiriaDistrict("Ansião")).toBe(true);
-		expect(isLeiriaDistrict("ansiao")).toBe(true);
 		expect(isLeiriaDistrict("Peniche")).toBe(true);
-		expect(isLeiriaDistrict("PENICHE")).toBe(true);
+		expect(isLeiriaDistrict("Atouguia da Baleia")).toBe(true);
+		expect(isLeiriaDistrict("Avelar")).toBe(true);
 	});
 
 	test("list is exactly the 16 district municipalities", () => {
 		expect(LEIRIA_DISTRICT_MUNICIPALITIES.length).toBe(16);
+		expect(LEIRIA_DISTRICT_MUNICIPALITIES).toContain("ansiao");
+		expect(LEIRIA_DISTRICT_MUNICIPALITIES).toContain("peniche");
 	});
 });
 

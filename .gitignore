@@ -17,6 +17,7 @@ apps/server/src/scraper/state/
 # Environment variables
 .env
 .env*.local
+local-auth.db*
 
 # IDEs and editors
 .vscode/*

@@ -1,20 +1,19 @@
 /**
- * Leiria district scope (SLICE_6 scope correction).
+ * Leiria district scope (SLICE_6 scope correction, roster fixed in SLICE_10).
  *
  * Original design filtered everything to the MUNICIPALITY of Leiria (city =
  * "Leiria"). Pedro corrected this on review: the tracker covers the whole
  * DISTRICT of Leiria — all 16 municipalities:
  *
  *   Alcobaça, Alvaiázere, Ansião, Batalha, Bombarral, Caldas da Rainha,
- *   Castanheira de Pêra, Figueiró dos Vinhos, Leiria, Marinha Grande,
- *   Nazaré, Óbidos, Pedrógão Grande, Peniche, Pombal, Porto de Mós
+ *   Castanheira de Pêra, Figueiró dos Vinhos, Leiria, Marinha Grande, Nazaré,
+ *   Óbidos, Pedrógão Grande, Peniche, Pombal, Porto de Mós
  *
- * (SLICE_10 correction: the list shipped with 14 entries and was missing
- * Ansião and Peniche — two real district municipalities. Nothing in the DB
- * had ever been filed under either concelho, so the municipal agendas of
- * both were being gated out at the door. The 16-concelho roster is the
- * actual Distrito de Leiria: a gate that drops in-scope rows is as wrong as
- * one that admits out-of-scope ones.)
+ * The roster shipped with 14 and left Ansião and Peniche out, so those two
+ * municipal sources — both configured, both parsing fine — had every event
+ * gated out on `city` and contributed nothing. The roster and the
+ * freguesia → município table now live in @events-tracker/api/places, shared
+ * with the web facet fold, so the gate and the UI cannot disagree about scope.
  *
  * Freguesia-level city values (e.g. Marrazes, Bajouca, Caranguejeira —
  * parishes of the municipality of Leiria; Pedrogão — parish of Leiria;
@@ -24,40 +23,17 @@
  * source filters identically and the UI copy matches the scraper reality.
  */
 
-/** The 16 municipalities of Distrito de Leiria (normalized, lowercase). */
-export const LEIRIA_DISTRICT_MUNICIPALITIES = [
-	"alcobaca",
-	"alvaiazere",
-	"ansiao",
-	"batalha",
-	"bombarral",
-	"caldas da rainha",
-	"castanheira de pera",
-	"figueiro dos vinhos",
-	"leiria",
-	"marinha grande",
-	"nazare",
-	"obidos",
-	"pedrogao grande",
-	"peniche",
-	"pombal",
-	"porto de mos",
-] as const;
+import {
+	DISTRICT_MUNICIPALITIES,
+	DISTRICT_PARISHES,
+	normalizePlace,
+} from "@events-tracker/api/places";
 
-/**
- * Normalize a city/locality string for district comparison: lowercase,
- * strip diacritics, unify separators, collapse whitespace.
- * "Caldas da Rainha" / "caldas-da-rainha" / "Caldas  da  rainha" all match.
- */
-export function normalizePlace(raw: string): string {
-	return raw
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.toLowerCase()
-		.replace(/[-_]+/g, " ")
-		.replace(/\s+/g, " ")
-		.trim();
-}
+export { normalizePlace };
+
+/** The 16 municipalities of Distrito de Leiria (normalized, lowercase). */
+export const LEIRIA_DISTRICT_MUNICIPALITIES: readonly string[] =
+	DISTRICT_MUNICIPALITIES.map(normalizePlace).sort();
 
 /**
  * Freguesias (parishes) observed in source data, by municipality:
@@ -149,6 +125,20 @@ const KNOWN_PARISHES = [
 ] as const;
 
 /**
+ * Every known freguesia/lugar: the local roster above plus the shared fold
+ * table in @events-tracker/api/places. The gate ("is this in scope?") and the
+ * web facet ("which município is this?") are the same question, so they read
+ * the same list instead of two rosters that drift apart.
+ */
+const ALL_PARISHES: readonly string[] = [
+	...new Set<string>([...KNOWN_PARISHES, ...DISTRICT_PARISHES]),
+];
+
+function isKnownParish(norm: string): boolean {
+	return ALL_PARISHES.includes(norm);
+}
+
+/**
  * Anything embedding the district name is in scope ("leiria e arredores",
  * "leiria (cidade)", the "Leira" typo the leiriagenda source emits, venue
  * names containing the word, etc.). The typo check keeps the leira/leiria
@@ -176,12 +166,12 @@ export function isDistrictLocality(city: string | null | undefined): boolean {
 	if ((LEIRIA_DISTRICT_MUNICIPALITIES as readonly string[]).includes(norm)) {
 		return false;
 	}
-	return (KNOWN_PARISHES as readonly string[]).includes(norm);
+	return isKnownParish(norm);
 }
 
 /**
  * District scope test. Accepts:
- *  - any of the 14 district municipalities (normalized)
+ *  - any of the 16 district municipalities (normalized)
  *  - freguesias of the municipality of Leiria (they ARE district)
  *  - strings embedding "leiria" ("Leiria e arredores", "Leiria (cidade)")
  *  - "Leira" typos (leiriagenda source emits these)
@@ -201,5 +191,5 @@ export function isLeiriaDistrict(city: string | null | undefined): boolean {
 	if ((LEIRIA_DISTRICT_MUNICIPALITIES as readonly string[]).includes(norm)) {
 		return true;
 	}
-	return (KNOWN_PARISHES as readonly string[]).includes(norm);
+	return isKnownParish(norm);
 }

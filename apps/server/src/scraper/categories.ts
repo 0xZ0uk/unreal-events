@@ -8,6 +8,12 @@ import { normalizeTitle } from "./normalize";
  * the filter dropdown stays small: singular/plural and variant labels collapse
  * into one canonical form; platform names are dropped; unknown labels pass
  * through untouched (never lose data) and are reported by `unknownCategory`.
+ *
+ * "Untouched" is why a label can still reach the dropdown: nothing failed when
+ * a source label was missing from both tables, the dropdown just grew. The
+ * drift guard in categories.test.ts pins the labels the live DB actually
+ * carried, so a synonym that only exists in production data fails a test
+ * instead of shipping a 34th filter option.
  */
 
 /** The canonical labels, in display order (filters + badges follow this). */
@@ -16,6 +22,7 @@ export const CANONICAL_CATEGORIES = [
 	"Música",
 	"Concertos",
 	"Festivais",
+	"Festas",
 	"Clubbing",
 	"Teatro",
 	"Dança",
@@ -32,6 +39,7 @@ export const CANONICAL_CATEGORIES = [
 	"Desporto",
 	"Gastronomia",
 	"Natureza",
+	"Atividades ao Ar Livre",
 	"Outros",
 ] as const;
 
@@ -90,6 +98,28 @@ const ALIASES_RAW: Record<string, string | string[]> = {
 	Outras: "Outros",
 	Jogos: "Outros",
 	Fotografia: "Outros",
+	// Drift found in the live database (SLICE_10). Every key below is a label
+	// the production DB actually carried into the filter dropdown, because the
+	// canonical set and the alias table were both missing it.
+	// Plural forms are the recurring miss: `Feira` was aliased but `Feiras` was
+	// not, `Oficina` but not `Oficinas` — each became its own filter option.
+	Festival: "Festivais",
+	Feiras: "Mercados e Feiras",
+	Oficinas: "Workshop",
+	"Oficina / workshop": "Workshop",
+	"Mais Novos": "Infantil",
+	Corrida: "Desporto",
+	Caminhada: "Desporto",
+	Ambiente: "Natureza",
+	"Evento ao ar livre": "Atividades ao Ar Livre",
+	"Eventos ao ar livre": "Atividades ao Ar Livre",
+	// Our own mappers' fallback buckets and source feed titles: the source gave
+	// no usable category, so the honest bucket is Outros.
+	Agenda: "Outros",
+	"CM Leiria": "Outros",
+	Espetáculo: "Outros",
+	Saúde: "Outros",
+	Educação: "Outros",
 };
 
 /** Platform/scraper names that must never surface as event categories. */
