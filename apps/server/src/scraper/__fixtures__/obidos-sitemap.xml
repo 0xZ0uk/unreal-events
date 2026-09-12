@@ -1,0 +1,1161 @@
+<!-- obidos fixture: agenda.obidos.pt/etn-sitemap.xml, fetched 2026-09-11 UTC -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This sitemap was dinamicamente generated on 11 de Setembro, 2026 at 22:25 by All in One SEO v4.9.10 - the original SEO plugin for WordPress. -->
+
+<?xml-stylesheet type="text/xsl" href="https://agenda.obidos.pt/default-sitemap.xsl?sitemap=etn"?>
+<urlset
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml"
+	xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-sta-ana-com-a-tradicional-batatada/]]></loc>
+		<lastmod><![CDATA[2026-09-08T14:10:48+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/18_batatada_no_pinhal_1_2500_2500.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/09/800993898_1415440854124822_1573343760274884075_n.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/conversa-sobre-o-livro-filha-da-louca-com-maria-francisca-gama/]]></loc>
+		<lastmod><![CDATA[2026-09-07T15:58:07+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/09/maria-gama-autora.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/09/Filhos-da-Louca_cartaz.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-das-gaeiras/]]></loc>
+		<lastmod><![CDATA[2026-09-07T15:20:45+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/09/festa-gaeiras.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/09/783286684_122185996118937449_5426383457980754830_n.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-do-imaculado-coracao-de-maria/]]></loc>
+		<lastmod><![CDATA[2026-09-03T15:35:16+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/15_Festa-do-Imaculado-Coração-de-Maria-olho-marinho.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-n-a-sra-do-bom-sucesso/]]></loc>
+		<lastmod><![CDATA[2026-09-03T15:35:10+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/14_Festa-em-honra-de-Nossa-Senhora-do-Bom-Sucesso-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-n-a-sra-da-assuncao/]]></loc>
+		<lastmod><![CDATA[2026-09-03T15:35:04+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/13_Festa-em-honra-de-Na-Sra-da-Assunção.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/toupeiro-2/]]></loc>
+		<lastmod><![CDATA[2026-08-31T22:19:59+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/toupeiro.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/toupeiro.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/afinidades-construidas-obras-da-doacao-alberto-caetano/]]></loc>
+		<lastmod><![CDATA[2026-08-10T23:40:14+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/06/exp.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/cartaz.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/o-principe-real-d-luis-filipe-em-africa/]]></loc>
+		<lastmod><![CDATA[2026-08-10T23:40:02+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/Painel-A1-Introducao.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/sipo-semana-internacional-de-piano-do-oeste/]]></loc>
+		<lastmod><![CDATA[2026-08-10T08:11:05+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/sipo.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/sipo.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-bom-sucesso/]]></loc>
+		<lastmod><![CDATA[2026-08-10T08:10:50+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/festival_bom_sucesso.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/cartaz_BS.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-vila-rainhas/]]></loc>
+		<lastmod><![CDATA[2026-08-04T11:16:53+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/villa_rainhas.png]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_RAINHAS_UP_2-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_RAINHAS_UP-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/mercado-medieval-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-07-29T08:13:53+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/mercado_medieval.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/cartazmmo26.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-barro-corado/]]></loc>
+		<lastmod><![CDATA[2026-07-29T08:13:46+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/oficina.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-de-santa-maria-madalena/]]></loc>
+		<lastmod><![CDATA[2026-07-24T09:54:23+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/12_Festa-de-Santa-Maria-Madalena1-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/exposicao-coletiva-dos-estudantes-finalistas-em-artes-plasticas-2026-esad-cr/]]></loc>
+		<lastmod><![CDATA[2026-07-20T08:34:35+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/06/AG_ESAD.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/06/cartaz_ESAD.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/applied-ai-machine-learning-summit-2026/]]></loc>
+		<lastmod><![CDATA[2026-07-17T15:12:55+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/preview-placeholder-banner.webp]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-1148-terra-de-mouros-e-cristaos/]]></loc>
+		<lastmod><![CDATA[2026-07-16T10:06:48+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-14.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/um-postal-para-recordar-sobre-obidos/]]></loc>
+		<lastmod><![CDATA[2026-07-16T10:06:30+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/Formato_postal-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/uma-janela-para-o-outro/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:55+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/servico-educativo_uma-janela.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-arqueologica/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:44+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-4.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/um-banquete-com-josefa-dobidos/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:34+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/servico-educativo_josefa.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/mini-cidades-do-futuro/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:25+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-12.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/atelie-riscadores/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:12+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-7.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/vem-desenhar-e-construir-a-tua-maquina-de-sonho/]]></loc>
+		<lastmod><![CDATA[2026-07-15T15:43:00+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/maquinaSonho.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/folio-festival-literario-internacional-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-07-09T15:15:27+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/folio-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/FOLIO_UP_2.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/FOLIO_UP_3.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-vila-natal/]]></loc>
+		<lastmod><![CDATA[2026-07-09T15:15:07+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/ovn-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_NATAL_UP.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_NATAL_UP_2.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-de-opera-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-07-09T15:01:03+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/festival_opera.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/opera.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/misterios-do-passado/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:16:20+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-13.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/entre-muros-e-memorias-visita-ao-convento-de-sao-miguel/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:16:12+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-9.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/a-descoberta-dos-ods-literatura-e-sustentabilidade/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:16:05+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/descobertaODS.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/as-cores-do-ecoponto-uma-viagem-musical-pela-reciclagem/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:15:58+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-6.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/teatro-de-papel-kamishibai/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:15:49+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-10.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/lugares-imaginarios/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:15:41+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-11.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/bosque-literario-e-os-poetas-populares-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:15:32+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-8.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/ler-nunca-esta-longe/]]></loc>
+		<lastmod><![CDATA[2026-07-09T11:15:04+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-23-at-14.39.45-11.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/dia-da-freguesia-a-dos-negros/]]></loc>
+		<lastmod><![CDATA[2026-07-06T10:53:41+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/WhatsApp-Image-2026-07-02-at-12.33.37.jpeg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/07/WhatsApp-Image-2026-07-02-at-12.33.36.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-santo-antonio-3/]]></loc>
+		<lastmod><![CDATA[2026-07-06T10:53:33+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/11_capeleira-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-de-teatro/]]></loc>
+		<lastmod><![CDATA[2026-07-01T10:28:10+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/Banner_Agenda_Cultural.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/TEATRO_OBIDOS.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-da-ginja/]]></loc>
+		<lastmod><![CDATA[2026-06-29T11:41:47+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/10_Festival-da-Ginja-amoreira-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-santo-antonio-2/]]></loc>
+		<lastmod><![CDATA[2026-06-22T21:06:21+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/9_carvalhedo-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/impressao-botanica/]]></loc>
+		<lastmod><![CDATA[2026-06-15T09:35:57+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/event1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/impressao_botanica.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-santo-antonio/]]></loc>
+		<lastmod><![CDATA[2026-06-15T09:35:37+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/8_Festa-em-honra-de-Santo-António-a-da-gorda.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/como-criar-uma-biblioteca/]]></loc>
+		<lastmod><![CDATA[2026-06-07T17:46:38+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/Capa_AC.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/Biblioteca_Livro_Capa_AR.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/Cartaz_Como_criar_uma_biblioteca_Atividade.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/sermao-de-santo-antao-ao-piano/]]></loc>
+		<lastmod><![CDATA[2026-06-07T17:46:30+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/piano.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/cartaz_final.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/desenhos-migratorios/]]></loc>
+		<lastmod><![CDATA[2026-06-03T15:19:50+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/desenhos_migratorios.png]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-de-encadernacao/]]></loc>
+		<lastmod><![CDATA[2026-06-01T09:05:09+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/encadernacao_.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-obidos-ativo/]]></loc>
+		<lastmod><![CDATA[2026-06-01T09:04:04+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/obidosativo.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/O_ATIVO_UP_2.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/O_ATIVO_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/nadir-afonso-territorio-de-absoluta-liberdade/]]></loc>
+		<lastmod><![CDATA[2026-06-01T09:03:52+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/NADIR-AFONSO.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/Nadir-Afonso-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/silabario_logosRPAC.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-do-espirito-santo/]]></loc>
+		<lastmod><![CDATA[2026-05-26T09:29:05+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/7_Festa-em-honra-do-Espírito-Santo-sancheira-grande.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obtidos-sob-olhar-de-abilio/]]></loc>
+		<lastmod><![CDATA[2026-05-25T09:30:42+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/05/servico-educativo_abilio.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/sob_olhar_abilio.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/figuras-translucidas/]]></loc>
+		<lastmod><![CDATA[2026-05-21T20:43:26+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/figuras_translucidas.png]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-do-senhor-jesus-do-carregal/]]></loc>
+		<lastmod><![CDATA[2026-05-21T20:43:10+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/6_Festa-em-honra-do-Senhor-Jesus-do-Carregal-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/leituras-a-oeste/]]></loc>
+		<lastmod><![CDATA[2026-05-12T13:45:48+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/livro.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/cartaz_leituras.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-sao-sebastiao/]]></loc>
+		<lastmod><![CDATA[2026-05-12T13:45:38+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/5_Sobral-da-Lagoa-2.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-vila-gaming/]]></loc>
+		<lastmod><![CDATA[2026-05-12T13:45:26+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/ovg-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_GAMING_UP_2.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/OV_GAMING_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/os-maios/]]></loc>
+		<lastmod><![CDATA[2026-05-04T15:24:58+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/4_Maios-em-Obidos_arquivo-CMO-2.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/academia-de-musica-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-04-28T21:45:35+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/academia_obidos.png]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/meia-maratona/]]></loc>
+		<lastmod><![CDATA[2026-04-20T14:01:57+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/meia_maratona.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/historias-as-camadas/]]></loc>
+		<lastmod><![CDATA[2026-04-20T14:01:45+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/04/historia_camadas.png]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/feira-do-livro-solidaria/]]></loc>
+		<lastmod><![CDATA[2026-04-20T14:01:35+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/feira_livro.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/latitudes-literatura-e-viajantes/]]></loc>
+		<lastmod><![CDATA[2026-04-20T14:01:24+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/latitudes-1.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/LATITUDES_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/a-marginalia-de-amadeo/]]></loc>
+		<lastmod><![CDATA[2026-04-14T10:45:06+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/marginalia.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/silabario_logosRPAC.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/semana-santa-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-04-14T10:44:56+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/semana_santa.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/SEMANA_SANTA_UP_2.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/SEMANA_SANTA_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/encontro-com-o-escritor-joao-tordo/]]></loc>
+		<lastmod><![CDATA[2026-04-14T10:44:50+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/joao_tordo.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/misericordias-domini/]]></loc>
+		<lastmod><![CDATA[2026-04-02T10:43:33+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Misericórdias_Domini_Alma_Nova_Sinfonietta_dóbidos.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-figuras-translucidas/]]></loc>
+		<lastmod><![CDATA[2026-04-01T13:53:42+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/fig_translucidas.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/cartaz_fev_mar.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/o-lugar-de-ser-visto/]]></loc>
+		<lastmod><![CDATA[2026-04-01T13:53:33+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/oficina.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/cartaz_oficina.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/recital-de-flautas/]]></loc>
+		<lastmod><![CDATA[2026-04-01T11:04:39+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Recital_de_Flautas_Telemann.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/flautas.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/concerto-sinfonico-direcao-pedro-dos-santos-filipe/]]></loc>
+		<lastmod><![CDATA[2026-03-31T08:41:41+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Concerto_Sinfónico_Orquestra_AMO.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/homenagem_familia_gama/]]></loc>
+		<lastmod><![CDATA[2026-03-29T14:40:08+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/gnr.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/grande-concerto/]]></loc>
+		<lastmod><![CDATA[2026-03-29T14:39:54+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Grande_Concerto_Semana_Santa.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Filomúsica-Stabat-Mater-Pergolesi-AC-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/corrida-do-chocolate/]]></loc>
+		<lastmod><![CDATA[2026-03-23T10:30:39+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/corrida_chocolate-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/obidos-sob-o-olhar-de-abilio/]]></loc>
+		<lastmod><![CDATA[2026-03-23T10:30:26+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/servico-educativo_abilio.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festival-de-chocolate-de-obidos/]]></loc>
+		<lastmod><![CDATA[2026-03-23T10:30:14+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/chocolate.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/FI_CHOCOLATE_UP_3.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/FI_CHOCOLATE_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-invencoes-e-modelacoes/]]></loc>
+		<lastmod><![CDATA[2026-03-15T17:20:55+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/invencoes_modelacoes.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/cartaz_fev_mar.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/dia-internacional-da-mulher/]]></loc>
+		<lastmod><![CDATA[2026-03-09T14:56:05+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/caminhada.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/cartaz26_dia-internacional-mulher.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/concerto-com-duo-ondina/]]></loc>
+		<lastmod><![CDATA[2026-03-08T20:20:54+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/duoOndina.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/exposicao-de-arte-publica-feminae-de-paulo-honorato/]]></loc>
+		<lastmod><![CDATA[2026-03-08T20:20:44+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/8mar.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/03/eterium_paulo_honorato_qr.png]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-naturezas-mortas/]]></loc>
+		<lastmod><![CDATA[2026-03-08T20:19:24+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/IMG_2468.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/natureza_morta.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-personagens-articulados/]]></loc>
+		<lastmod><![CDATA[2026-03-02T14:41:56+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/IMG_1231.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/Personagens_Articulados_Redes.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/oficina-arvores-amigas/]]></loc>
+		<lastmod><![CDATA[2026-02-22T22:48:53+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/arvores_amigas.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/02/cartaz_fev_mar.jpeg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/um-silabario-por-reconstruir-iii/]]></loc>
+		<lastmod><![CDATA[2026-02-16T12:09:53+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/exp_.png]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/silabario_logosRPAC.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-de-n-a-sra-da-graca/]]></loc>
+		<lastmod><![CDATA[2026-02-13T13:30:52+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/2_Festa-de-N.-Sra.-da-Graça.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/corta-e-cose-oficina-de-escrita-criativa/]]></loc>
+		<lastmod><![CDATA[2026-02-13T13:30:44+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/escrita-criativa.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/feriado-municipal/]]></loc>
+		<lastmod><![CDATA[2026-01-30T16:42:41+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/feriado_municipal.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/romaria-a-ermida-de-santo-antao/]]></loc>
+		<lastmod><![CDATA[2026-01-30T16:41:18+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/1_ermida-santo-antao.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/jazz-no-armazem/]]></loc>
+		<lastmod><![CDATA[2026-01-30T16:41:11+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/jazz_armazem.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/FEFFERY_JAZZ_22_UP.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/LOKOMOTIV_JAZZ_23_UP.jpg]]>			</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/LAGINHA_JAZZ_24_UP.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-n-a-sra-da-luz/]]></loc>
+		<lastmod><![CDATA[2026-01-27T16:48:52+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/24_Festa-em-honra-de-Nossa-Senhora-da-Luz-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-n-a-sra-da-conceicao/]]></loc>
+		<lastmod><![CDATA[2026-01-27T16:48:44+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/21_Festa-em-honra-de-Nossa-Senhora-da-Conceição-tras-do-outeiro.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-n-a-sra-da-aboboriz/]]></loc>
+		<lastmod><![CDATA[2026-01-27T16:48:18+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/16_Festa-em-Honra-de-Na-Sra-da-Aboboriz-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-do-menino-jesus/]]></loc>
+		<lastmod><![CDATA[2026-01-26T11:12:36+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/23_gracieira-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-santa-luzia/]]></loc>
+		<lastmod><![CDATA[2026-01-26T11:12:21+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/22_Festa-na-Usseira-Obidos-em-Honra-de-Santa-Luzia-1.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/festa-em-honra-de-santo-andre/]]></loc>
+		<lastmod><![CDATA[2026-01-26T11:11:37+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/20_Festa-em-honra-de-Santo-André-arelho.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://agenda.obidos.pt/evento/feira-de-santa-iria/]]></loc>
+		<lastmod><![CDATA[2026-01-26T11:11:14+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc>
+				<![CDATA[https://agenda.obidos.pt/wp-content/uploads/2026/01/19_Feira-de-Santa-Iria-2.jpg]]>			</image:loc>
+		</image:image>
+	</url>
+</urlset>

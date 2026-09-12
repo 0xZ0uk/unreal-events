@@ -1,12 +1,14 @@
 import { db, schema } from "@events-tracker/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { canonicalizeCategories } from "./categories";
-import { fingerprint, fingerprintUndated } from "./fingerprint";
-import { normalizeVenueName, slugify } from "./normalize";
+import { deleteEvents } from "./event-delete";
+import { fingerprint, fingerprintUndated, lisbonDay } from "./fingerprint";
+import { normalizeVenueName, slugify, venuesMatch } from "./normalize";
 import { purgePastEvents } from "./purge";
 import { reconcileIdentities } from "./reconcile";
 import type { RawEvent } from "./types";
+import { mergeDuplicateVenues } from "./venues";
 
 /** Resolve (by normalized slug) or create a venue, returning its stable id. */
 async function resolveOrCreateVenue(
@@ -16,11 +18,34 @@ async function resolveOrCreateVenue(
 	const name = normalizeVenueName(venueName);
 	const slug = slugify(name) || "venue-desconhecido";
 
+	// Fast path: exact slug already exists (re-scrape of the same spelling).
 	const existing = await db.query.venues.findFirst({
 		where: eq(schema.venues.slug, slug),
 	});
 	if (existing) {
 		return existing.id;
+	}
+
+	// Cross-source naming path: a different spelling of the same physical
+	// place may already exist for this city (`BLACK BOX` vs `Black Box -
+	// Plataforma...`). Reuse it via the STRICT `venuesMatch` so events point
+	// at the same venue row immediately; vague placeholder venues never match
+	// (a city-level announcement is not the physical place). mergeDuplicateVenues
+	// below converges any rows this misses.
+	if (city != null) {
+		const sameCity = await db
+			.select({
+				id: schema.venues.id,
+				name: schema.venues.name,
+				city: schema.venues.city,
+			})
+			.from(schema.venues)
+			.where(eq(schema.venues.city, city));
+		for (const cand of sameCity) {
+			if (venuesMatch(name, cand.name, city, cand.city)) {
+				return cand.id;
+			}
+		}
 	}
 
 	const inserted = await db
@@ -80,9 +105,44 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 			? fingerprint(raw.title, venueRef, raw.startAt)
 			: fingerprintUndated(raw.title, venueRef);
 
-	const existing = await db.query.events.findFirst({
+	let existing = await db.query.events.findFirst({
 		where: eq(schema.events.fingerprint, fp),
 	});
+
+	// Same source item, same Lisbon day, different fingerprint: the source
+	// re-published this event (retitled, moved venue, shifted the time). That is
+	// the SAME occurrence, so reuse its row — a twin minted here is invisible to
+	// the identity pass, which only wildcards across venues inside one
+	// (title, day) group. A different day stays a separate row on purpose:
+	// recurring sources (Região de Leiria, monthly feiras) publish one slug that
+	// legitimately covers several occurrences.
+	if (!existing && raw.startAt != null && raw.slug) {
+		const startAt = raw.startAt;
+		const priors = await db
+			.select({
+				id: schema.events.id,
+				start_at: schema.events.start_at,
+			})
+			.from(schema.eventSources)
+			.innerJoin(
+				schema.events,
+				eq(schema.events.id, schema.eventSources.event_id),
+			)
+			.where(
+				and(
+					eq(schema.eventSources.source, source),
+					eq(schema.eventSources.source_event_id, raw.slug),
+				),
+			);
+		const twin = priors.find(
+			(p) => lisbonDay(p.start_at) === lisbonDay(startAt),
+		);
+		if (twin) {
+			existing = await db.query.events.findFirst({
+				where: eq(schema.events.id, twin.id),
+			});
+		}
+	}
 
 	if (existing) {
 		// Cross-source reconciliation: a second source seeing the same event
@@ -159,13 +219,15 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	}
 	if (raw.startAt != null) {
 		// Ghost cleanup: an UNDATED twin of this event (same normalized
-		// title + venue) is now superseded by the dated row. event_sources
-		// rows cascade with it.
-		await db
-			.delete(schema.events)
+		// title + venue) is now superseded by the dated row. Its
+		// event_sources rows go with it.
+		const ghosts = await db
+			.select({ id: schema.events.id })
+			.from(schema.events)
 			.where(
 				eq(schema.events.fingerprint, fingerprintUndated(raw.title, venueRef)),
 			);
+		await deleteEvents(ghosts.map((g) => g.id));
 	}
 	await db
 		.insert(schema.eventSources)
@@ -249,8 +311,16 @@ export async function ingest(
 
 	// Identity reconciliation: collapse rows that are the same real-world
 	// event but hashed differently due to source time disagreements (e.g.
-	// Viral Agenda's DST-shifted JSON-LD). Merges categories + attributions
-	// onto the earliest row; no-op on a converged DB.
+	// Viral Agenda's DST-shifted JSON-LD) or venue naming (cross-source).
+	// Merges categories + attributions onto the earliest row; no-op on a
+	// converged DB. Venue-row fusion must run first so both converge onto
+	// one venue_id (and therefore one fingerprint group).
+	try {
+		await mergeDuplicateVenues();
+	} catch (mergeErr) {
+		const msg = mergeErr instanceof Error ? mergeErr.message : String(mergeErr);
+		error = error ?? `venue merge failed: ${msg}`;
+	}
 	try {
 		await reconcileIdentities();
 	} catch (recErr) {

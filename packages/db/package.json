@@ -19,7 +19,8 @@
 		"db:migrate:deploy": "drizzle-kit migrate",
 		"db:seed": "bun run src/seed.ts",
 		"db:studio": "drizzle-kit studio",
-		"db:migrate": "drizzle-kit migrate"
+		"db:migrate": "drizzle-kit migrate",
+		"db:publish": "bun run src/publish-turso.ts"
 	},
 	"dependencies": {
 		"@events-tracker/env": "workspace:*",

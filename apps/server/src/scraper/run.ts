@@ -1,6 +1,6 @@
 import type { SourceId } from "./index";
 import { sources } from "./index";
-import { ingest } from "./ingest";
+import { runSource } from "./runner";
 
 /**
  * Scraper runner.
@@ -9,7 +9,9 @@ import { ingest } from "./ingest";
  *   bun run src/scraper/run.ts leiriagenda → run one source
  *
  * Per-source failures are counted, never fatal — one dead source doesn't
- * stop the rest. Output: one JSON block per run.
+ * stop the rest. That includes a source that *throws*: `runSource` records it
+ * as a failure (with its `scrape_runs` row) and the batch carries on. Output:
+ * one JSON block per run.
  */
 const arg = process.argv[2];
 
@@ -27,31 +29,5 @@ if (toRun.length === 0 || toRun.some((id) => !(id in sources))) {
 }
 
 for (const id of toRun) {
-	const scrape = sources[id];
-	const startedAt = Date.now();
-	const { events, failures, firstError } = await scrape();
-	const result = await ingest(events, id, {
-		found: events.length + failures,
-		failures,
-		firstError,
-	});
-	const elapsedMs = Date.now() - startedAt;
-	console.log(
-		JSON.stringify(
-			{
-				source: id,
-				elapsedMs,
-				found: result.itemsFound,
-				new: result.itemsNew,
-				updated: result.itemsUpdated,
-				skippedPast: result.itemsSkippedPast,
-				purged: result.itemsPurged,
-				failed: result.itemsFailed,
-				error: result.error,
-				runId: result.runId,
-			},
-			null,
-			2,
-		),
-	);
+	console.log(JSON.stringify(await runSource(id, sources[id]), null, 2));
 }

@@ -4,12 +4,16 @@
  * shared normalize/fingerprint/ingest pipeline.
  */
 import { scrape as scrapeBol } from "./bol";
+import { scrape as scrapeCaldas } from "./caldas";
 import { scrape as scrapeCisterfestas } from "./cisterfestas";
 import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
 import { isLeiriaDistrict } from "./district";
 import { scrape as scrapeEventbrite } from "./eventbrite";
 import { scrape as scrapeFestasearraiais } from "./festasearraiais";
 import { scrape as scrapeLeiriagenda } from "./leiriagenda";
+import { scrape as scrapeMunicipal } from "./municipal";
+import { scrape as scrapeObidos } from "./obidos";
+import { scrape as scrapeRegiaoleiria } from "./regiaoleiria";
 import { scrape as scrapeShotgun } from "./shotgun";
 import { scrape as scrapeTicketline } from "./ticketline";
 import { scrape as scrapeViralagenda } from "./viralagenda";
@@ -27,6 +31,21 @@ const scrapeFestasearraiaisDistrict = async () =>
 const scrapeCisterfestasDistrict = async () =>
 	scrapeCisterfestas(undefined, (place) => isLeiriaDistrict(place));
 
+/** SLICE_9 sources. municipal/regiaoleiria already default to the district
+ * gate; the registry wires it explicitly so the scope rule lives in one place.
+ * obidos/caldas take it as their second argument. */
+const scrapeMunicipalDistrict = async () =>
+	scrapeMunicipal(undefined, (place) => isLeiriaDistrict(place));
+
+const scrapeRegiaoleiriaDistrict = async () =>
+	scrapeRegiaoleiria(undefined, (place) => isLeiriaDistrict(place));
+
+const scrapeObidosDistrict = async () =>
+	scrapeObidos(undefined, (place) => isLeiriaDistrict(place));
+
+const scrapeCaldasDistrict = async () =>
+	scrapeCaldas(undefined, (place) => isLeiriaDistrict(place));
+
 export const sources = {
 	leiriagenda: scrapeLeiriagenda,
 	cmleiriarss: scrapeCmLeiriarss,
@@ -37,6 +56,10 @@ export const sources = {
 	festasearraiais: scrapeFestasearraiaisDistrict,
 	cisterfestas: scrapeCisterfestasDistrict,
 	shotgun: scrapeShotgunDistrict,
+	municipal: scrapeMunicipalDistrict,
+	obidos: scrapeObidosDistrict,
+	regiaoleiria: scrapeRegiaoleiriaDistrict,
+	caldas: scrapeCaldasDistrict,
 } as const;
 
 export type SourceId = keyof typeof sources;

@@ -1,0 +1,901 @@
+<!DOCTYPE HTML>
+<html lang="pt-PT">
+
+<head>
+  <title>Agenda Cultural</title>
+        <style>
+        .stickyForm{
+          display:none;
+        }
+        #aida-mount textarea{
+          height: unset !important;
+          min-height: unset !important;
+          max-height: unset !important;
+        }
+        #aida-mount button{
+          padding: 0 4px;
+        }
+        .ReactVirtualized__Grid {
+          padding-top: 4px;
+        }
+      </style>
+<link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/mandatory-b73ced5ea4.min.css" media="all"><link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/mega_search-5afe7b92fd.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/vendor/superfish-f6f8538a6a.vendor.css" media="all">
+<link rel="stylesheet" type="text/css" href="/assets/cmbatalha/cm_batalha/stylesheets/widget_styles/events_list-d41d8cd98f.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="/assets/cmbatalha/cm_batalha/stylesheets/widget_styles/events_list_23-d41d8cd98f.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="/assets/wm-smile/stylesheets/frontoffice/widgets/events_list-743967ed01.min.css" media="all">
+
+        <script src="/assets/wm-smile/javascripts/frontoffice/focus-trap-4ff6d966a9.min.js"></script>
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="W1AdTuirxsMsVoBnkWRMqUQlaWtAhyjKmpCf2JKRLv9JBLknSl+aY7CxVlSFMDfkgAQPWv1SyZwUdn8B+I0aUA==" />
+  <script src="/assets/wm-smile/javascripts/vendor/smile-frontoffice-0fc0bba368.vendor.js"></script>  <script src="/assets/wm-smile/javascripts/frontoffice/smile-82477b69b7.min.js"></script>
+<script src="/assets/wm-smile/javascripts/frontoffice/mega-search-6a0138b76a.min.js"></script>
+<script src="/assets/wm-smile/javascripts/vendor/superfish-96514b9456.vendor.js"></script>
+<script src="/assets/wm-smile/javascripts/frontoffice/widgets-common-34ae43cebc.min.js"></script>
+<script src="/assets/cmbatalha/cm_batalha/javascripts/widget_styles/events_list-d41d8cd98f.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://aida.cityfy.pt/aida/cdn/aida-client/aida-client.min.js" crossorigin="anonymous"></script>
+
+  
+
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SCRIPTS E CALLER - other included scripts are on the bottom of this page -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <link rel="stylesheet" type="text/css" href="/assets/cmbatalha/cm_batalha/stylesheets/caller-cc42aec0a3.min.css" media="all">
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/theme_utils_interior-e466d035b1.min.js"></script>
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/theme_utils_geral-35df821683.min.js"></script>
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/vendor/jquery-d21aab6b53.mmenu.all.min.js"></script><!-- Mobile Menu -->
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/vendor/simpleScrollbar-03808bca29.min.js"></script><!-- Scrollbars Custom -->
+  
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- META TAGS -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <meta name="viewport" content="initial-scale=1, width=device-width, minimum-scale=1, user-scalable=yes">
+  <!-- facebook share: imagens aparecerem no 1º load-->
+  <meta property="og:image:width" content="450"/>
+  <meta property="og:image:height" content="298"/>
+    
+      <!-------------------------------------------------------------------------------------------------------------->
+  <!-- READSPEAKER -->
+  <!-------------------------------------------------------------------------------------------------------------->
+    <script type="text/javascript"> 
+    window.rsConf = {general: {usePost: true}};
+    </script>
+    <script src="https://cdn-eu.readspeaker.com/script/15464/webReader/webReader.js?pids=wr" type="text/javascript" id="rs_req_Init"></script>
+  <!-- END ReadSpeaker -->
+
+  <!-- NAO APAGAR ISTO -->
+  <meta name="keywords" content="">
+  <script>
+    // (A) RUN THIS ON PAGE LOAD - AAA Fix
+    window.addEventListener("load", () => {
+      $("#goog-gt-votingForm").remove();
+    });
+</script>
+  <meta name="canonical" content="https://www.cm-batalha.pt/municipe/comunicacao/agenda-cultural" />
+<meta name="description" content="Sítio oficial da Câmara Municipal da Batalha. Informação sobre o município, composição e atividades. Inclui uma agenda de eventos no concelho." />
+<link rel="image_src" href="https://www.cm-batalha.pt/cmbatalha/uploads/site_zone/seo_default_image/1/logo_batalha.svg" />
+<meta name="wm:pagetype" content="page" />
+<meta name="wm:page_id" content="1081" />
+<meta property="og:title" content="Agenda Cultural" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://www.cm-batalha.pt/cmbatalha/uploads/site_zone/seo_default_image/1/logo_batalha.svg" />
+<meta property="og:url" content="https://www.cm-batalha.pt/municipe/comunicacao/agenda-cultural" />
+<meta property="og:description" content="Sítio oficial da Câmara Municipal da Batalha. Informação sobre o município, composição e atividades. Inclui uma agenda de eventos no concelho." />
+<meta property="og:locale" content="pt_PT" />
+<meta property="og:site_name" content="Câmara Municipal da Batalha" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://www.cm-batalha.pt/municipe/comunicacao/agenda-cultural" />
+<meta name="twitter:title" content="Agenda Cultural" />
+<meta name="twitter:description" content="Sítio oficial da Câmara Municipal da Batalha. Informação sobre o município, composição e atividades. Inclui uma agenda de eventos no concelho." />
+<meta name="twitter:image" content="https://www.cm-batalha.pt/cmbatalha/uploads/site_zone/seo_default_image/1/logo_batalha.svg" />
+    <link rel="shortcut icon" href="/cmbatalha/uploads/site_zone/favicon/1/fav_batalha.png">
+  <link rel="apple-touch-icon" href="/cmbatalha/uploads/site_zone/favicon/1/fav_batalha.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_57_57.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_72_72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_76_76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_114_114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_120_120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_144_144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/thumbs/cmbatalha/uploads/site_zone/favicon/1/fav_batalha_1_152_152.png">
+
+  <!-- NAO APAGAR ISTO -->
+
+<script src="/assets/wm-smile/javascripts/frontoffice/cookie_consent-8185edf152.min.js"></script><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TR9ZM6WRCL"></script>
+<script>(function(){
+  var googleApiLoaded = false;
+  var hasConsent = function(){
+    var api = window.WMCookieConsent || {};
+    if (typeof api.isCategoryAllowed === 'function') {
+      return api.isCategoryAllowed('analytics');
+    }
+    if (typeof api.hasConsent === 'function') {
+      return api.hasConsent();
+    }
+    return false;
+  };
+  var checkCookieBarGoogleApi = function(){
+    if(googleApiLoaded){ return; }
+    if(hasConsent()){
+      googleApiLoaded = true;
+      
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TR9ZM6WRCL');
+
+    }
+  };
+  window.addEventListener('wm:cookie:accepted', checkCookieBarGoogleApi);
+  window.addEventListener('wm:cookie:custom', checkCookieBarGoogleApi);
+  window.addEventListener('wm:cookie:updated', checkCookieBarGoogleApi);
+  checkCookieBarGoogleApi();
+})()
+</script></head>
+
+<body class="interior geral">
+
+  <div class="loading-overlay"></div>
+  
+  <a href="#accessibilityMainContent" class="accessibilityElement" aria-label="Título" aria-label="Título"><p>Passar para o Conteúdo Principal</p></a>
+<div id="cookie_bar_1" class="cookie-bar cookie-position--top cookie-bar--horizontal" role="region" aria-live="assertive" data-site-zone="1" tab-index="0" aria-hidden="true" style="display: none;" data-config-digest="0d2861d07895075c2c90eb32d2298852"><div class="cookie-bar__container" style="--cb-bg: #2B2B2B; background: #2B2B2B; border-color: #2B2B2B; --cb-text: #ffffff; --cb-muted: #ffffff; color: #ffffff; --cb-accent: #EDEDED; --cb-accent-strong: #EDEDED"><div class="cookie-bar__text"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="cookie-bar__icon" alt="" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9 3 3 0 0 0 3 3 3 3 0 0 0 3 3 3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="15.5" cy="12.4" r="0.9" fill="currentColor"></circle><circle cx="12" cy="15.4" r="0.9" fill="currentColor"></circle><circle cx="9.3" cy="11.6" r="0.9" fill="currentColor"></circle></svg><div class="cookie-bar__copy"><div class="cookie-bar__title"><strong>Utilizamos cookies</strong></div><div class="cookie-bar__desc">Este site utiliza cookies para melhorar a sua experiência. <a class="cookie-bar__policy-inline" href="/pages/721">Política de cookies</a>.</div></div></div><div class="cookie-bar__actions"><a class="cookie-btn cookie-btn--settings" role="button" aria-label="Personalizar cookies" style="background: transparent; border-color: #ffffff; color: #ffffff" href="/personalizar-cookies">Personalizar cookies</a><button name="button" type="button" class="cookie-btn cookie-btn--accept" data-cookie-choice="accepted" style="background: #EDEDED; border-color: #EDEDED; color: #2B2B2B">Aceitar e prosseguir</button></div></div></div>
+
+  <a href="#stickyFooter" title="voltar ao topo da página" class="cd-top">Top</a>
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- MOBILE MENU -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <div class="mobileMenu">
+    <a href="#menu">
+      <span class="accessibilityElement">menu</span>
+    </a>
+    <nav id="menu"></nav>
+  </div>
+
+  <div id="stickyFooter">
+   
+    <!-------------------------------------------------------------------------------------------------------------->
+    <!-- HEADER -->
+    <!-------------------------------------------------------------------------------------------------------------->
+
+    <header class="grid-container full">
+      <div class="grid-container">
+        <div class="grid-x grid-margin-x">
+          <div class="tools xxsmall-12 large-9 cell grid-x">
+            <div class="tools_AREA xxsmall-12 small-9 cell hidden-post">  
+  
+<div id="html_block_111" class="widget html_block" data-id="111" data-content_type="HtmlBlock">
+
+  <ul class="socialButtons">
+  <li><a href="https://www.facebook.com/MunicipioBatalha/" target="_blank"><img src="/cmbatalha/layout/social/facebook_icon.svg" alt="Facebook" />Página do Facebook</a></li>
+  <li><a href="https://www.instagram.com/municipiobatalha" target="_blank"><img src="/cmbatalha/layout/social/instagram_icon.svg" alt="Instagram" />Página do Instagram</a></li>
+</ul>
+<ul class="toolButtons">
+  <li><a href="mailto:geral@cm-batalha.pt" target="_blank"><img src="/cmbatalha/layout/social/contactos_icon.svg" alt="Contactos" />Página de Contactos</a></li>
+  <li>
+  	<div class="googleTranslate">
+        <div id="google_translate_element"></div>
+        <script type="text/javascript">
+          var translate = null;
+
+          function googleTranslateElementInit() {
+            translate = googleTranslate = new google.translate.TranslateElement({
+              pageLanguage: 'pt',
+              includedLanguages: 'pt-PT,es,en,fr,it,de,nl,ru,ja,zh-CN',
+              autoDisplay: false,
+              layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            }, 'google_translate_element');
+
+            fixGoogleAcessibility(googleTranslate);
+          }
+          $(window).on('load', function () {
+            var $head = $(".goog-te-menu-frame").contents().find("head");
+
+            $head.append($("<link/>", {
+              rel: "stylesheet",
+              href: "/cmbatalha/layout/googletranslate.css",
+              type: "text/css"
+            }));
+          })
+
+          function fixGoogleAcessibility(elem) {
+            let a = $("#goog-gt-tt .original-text");
+            if (a.length > 0) {
+              a.removeClass("original-text");
+              a = a[0];
+              a.innerHTML = '<span class="original-text"></span>';
+            }
+
+            $('img[src*="cleardot"]').prop("alt", "Google Clear Dot");
+          
+          }
+        </script>
+        <script type="text/javascript"
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      </div>
+  </li>
+</ul>
+
+<ul class="linksButtons">
+  <li><a href="https://www.municipio-batalha.pt/servicosonline/" target="_blank">Serviços Online</a></li>
+  <li><a href="https://atendimento.municipio-batalha.pt/" target="_blank">Agendar Atendimento</a></li>
+  <li><a href="/participar/reportar-ocorrencias" target="_blank">Reportar Ocorrência</a></li>
+</ul>
+
+</div>
+
+</div>
+            <div class="search_AREA xxsmall-12 large-3 cell hidden-post">  
+  <div id="mega_search_1" class="widget mega_search" data-id="1" data-content_type="MegaSearch">
+  <div class="SearchWrap xsmall-12">
+    <div class="home-banner-search" id="home-banner-search">
+      <div class="home-search-wrapper" id="home-search-wrapper">
+        <div class="mega_pesquisa_search_form" role="search">
+          <label class="sr-only-label" for="mega_pesquisa_input_1">
+            Pesquisar conteúdos na plataforma inteira
+          </label>
+          <input id="mega_pesquisa_input_1"
+            name="search"
+            type="search"
+            value=""
+            data-core="cmbatalha"
+            data-wmso_url="http://servicosonline.cm-paredes.pt/awesome/servicos/public/pesquisa.axd"
+            data-results_per_page="10"
+            data-show_results_from_service_directory="false"
+            data-show_results_from_wmso="false"
+            data-show_results_from_wm="true"
+            data-show_results_from_ai="false"
+            data-show_results_from_sites="[&quot;www.cm-batalha.pt&quot;, &quot;https://www.cm-batalha.pt&quot;]"
+            data-show_results_from_pa="true"
+            data-number_of_questions="3"
+            class="mega_pesquisa_input"
+            role="searchbox"
+            placeholder="Pesquisar conteúdos na plataforma inteira">
+
+          <button type="button" id="mega_pesquisa_button" name="mega_pesquisa" class="mega_pesquisa_button search_button"><span class="sr-only">Pesquisar conteúdos na plataforma inteira</span></button>
+        </div>
+      </div>
+        <div id="search-modal" class="modal" role="dialog" style="">
+          <div class="modal-body">
+            <div class="home-modal-close-wrapper"><a href="#" id="home-modal-close-button"><span class="icone fecharModal">Fechar</span></a></div>
+            <div class="search-home-results-header">
+
+                <div class="home-wm-search-results-header columns">
+                  <h2 class="search-label">Pesquisa Geral</h2>
+                  <div class="search-home-results-panel home-wm-search-results"></div>
+                  <div id="cover-spin"></div>
+                </div>
+                <div class="home-wmfaqs-search-results-header columns">
+                  <h2 class="search-label">Procedimentos de Ajuda</h2>
+                  <div class="search-home-results-panel home-wmfaqs-search-results"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+    <div id="template_container">
+
+        <script id="wm-search-results-template" type="text/x-handlebars-template">
+          {{#if this}}
+            <ul class="search-results-buffer" style="display:block">
+              {{#each this}}
+                <li class="teste">
+                  <a href="{{url}}" title="{{safe_title}}">
+                    <div class="search-result-title">
+                      {{#each title}}
+                        {{{.}}}
+                      {{/each}}
+                    </div>
+                    <div aria-hidden="true" class="search-result-snippet">
+                      {{#each maincontent}}
+                        {{{.}}} ...
+                      {{/each}}
+                    </div>
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1">
+                <ul class="search-results-inner">
+                </ul>
+              </li>
+            </ul>
+            <div class="paginator page-paginator"></div>
+          {{else}}
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1">
+                <ul class="search-results-buffer">
+                  <li class="sem-resultados pages">
+                    Sem Resultados
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          {{/if}}
+        </script>
+
+
+
+        <script id="wmfaqs-search-results-template" type="text/x-handlebars-template">
+          {{#if dados}}
+            <ul class="search-results-buffer" style="display:block">
+              {{#each dados}}
+                <li class="site-help-link">
+                  <div class="title" data-id="shl{{id}}"><span class="wmIcon icone colapsed"></span>{{title}}</div>
+                  <div class="text" data-id="shl{{id}}" style="display:none">{{{text}}}</div>
+                  {{#if more_page_id}}
+                    <div class="more-info" data-id="shl{{id}}" style="display:none">
+                      <a href="{{url}}">Mais</a>
+                    </div>
+                  {{/if}}
+                  {{#if more_page_url}}
+                    <div class="more-info externa" data-id="shl{{id}}" style="display:none">
+                      <a href="{{url}}">Mais</a>
+                    </div>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+
+            <ul class="search-results-placeholder site-help-link-list">
+              <li class="search-page" data-paginator-page="1">
+                <ul role="list" class="search-results-inner">
+                </ul>
+              </li>
+            </ul>
+            <div class="paginator page-paginator"></div>
+
+          {{else}}
+
+            <ul class="search-results-placeholder">
+              <li class="search-page" data-paginator-page="1">
+                <ul class="search-results-buffer">
+                  <li class="sem-resultados site-help-link">
+                    Sem Resultados
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+          {{/if}}
+        </script>
+    </div>
+</div>
+
+</div>
+          </div>
+          <div class="logo_AREA xxsmall-12 large-12 cell hidden-post">  
+  
+<div id="html_block_28" class="widget html_block" data-id="28" data-content_type="HtmlBlock">
+
+  <a href="/" title="Voltar ao início"><img src="/cmbatalha/layout/logo_batalha.svg" width="200" height="100" loading="eager" alt="Logótipo" /></a>
+
+</div>
+
+</div>
+        </div>
+      </div>
+      
+      <!-------------------------------------------------------------------------------------------------------------->
+      <!-- MENU -->
+      <!-------------------------------------------------------------------------------------------------------------->
+      <nav class="navContainer show-for-xlarge" id="navbar">
+        <div class="grid-container">
+          <div class="grid-x grid-margin-x">
+              <div class="menu_AREA xxsmall-12 cell hidden-post">
+                  <a id="accessibilityMainContent"></a>  
+  <div id="horizontal_menu_1" class="widget horizontal_menu" data-id="1" data-content_type="HorizontalMenu">
+
+    <ul class="depth1 ddmenu sf-menu" id="widget-menu-horizontal_menu-1"><li class="depth1 pos_1 first has_descendants"><a href="/municipio" target="_self" class="depth1 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-314e5296"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3361</p><!--googleon: all--><span>Município</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-314e5296"><li class="depth2 pos_1 first "><a href="/municipio/presidente" target="_self" class="depth2 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3797</p><!--googleon: all--><span>Presidente</span></a></li><li class="depth2 pos_2 "><a href="/municipio/executivo-municipal" target="_self" class="depth2 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9336</p><!--googleon: all--><span>Executivo Municipal</span></a></li><li class="depth2 pos_3 "><a href="/municipio/assembleia-municipal" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3669</p><!--googleon: all--><span>Assembleia Municipal</span></a></li><li class="depth2 pos_4 has_descendants"><a href="/municipio/juntas-de-freguesia" target="_self" class="depth2 pos_4 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-314e5296-6bbdb50d"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3729</p><!--googleon: all--><span>Juntas de Freguesia</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-314e5296-6bbdb50d"><li class="depth3 pos_1 first "><a href="/municipio/juntas-de-freguesia/junta-de-freguesia-da-batalha" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6807</p><!--googleon: all--><span>Junta de Freguesia da Batalha</span></a></li><li class="depth3 pos_2 "><a href="/municipio/juntas-de-freguesia/junta-de-freguesia-da-golpilheira" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3310</p><!--googleon: all--><span>Junta de Freguesia da Golpilheira</span></a></li><li class="depth3 pos_3 "><a href="/municipio/juntas-de-freguesia/junta-de-freguesia-do-reguengo-do-fetal" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6469</p><!--googleon: all--><span>Junta de Freguesia do Reguengo do Fetal</span></a></li><li class="depth3 pos_4 last "><a href="/municipio/juntas-de-freguesia/junta-de-freguesia-de-sao-mamede" target="_self" class="depth3 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4008</p><!--googleon: all--><span>Junta de Freguesia de São Mamede</span></a></li></ul></li><li class="depth2 pos_5 "><a href="/municipio/o-concelho" target="_self" class="depth2 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9523</p><!--googleon: all--><span>O Concelho</span></a></li><li class="depth2 pos_6 has_descendants"><a href="/municipio/informacao-financeira" target="_self" class="depth2 pos_6 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-314e5296-1b8fbe90"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">712</p><!--googleon: all--><span>Informação Financeira</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-314e5296-1b8fbe90"><li class="depth3 pos_1 first "><a href="/municipio/informacao-financeira/instrumentos-previsionais" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">230</p><!--googleon: all--><span>Instrumentos Previsionais</span></a></li><li class="depth3 pos_2 "><a href="/municipio/informacao-financeira/prestacao-de-contas" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5194</p><!--googleon: all--><span>Prestação de Contas</span></a></li><li class="depth3 pos_3 "><a href="/municipio/informacao-financeira/apoios-concedidos-recebidos" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">572</p><!--googleon: all--><span>Apoios Concedidos/Recebidos</span></a></li><li class="depth3 pos_4 "><a href="/municipio/informacao-financeira/mapa-de-pessoal" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9274</p><!--googleon: all--><span>Mapa de Pessoal</span></a></li><li class="depth3 pos_5 "><a href="/municipio/informacao-financeira/balanco-social" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2925</p><!--googleon: all--><span>Balanço Social</span></a></li><li class="depth3 pos_6 "><a href="/municipio/informacao-financeira/financiamentos-comunitarios" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3832</p><!--googleon: all--><span>Financiamentos Comunitários</span></a></li><li class="depth3 pos_7 last "><a href="/municipio/informacao-financeira/impostos-municipais" target="_self" class="depth3 pos_7 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6876</p><!--googleon: all--><span>Impostos Municipais</span></a></li></ul></li><li class="depth2 pos_7 has_descendants"><a href="/municipio/etica-e-transparencia" target="_self" class="depth2 pos_7 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-314e5296-5b1a827a"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2475</p><!--googleon: all--><span>Ética e Transparência</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-314e5296-5b1a827a"><li class="depth3 pos_1 first "><a href="/municipio/etica-e-transparencia/estrategia-municipal" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1523</p><!--googleon: all--><span>Estratégia Municipal</span></a></li><li class="depth3 pos_2 "><a href="/municipio/etica-e-transparencia/organizacao-e-governacao" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6164</p><!--googleon: all--><span>Organização e Governação</span></a></li><li class="depth3 pos_3 "><a href="/municipio/etica-e-transparencia/informacao-juridica" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4874</p><!--googleon: all--><span>Informação Jurídica</span></a></li><li class="depth3 pos_4 last "><a href="/municipio/etica-e-transparencia/prevencao-da-corrupcao" target="_self" class="depth3 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6207</p><!--googleon: all--><span>Prevenção da Corrupção</span></a></li></ul></li><li class="depth2 pos_8 last has_descendants"><a href="/municipio/geminacoes" target="_self" class="depth2 pos_8 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-314e5296-ef027a88"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6097</p><!--googleon: all--><span>Geminações</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-314e5296-ef027a88"><li class="depth3 pos_1 first "><a href="/municipio/geminacoes/trujillo" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6151</p><!--googleon: all--><span>Trujillo - Espanha</span></a></li><li class="depth3 pos_2 last "><a href="/municipio/geminacoes/joinville-le-pont-franca" target="_self" class="depth3 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8243</p><!--googleon: all--><span>Joinville-le-Pont - França</span></a></li></ul></li></ul></li><li class="depth1 pos_2 selected has_descendants"><a href="/municipe" target="_self" class="depth1 pos_2 selected has_descendants" aria-expanded="true" aria-controls="widget-menu-horizontal_menu-1-8efd4864"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1741</p><!--googleon: all--><span>Munícipe</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-8efd4864"><li class="depth2 pos_1 first "><a href="/municipe/avisos" target="_self" class="depth2 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9401</p><!--googleon: all--><span>Avisos</span></a></li><li class="depth2 pos_2 "><a href="/municipe/editais" target="_self" class="depth2 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5878</p><!--googleon: all--><span>Editais</span></a></li><li class="depth2 pos_3 "><a href="/municipe/recrutamento" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3097</p><!--googleon: all--><span>Recrutamento</span></a></li><li class="depth2 pos_4 "><a href="/municipe/protocolos" target="_self" class="depth2 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9227</p><!--googleon: all--><span>Protocolos</span></a></li><li class="depth2 pos_5 "><a href="/municipe/despachos" target="_self" class="depth2 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1161</p><!--googleon: all--><span>Despachos</span></a></li><li class="depth2 pos_6 "><a href="/municipe/regulamentos" target="_self" class="depth2 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3917</p><!--googleon: all--><span>Regulamentos</span></a></li><li class="depth2 pos_7 "><a href="/municipe/eleicoes" target="_self" class="depth2 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4662</p><!--googleon: all--><span>Eleições</span></a></li><li class="depth2 pos_8 "><a href="/municipe/protecao-de-dados" target="_self" class="depth2 pos_8 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1242</p><!--googleon: all--><span>Proteção de dados</span></a></li><li class="depth2 pos_9 last selected selected_descendant has_descendants"><a href="/municipe/comunicacao" target="_self" class="depth2 pos_9 last selected selected_descendant has_descendants" aria-expanded="true" aria-controls="widget-menu-horizontal_menu-1-8efd4864-f3b170f5"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8917</p><!--googleon: all--><span>Comunicação</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-8efd4864-f3b170f5"><li class="depth3 pos_1 first "><a href="/municipe/comunicacao/noticias" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2634</p><!--googleon: all--><span>Notícias</span></a></li><li class="depth3 pos_2 current-page selected"><a href="/municipe/comunicacao/agenda-cultural" target="_self" class="depth3 pos_2 current-page selected" aria-current="page"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6849</p><!--googleon: all--><span>Agenda Cultural</span></a></li><li class="depth3 pos_3 last "><a href="/municipe/comunicacao/boletins" target="_self" class="depth3 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4832</p><!--googleon: all--><span>Boletins</span></a></li></ul></li></ul></li><li class="depth1 pos_3 has_descendants"><a href="/areas-de-intervencao" target="_self" class="depth1 pos_3 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2632</p><!--googleon: all--><span>Áreas de Intervenção</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-bb9df032"><li class="depth2 pos_1 first has_descendants"><a href="/areas-de-intervencao/ambiente" target="_self" class="depth2 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-e81d786e"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4057</p><!--googleon: all--><span>Ambiente</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-e81d786e"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/ambiente/agua" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2781</p><!--googleon: all--><span>Água</span></a></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/ambiente/alteracoes-climaticas" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3836</p><!--googleon: all--><span>Alterações Climáticas</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/ambiente/estrutura-ecologica-municipal" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6659</p><!--googleon: all--><span>Estrutura Ecológica Municipal</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/ambiente/limpeza-urbana" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">311</p><!--googleon: all--><span>Limpeza Urbana</span></a></li><li class="depth3 pos_5 "><a href="/areas-de-intervencao/ambiente/residuos-urbanos" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7331</p><!--googleon: all--><span>Resíduos Urbanos</span></a></li><li class="depth3 pos_6 "><a href="/areas-de-intervencao/ambiente/ruido-86" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">350</p><!--googleon: all--><span>Ruído</span></a></li><li class="depth3 pos_7 last "><a href="/areas-de-intervencao/ambiente/valorizacao-agricola-de-efluentes-pecuarios" target="_self" class="depth3 pos_7 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6880</p><!--googleon: all--><span>Valorização Agrícola de Efluentes Pecuários</span></a></li></ul></li><li class="depth2 pos_2 has_descendants"><a href="/areas-de-intervencao/cultura" target="_self" class="depth2 pos_2 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-82decb28"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9713</p><!--googleon: all--><span>Cultura</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-82decb28"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/cultura/eventos" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7855</p><!--googleon: all--><span>Eventos</span></a></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/cultura/auditorio-municipal" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9956</p><!--googleon: all--><span>Auditório Municipal</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/cultura/museu-da-comunidade-concelhia-da-batalha" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2746</p><!--googleon: all--><span>Museu da Comunidade Concelhia da Batalha</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/cultura/biblioteca-municipal" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7474</p><!--googleon: all--><span>Biblioteca Municipal</span></a></li><li class="depth3 pos_5 "><a href="/areas-de-intervencao/cultura/arquivo-historico" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">747</p><!--googleon: all--><span>Arquivo Histórico</span></a></li><li class="depth3 pos_6 last has_descendants"><a href="/areas-de-intervencao/cultura/publicacoes" target="_self" class="depth3 pos_6 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-82decb28-da8b025b"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7161</p><!--googleon: all--><span>Publicações</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-82decb28-da8b025b"><li class="depth4 pos_1 first "><a href="/areas-de-intervencao/cultura/publicacoes/livros" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7782</p><!--googleon: all--><span>Livros</span></a></li><li class="depth4 pos_2 last "><a href="/areas-de-intervencao/cultura/publicacoes/cd-s" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4156</p><!--googleon: all--><span>CD&#39;s</span></a></li></ul></li></ul></li><li class="depth2 pos_3 has_descendants"><a href="/areas-de-intervencao/desporto" target="_self" class="depth2 pos_3 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-a74ab6e1"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">361</p><!--googleon: all--><span>Desporto</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-a74ab6e1"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/desporto/instalacoes-desportivas" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9684</p><!--googleon: all--><span>Instalações Desportivas</span></a></li><li class="depth3 pos_2 "><a href="/visitar/turismo-de-natureza" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4767</p><!--googleon: all--><span>Desporto de Natureza</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/desporto/programas-desportivos-municipais" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9048</p><!--googleon: all--><span>Programas Desportivos Municipais</span></a></li><li class="depth3 pos_4 last "><a href="/areas-de-intervencao/desporto/regulamentos" target="_self" class="depth3 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5612</p><!--googleon: all--><span>Regulamentos</span></a></li></ul></li><li class="depth2 pos_4 has_descendants"><a href="/areas-de-intervencao/educacao" target="_self" class="depth2 pos_4 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-f8f6feb7"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4209</p><!--googleon: all--><span>Educação</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-f8f6feb7"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/educacao/calendario-escolar" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3698</p><!--googleon: all--><span>Calendário Escolar</span></a></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/educacao/rede-escolar" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9175</p><!--googleon: all--><span>Rede Escolar</span></a></li><li class="depth3 pos_3 has_descendants"><a href="/areas-de-intervencao/educacao/escola-a-tempo-inteiro" target="_self" class="depth3 pos_3 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-f8f6feb7-6d365455"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1396</p><!--googleon: all--><span>Escola a Tempo Inteiro</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-f8f6feb7-6d365455"><li class="depth4 pos_1 first "><a href="https://siga.edubox.pt/" target="_blank" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7898</p><!--googleon: all--><span>Plataforma SIGA</span></a></li><li class="depth4 pos_2 last "><a href="/areas-de-intervencao/educacao/escola-a-tempo-inteiro/apoios-alimentares" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3012</p><!--googleon: all--><span>Apoios Alimentares</span></a></li></ul></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/educacao/projetos-educativos" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1425</p><!--googleon: all--><span>Projetos Educativos</span></a></li><li class="depth3 pos_5 last "><a href="/areas-de-intervencao/educacao/transportes-escolares" target="_self" class="depth3 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">30</p><!--googleon: all--><span>Transportes Escolares</span></a></li></ul></li><li class="depth2 pos_5 has_descendants"><a href="/areas-de-intervencao/acao-e-apoio-social" target="_self" class="depth2 pos_5 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-23f7aa81"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3881</p><!--googleon: all--><span>Ação E Apoio Social</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-23f7aa81"><li class="depth3 pos_1 first has_descendants"><a href="/areas-de-intervencao/acao-e-apoio-social/rede-social" target="_self" class="depth3 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-23f7aa81-42b41cb0"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3075</p><!--googleon: all--><span>Rede Social</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-23f7aa81-42b41cb0"><li class="depth4 pos_1 first last "><a href="/areas-de-intervencao/acao-e-apoio-social/rede-social/clas" target="_self" class="depth4 pos_1 first last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9959</p><!--googleon: all--><span>CLAS</span></a></li></ul></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/acao-e-apoio-social/gabinete-de-insercao-profissional" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1601</p><!--googleon: all--><span>Gabinete de Inserção Profissional</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/acao-e-apoio-social/cpcj" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6064</p><!--googleon: all--><span>CPCJ</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/acao-e-apoio-social/rendimento-social-de-insercao" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6812</p><!--googleon: all--><span>Rendimento Social de Inserção</span></a></li><li class="depth3 pos_5 has_descendants"><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social" target="_self" class="depth3 pos_5 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-23f7aa81-90948568"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9084</p><!--googleon: all--><span>Programas de Intervenção Social</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-23f7aa81-90948568"><li class="depth4 pos_1 first "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/banco-local-de-voluntariado" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3643</p><!--googleon: all--><span>Banco Local de Voluntariado</span></a></li><li class="depth4 pos_2 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/comparticipacao-de-medicamentos" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8084</p><!--googleon: all--><span>Comparticipação de Medicamentos</span></a></li><li class="depth4 pos_3 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/loja-social" target="_self" class="depth4 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7629</p><!--googleon: all--><span>Loja Social</span></a></li><li class="depth4 pos_4 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/banco-de-ajudas-tecnicas" target="_self" class="depth4 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8178</p><!--googleon: all--><span>Banco de Ajudas Técnicas</span></a></li><li class="depth4 pos_5 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/apoio-habitacional" target="_self" class="depth4 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5289</p><!--googleon: all--><span>Apoio Habitacional</span></a></li><li class="depth4 pos_6 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/novas-primaveras" target="_self" class="depth4 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5870</p><!--googleon: all--><span>Novas Primaveras</span></a></li><li class="depth4 pos_7 "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/atividades-aquaticas-terapeuticas" target="_self" class="depth4 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6791</p><!--googleon: all--><span>Atividades Aquáticas Terapêuticas</span></a></li><li class="depth4 pos_8 last "><a href="/areas-de-intervencao/acao-e-apoio-social/programas-de-intervencao-social/comai-comissao-municipal-de-apoio-ao-idoso" target="_self" class="depth4 pos_8 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5063</p><!--googleon: all--><span>COMAI - Comissão Municipal de Apoio ao Idoso</span></a></li></ul></li><li class="depth3 pos_6 "><a href="/areas-de-intervencao/acao-e-apoio-social/batalha-senior" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5646</p><!--googleon: all--><span>Batalha Sénior</span></a></li><li class="depth3 pos_7 "><a href="/areas-de-intervencao/acao-e-apoio-social/bolsas-de-estudo" target="_self" class="depth3 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5887</p><!--googleon: all--><span>Bolsas de Estudo</span></a></li><li class="depth3 pos_8 "><a href="/areas-de-intervencao/acao-e-apoio-social/crescer-mais" target="_self" class="depth3 pos_8 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7564</p><!--googleon: all--><span>Crescer Mais</span></a></li><li class="depth3 pos_9 last "><a href="/areas-de-intervencao/acao-e-apoio-social/radar-social" target="_self" class="depth3 pos_9 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3398</p><!--googleon: all--><span>Radar Social</span></a></li></ul></li><li class="depth2 pos_6 "><a href="/areas-de-intervencao/gabinete-de-medicina-veterinaria" target="_self" class="depth2 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5896</p><!--googleon: all--><span>Gabinete de Medicina Veterinária</span></a></li><li class="depth2 pos_7 has_descendants"><a href="/areas-de-intervencao/gabinete-florestal" target="_self" class="depth2 pos_7 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-6580453f"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6796</p><!--googleon: all--><span>Gabinete Florestal</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-6580453f"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/gabinete-florestal/cmgifr-comissao-municipal-de-gestao-integrada-de-fogos-rurais" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8625</p><!--googleon: all--><span>CMGIFR-Comissão Municipal de Gestão Integrada de Fogos Rurais</span></a></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/gabinete-florestal/pmdfci-plano-municipal-de-defesa-da-floresta-contra-incendios" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5298</p><!--googleon: all--><span>PMDFCI - Plano Municipal de Defesa da Floresta contra Incêndios</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/gabinete-florestal/gestao-de-combustiveis-limpeza-de-terrenos" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8219</p><!--googleon: all--><span>Gestão de combustíveis - Limpeza de terrenos</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/gabinete-florestal/prevencao-de-incendios-rurais" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">606</p><!--googleon: all--><span>Prevenção de incêndios rurais</span></a></li><li class="depth3 pos_5 "><a href="/areas-de-intervencao/gabinete-florestal/queimas-e-queimadas" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2759</p><!--googleon: all--><span>Queimas e queimadas</span></a></li><li class="depth3 pos_6 "><a href="/areas-de-intervencao/gabinete-florestal/plantacoes-arborizacoes" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2483</p><!--googleon: all--><span>Plantações/Arborizações</span></a></li><li class="depth3 pos_7 "><a href="/areas-de-intervencao/gabinete-florestal/condominios-de-aldeia" target="_self" class="depth3 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6434</p><!--googleon: all--><span>Condomínios de aldeia</span></a></li><li class="depth3 pos_8 "><a href="/areas-de-intervencao/gabinete-florestal/lancamento-de-fogo-de-artificio" target="_self" class="depth3 pos_8 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2325</p><!--googleon: all--><span>Lançamento de Fogo de Artifício</span></a></li><li class="depth3 pos_9 last "><a href="/areas-de-intervencao/gabinete-florestal/area-integrada-de-gestao-da-paisagem-aigp-da-batalha" target="_self" class="depth3 pos_9 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4309</p><!--googleon: all--><span>Área Integrada de Gestão da Paisagem (AIGP) da Batalha</span></a></li></ul></li><li class="depth2 pos_8 has_descendants"><a href="/areas-de-intervencao/protecao-civil" target="_self" class="depth2 pos_8 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-726b70df"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1377</p><!--googleon: all--><span>Proteção Civil</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-726b70df"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/protecao-civil/comissao-municipal-de-protecao-civil" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3081</p><!--googleon: all--><span>Comissão Municipal de Proteção Civil</span></a></li><li class="depth3 pos_2 "><a href="/areas-de-intervencao/protecao-civil/plano-municipal-de-emergencia" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">710</p><!--googleon: all--><span>Plano Municipal de Emergência</span></a></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/protecao-civil/medidas-de-prevencao-e-autoprotecao" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3300</p><!--googleon: all--><span>Medidas de Prevenção e Autoproteção</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/protecao-civil/vespa-asiatica" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">348</p><!--googleon: all--><span>Vespa Asiática</span></a></li><li class="depth3 pos_5 "><a href="/areas-de-intervencao/protecao-civil/galeria" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">882</p><!--googleon: all--><span>Programas &quot;Aldeia Segura&quot; e &quot;Pessoas Seguras&quot;</span></a></li><li class="depth3 pos_6 "><a href="/areas-de-intervencao/protecao-civil/plano-de-seguranca-de-eventos" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1914</p><!--googleon: all--><span>Plano de Segurança de Eventos</span></a></li><li class="depth3 pos_7 "><a href="/areas-de-intervencao/protecao-civil/seguranca-contra-incendio-em-edificios" target="_self" class="depth3 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9231</p><!--googleon: all--><span>Segurança contra incêndio em edifícios</span></a></li><li class="depth3 pos_8 last "><a href="/areas-de-intervencao/protecao-civil/contactos-uteis" target="_self" class="depth3 pos_8 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8618</p><!--googleon: all--><span>Contactos Úteis</span></a></li></ul></li><li class="depth2 pos_9 has_descendants"><a href="/areas-de-intervencao/urbanismo" target="_self" class="depth2 pos_9 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8036</p><!--googleon: all--><span>Urbanismo</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3"><li class="depth3 pos_1 first has_descendants"><a href="/areas-de-intervencao/urbanismo/urbanizacao-e-edificacao" target="_self" class="depth3 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-0f2eac67"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9890</p><!--googleon: all--><span>Urbanização e Edificação</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-0f2eac67"><li class="depth4 pos_1 first "><a href="/areas-de-intervencao/urbanismo/urbanizacao-e-edificacao/instrucoes-de-apoio" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7672</p><!--googleon: all--><span>Instruções de Apoio</span></a></li><li class="depth4 pos_2 last "><a href="/areas-de-intervencao/urbanismo/urbanizacao-e-edificacao/estudos-do-ruido" target="_self" class="depth4 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2674</p><!--googleon: all--><span>Estudos do Ruído</span></a></li></ul></li><li class="depth3 pos_2 has_descendants"><a href="/areas-de-intervencao/urbanismo/planos" target="_self" class="depth3 pos_2 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2641</p><!--googleon: all--><span>Planos</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6"><li class="depth4 pos_1 first has_descendants"><a href="/areas-de-intervencao/urbanismo/planos/planos-em-vigor" target="_self" class="depth4 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6-1fe7f857"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6724</p><!--googleon: all--><span>Planos em Vigor</span></a><ul class="depth5 " id="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6-1fe7f857"><li class="depth5 pos_1 first "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-vigor/3-alteracao-a-1-revisao-do-pdm" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7729</p><!--googleon: all--><span>3.ª Alteração à 1.ª Revisão do PDM</span></a></li><li class="depth5 pos_2 "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-vigor/2-alteracao-a-1-revisao-do-pdm" target="_self" class="depth5 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7095</p><!--googleon: all--><span>2.ª Alteração à 1.ª Revisão do PDM</span></a></li><li class="depth5 pos_3 "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-vigor/1-revisao-do-plano-diretor-municipal" target="_self" class="depth5 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6749</p><!--googleon: all--><span>1.ª Revisão do Plano Diretor Municipal</span></a></li><li class="depth5 pos_4 last "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-vigor/plano-de-pormenor-das-cancelas" target="_self" class="depth5 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5555</p><!--googleon: all--><span>Plano de Pormenor das Cancelas</span></a></li></ul></li><li class="depth4 pos_2 "><a href="/areas-de-intervencao/urbanismo/planos/avaliacao-ambiental-estrategica" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1074</p><!--googleon: all--><span>Avaliação Ambiental Estratégica</span></a></li><li class="depth4 pos_3 last has_descendants"><a href="/areas-de-intervencao/urbanismo/planos/planos-em-alteracao" target="_self" class="depth4 pos_3 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6-36a3a1fa"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6719</p><!--googleon: all--><span>Planos em Alteração</span></a><ul class="depth5 " id="widget-menu-horizontal_menu-1-bb9df032-4b8df6e3-25e412c6-36a3a1fa"><li class="depth5 pos_1 first "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-alteracao/2-revisao-do-pdm-da-batalha" target="_self" class="depth5 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1423</p><!--googleon: all--><span>2.ª Revisão do PDM da Batalha</span></a></li><li class="depth5 pos_2 "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-alteracao/unidade-de-execucao-da-ale-jardoeira-sul-u2" target="_self" class="depth5 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1988</p><!--googleon: all--><span>Unidade de execução da ALE Jardoeira Sul - U2</span></a></li><li class="depth5 pos_3 "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-alteracao/plano-de-pormenor-da-expansao-da-vila-da-batalha-uopg-12" target="_self" class="depth5 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6444</p><!--googleon: all--><span>Plano de Pormenor da Expansão da Vila da Batalha UOPG 12</span></a></li><li class="depth5 pos_4 last "><a href="/areas-de-intervencao/urbanismo/planos/planos-em-alteracao/unidade-de-execucao-de-s-mamede-uopg-7" target="_self" class="depth5 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4043</p><!--googleon: all--><span>Unidade de Execução de S. Mamede UOPG 7</span></a></li></ul></li></ul></li><li class="depth3 pos_3 "><a href="/areas-de-intervencao/urbanismo/ren" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4661</p><!--googleon: all--><span>REN</span></a></li><li class="depth3 pos_4 "><a href="/areas-de-intervencao/urbanismo/reot" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4349</p><!--googleon: all--><span>REOT</span></a></li><li class="depth3 pos_5 "><a href="/areas-de-intervencao/urbanismo/reabilitacao-urbana" target="_self" class="depth3 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9819</p><!--googleon: all--><span>Reabilitação Urbana</span></a></li><li class="depth3 pos_6 "><a href="/areas-de-intervencao/urbanismo/programa-batalha-restaura" target="_self" class="depth3 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5020</p><!--googleon: all--><span>Programa &quot;Batalha Restaura&quot;</span></a></li><li class="depth3 pos_7 "><a href="/areas-de-intervencao/urbanismo/patrimonio-alienacoes-e-hastas-publicas" target="_self" class="depth3 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8667</p><!--googleon: all--><span>Património, Alienações e Hastas públicas</span></a></li><li class="depth3 pos_8 last "><a href="https://sig.municipio-batalha.pt/portal/apps/sites/#/geobatalha" target="_blank" class="depth3 pos_8 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3115</p><!--googleon: all--><span>GeoBatalha</span></a></li></ul></li><li class="depth2 pos_10 "><a href="/areas-de-intervencao/balcao-unico-do-predio" target="_self" class="depth2 pos_10 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7629</p><!--googleon: all--><span>Balcão Único do Prédio</span></a></li><li class="depth2 pos_11 has_descendants"><a href="/areas-de-intervencao/habitacao" target="_self" class="depth2 pos_11 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-f8172933"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3598</p><!--googleon: all--><span>Habitação</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-f8172933"><li class="depth3 pos_1 first "><a href="/areas-de-intervencao/habitacao/estrategia-local-de-habitacao" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3850</p><!--googleon: all--><span>Estratégia Local de Habitação</span></a></li><li class="depth3 pos_2 last "><a href="/areas-de-intervencao/habitacao/carta-da-habitacao" target="_self" class="depth3 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6633</p><!--googleon: all--><span>Carta da Habitação</span></a></li></ul></li><li class="depth2 pos_12 last has_descendants"><a href="/areas-de-intervencao/obras-municipais" target="_self" class="depth2 pos_12 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-a5ba0038"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3190</p><!--googleon: all--><span>Obras Municipais</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-bb9df032-a5ba0038"><li class="depth3 pos_1 first has_descendants"><a href="/areas-de-intervencao/obras-municipais/empreitadas" target="_self" class="depth3 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-a5ba0038-6f135ee4"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7415</p><!--googleon: all--><span>Empreitadas</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-a5ba0038-6f135ee4"><li class="depth4 pos_1 first "><a href="/areas-de-intervencao/obras-municipais/empreitadas/obras-concluidas-no-ano-2024" target="_self" class="depth4 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3704</p><!--googleon: all--><span>Obras concluídas no ano 2024</span></a></li><li class="depth4 pos_2 "><a href="/areas-de-intervencao/obras-municipais/empreitadas/obras-concluidas-no-ano-2023" target="_self" class="depth4 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5801</p><!--googleon: all--><span>Obras concluídas no ano 2023</span></a></li><li class="depth4 pos_3 last "><a href="/areas-de-intervencao/obras-municipais/empreitadas/obras-concluidas-no-ano-2022" target="_self" class="depth4 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2017</p><!--googleon: all--><span>Obras concluídas no ano 2022</span></a></li></ul></li><li class="depth3 pos_2 last has_descendants"><a href="/areas-de-intervencao/obras-municipais/contratacao-publica" target="_self" class="depth3 pos_2 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-bb9df032-a5ba0038-628cc91f"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8445</p><!--googleon: all--><span>Contratação pública</span></a><ul class="depth4 " id="widget-menu-horizontal_menu-1-bb9df032-a5ba0038-628cc91f"><li class="depth4 pos_1 first last "><a href="/areas-de-intervencao/obras-municipais/contratacao-publica/plataforma-eletronica" target="_self" class="depth4 pos_1 first last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8817</p><!--googleon: all--><span>Plataforma eletrónica</span></a></li></ul></li></ul></li></ul></li><li class="depth1 pos_4 has_descendants"><a href="/visitar" target="_self" class="depth1 pos_4 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-e0787231"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9816</p><!--googleon: all--><span>Visitar</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-e0787231"><li class="depth2 pos_1 first has_descendants"><a href="/visitar/patrimonio-construido" target="_self" class="depth2 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-e0787231-75811f1c"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1060</p><!--googleon: all--><span>Património Construído</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-e0787231-75811f1c"><li class="depth3 pos_1 first "><a href="/visitar/patrimonio-construido/mosteiro-da-batalha" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4315</p><!--googleon: all--><span>Mosteiro da Batalha</span></a></li><li class="depth3 pos_2 "><a href="/visitar/patrimonio-construido/ponte-da-boutaca" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6097</p><!--googleon: all--><span>Ponte da Boutaca</span></a></li><li class="depth3 pos_3 "><a href="/visitar/patrimonio-construido/igrejas" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7446</p><!--googleon: all--><span>Igrejas</span></a></li><li class="depth3 pos_4 last "><a href="/visitar/patrimonio-construido/pelourinho-da-batalha" target="_self" class="depth3 pos_4 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9043</p><!--googleon: all--><span>Pelourinho da Batalha</span></a></li></ul></li><li class="depth2 pos_2 has_descendants"><a href="/visitar/patrimonio-natural" target="_self" class="depth2 pos_2 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-e0787231-2543abb3"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">145</p><!--googleon: all--><span>Património Natural</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-e0787231-2543abb3"><li class="depth3 pos_1 first "><a href="/visitar/patrimonio-natural/pia-do-urso" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5249</p><!--googleon: all--><span>Pia do Urso</span></a></li><li class="depth3 pos_2 "><a href="/visitar/patrimonio-natural/grutas-da-moeda" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7833</p><!--googleon: all--><span>Grutas da Moeda</span></a></li><li class="depth3 pos_3 "><a href="/visitar/patrimonio-natural/buraco-roto" target="_self" class="depth3 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3814</p><!--googleon: all--><span>Buraco Roto</span></a></li><li class="depth3 pos_4 "><a href="/visitar/patrimonio-natural/escarpa-da-falha-do-reguengo-do-fetal" target="_self" class="depth3 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6300</p><!--googleon: all--><span>Escarpa da Falha do Reguengo do Fetal</span></a></li><li class="depth3 pos_5 last "><a href="/visitar/patrimonio-natural/vale-do-rio-lena" target="_self" class="depth3 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6582</p><!--googleon: all--><span>Vale do Rio Lena</span></a></li></ul></li><li class="depth2 pos_3 "><a href="/visitar/museus" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">188</p><!--googleon: all--><span>Museus</span></a></li><li class="depth2 pos_4 has_descendants"><a href="/visitar/turismo-de-natureza" target="_self" class="depth2 pos_4 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-e0787231-1f82d310"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2136</p><!--googleon: all--><span>Turismo de Natureza</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-e0787231-1f82d310"><li class="depth3 pos_1 first "><a href="/visitar/turismo-de-natureza/percursos-pedestres" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4174</p><!--googleon: all--><span>Percursos Pedestres</span></a></li><li class="depth3 pos_2 last "><a href="/visitar/turismo-de-natureza/escalada" target="_self" class="depth3 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">337</p><!--googleon: all--><span>Escalada</span></a></li></ul></li><li class="depth2 pos_5 "><a href="/visitar/auto-caravanismo" target="_self" class="depth2 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8988</p><!--googleon: all--><span>Auto-caravanismo</span></a></li><li class="depth2 pos_6 "><a href="/visitar/gastronomia" target="_self" class="depth2 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8403</p><!--googleon: all--><span>Gastronomia</span></a></li><li class="depth2 pos_7 "><a href="/visitar/principais-eventos" target="_self" class="depth2 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2552</p><!--googleon: all--><span>Principais eventos</span></a></li><li class="depth2 pos_8 "><a href="/visitar/agenda-cultural" target="_self" class="depth2 pos_8 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2365</p><!--googleon: all--><span>Agenda Cultural </span></a></li><li class="depth2 pos_9 last has_descendants"><a href="/visitar/outros-pontos-de-interesse" target="_self" class="depth2 pos_9 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-e0787231-84853d76"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">702</p><!--googleon: all--><span>Outros pontos de interesse </span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-e0787231-84853d76"><li class="depth3 pos_1 first "><a href="/visitar/outros-pontos-de-interesse/aldeia-pintada" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3040</p><!--googleon: all--><span>Aldeia Pintada</span></a></li><li class="depth3 pos_2 last "><a href="/visitar/outros-pontos-de-interesse/reguengo-do-fetal" target="_self" class="depth3 pos_2 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4273</p><!--googleon: all--><span>Reguengo do Fetal</span></a></li></ul></li></ul></li><li class="depth1 pos_5 has_descendants"><a href="/investir" target="_self" class="depth1 pos_5 has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-48401bd2"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5636</p><!--googleon: all--><span>Investir</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-48401bd2"><li class="depth2 pos_1 first has_descendants"><a href="/investir/balcao-do-empreendedor" target="_self" class="depth2 pos_1 first has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-48401bd2-a94f7129"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7201</p><!--googleon: all--><span>Balcão do Empreendedor</span></a><ul class="depth3 " id="widget-menu-horizontal_menu-1-48401bd2-a94f7129"><li class="depth3 pos_1 first "><a href="/investir/balcao-do-empreendedor/licenciamento-zero" target="_self" class="depth3 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9008</p><!--googleon: all--><span>Licenciamento Zero</span></a></li><li class="depth3 pos_2 "><a href="/investir/balcao-do-empreendedor/licenciamento-industrial" target="_self" class="depth3 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7579</p><!--googleon: all--><span>Licenciamento Industrial</span></a></li><li class="depth3 pos_3 last "><a href="/investir/balcao-do-empreendedor/alojamento-local" target="_self" class="depth3 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6275</p><!--googleon: all--><span>Alojamento Local</span></a></li></ul></li><li class="depth2 pos_2 "><a href="/investir/horarios" target="_self" class="depth2 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6343</p><!--googleon: all--><span>Horários</span></a></li><li class="depth2 pos_3 "><a href="/investir/i9" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6125</p><!--googleon: all--><span>i9</span></a></li><li class="depth2 pos_4 "><a href="/investir/ocupacao-do-espaco-publico-e-publicidade" target="_self" class="depth2 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7108</p><!--googleon: all--><span>Ocupação do espaço público e Publicidade</span></a></li><li class="depth2 pos_5 last "><a href="/investir/areas-de-atividades-economicas" target="_self" class="depth2 pos_5 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4378</p><!--googleon: all--><span>Áreas de Atividades Económicas</span></a></li></ul></li><li class="depth1 pos_6 last has_descendants"><a href="/participar" target="_self" class="depth1 pos_6 last has_descendants" aria-expanded="false" aria-controls="widget-menu-horizontal_menu-1-dc6211c4"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">433</p><!--googleon: all--><span>Participar</span></a><ul class="depth2 " id="widget-menu-horizontal_menu-1-dc6211c4"><li class="depth2 pos_1 first "><a href="/participar/reportar-ocorrencias" target="_self" class="depth2 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1101</p><!--googleon: all--><span>Reportar Ocorrências</span></a></li><li class="depth2 pos_2 "><a href="https://op.cm-batalha.pt/" target="_blank" class="depth2 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">706</p><!--googleon: all--><span>Orçamento Participativo</span></a></li><li class="depth2 pos_3 "><a href="/sugestoes-reclamacoes-elogios" target="_self" class="depth2 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2350</p><!--googleon: all--><span>Sugestões</span></a></li><li class="depth2 pos_4 "><a href="/participar/direito-de-preferencia" target="_self" class="depth2 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3577</p><!--googleon: all--><span>Direito de Preferência</span></a></li><li class="depth2 pos_5 "><a href="/participar/concurso-o-fio-da-memoria-o-conto" target="_self" class="depth2 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8593</p><!--googleon: all--><span>Concurso &quot;O Fio da Memória - O Conto&quot;</span></a></li><li class="depth2 pos_6 last "><a href="/participar/fiaba" target="_self" class="depth2 pos_6 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">3244</p><!--googleon: all--><span>FIABA</span></a></li></ul></li></ul>
+
+</div>
+
+
+              </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <!-------------------------------------------------------------------------------------------------------------->
+    <!-- MAIN -->
+    <!-------------------------------------------------------------------------------------------------------------->
+    <main class="siteContents grid-container">
+      <div class="grid-x grid-margin-x">
+        <nav class="verticalMenu_AREA show-for-xlarge xsmall-3 cell hidden-post">  
+  <div id="vertical_menu_1" class="widget vertical_menu no-wm-idx" data-id="1" data-content_type="VerticalMenu">
+
+
+      <a class='current_menu' href="/municipe">
+        Munícipe
+      </a>
+
+
+    <ul class="depth1 " id="widget-menu-vertical_menu-1"><li class="depth1 pos_1 first "><a href="/municipe/avisos" target="_self" class="depth1 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">9122</p><!--googleon: all--><span>Avisos</span></a></li><li class="depth1 pos_2 "><a href="/municipe/editais" target="_self" class="depth1 pos_2 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">2760</p><!--googleon: all--><span>Editais</span></a></li><li class="depth1 pos_3 "><a href="/municipe/recrutamento" target="_self" class="depth1 pos_3 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4360</p><!--googleon: all--><span>Recrutamento</span></a></li><li class="depth1 pos_4 "><a href="/municipe/protocolos" target="_self" class="depth1 pos_4 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">4153</p><!--googleon: all--><span>Protocolos</span></a></li><li class="depth1 pos_5 "><a href="/municipe/despachos" target="_self" class="depth1 pos_5 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">6184</p><!--googleon: all--><span>Despachos</span></a></li><li class="depth1 pos_6 "><a href="/municipe/regulamentos" target="_self" class="depth1 pos_6 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">1764</p><!--googleon: all--><span>Regulamentos</span></a></li><li class="depth1 pos_7 "><a href="/municipe/eleicoes" target="_self" class="depth1 pos_7 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">338</p><!--googleon: all--><span>Eleições</span></a></li><li class="depth1 pos_8 "><a href="/municipe/protecao-de-dados" target="_self" class="depth1 pos_8 "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">7106</p><!--googleon: all--><span>Proteção de dados</span></a></li><li class="depth1 pos_9 last selected selected_descendant has_descendants"><a href="/municipe/comunicacao" target="_self" class="depth1 pos_9 last selected selected_descendant has_descendants" aria-expanded="true" aria-controls="widget-menu-vertical_menu-1-1702ca47"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">5246</p><!--googleon: all--><span>Comunicação</span></a><ul class="depth2 " id="widget-menu-vertical_menu-1-1702ca47"><li class="depth2 pos_1 first "><a href="/municipe/comunicacao/noticias" target="_self" class="depth2 pos_1 first "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">319</p><!--googleon: all--><span>Notícias</span></a></li><li class="depth2 pos_2 current-page selected"><a href="/municipe/comunicacao/agenda-cultural" target="_self" class="depth2 pos_2 current-page selected" aria-current="page"><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">8651</p><!--googleon: all--><span>Agenda Cultural</span></a></li><li class="depth2 pos_3 last "><a href="/municipe/comunicacao/boletins" target="_self" class="depth2 pos_3 last "><!--googleoff: all--><p style="display:none" hidden data-nosnippet aria-hidden="true" class="hidden">134</p><!--googleon: all--><span>Boletins</span></a></li></ul></li></ul>
+
+
+</div>
+
+</nav>
+        <section class="mainContents large-12 xlarge-9 cell hidden-post">
+          <div class="breadCrumb_AREA"><span class="BO-only shared"></span>  
+  <div id="breadcrumb_1" class="widget breadcrumb" data-id="1" data-content_type="Breadcrumb">
+  <ul>
+
+      <li>
+        <a href="/inicio">Início<img alt="_" aria-hidden="true" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        <a href="/municipe">Munícipe<img alt="_" aria-hidden="true" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        <a href="/municipe/comunicacao">Comunicação<img alt="_" aria-hidden="true" src="/s.gif" /></a>
+      </li>
+
+
+      <li>
+        Agenda Cultural
+      </li>
+  </ul>
+</div>
+
+</div>
+          <div class="central_AREA commonContent"><span class="BO-only"></span>
+            <h1 class="pageTitle">Agenda Cultural</h1>
+                           <!-- Readspeaker -->
+                <div style="width:400px">
+                <div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">
+                  <a id="readspeakerlnk" rel="nofollow" class="rsbtn_play" accesskey="L" title="Ouvir com ReadSpeaker webReader" href="#">
+                  <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Ouvir</span></span></span>
+                  <span class="rsbtn_right rsimg rsplay rspart"></span>
+                  </a>
+                </div>
+                <script>
+                <!--
+                lnk="//app-eu.readspeaker.com/cgi-bin/rsent?customerid=15464&amp;lang=pt_pt&amp;readclass=pageTitle,summary,text,article&amp;url=https://www.cm-batalha.pt//municipe/comunicacao/agenda-cultural";
+                //lnk+=encodeURIComponent("/municipe/comunicacao/agenda-cultural");
+                lnk+=encodeURIComponent(location.href);
+                $("#readspeakerlnk").attr("href", lnk);
+                -->
+                  </script>
+            </div>
+              
+  <div id="events_list_82" class="widget events_list no-wm-idx" data-id="82" data-content_type="EventsList">
+
+  <div class="search "><div class="fields"><div class="widget_form"><form id="events_list_82_search_vpdkjmyq" class="generic_search" role="search" aria-label="Pesquisar Eventos" action="/municipe/comunicacao/agenda-cultural" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="1jO7AOc6fQ1LRjer0+baEJoYcDiYz4zhJtR3qePt8jF2sagrLVUkkm9IQMWLwAbRBMc70iUDJ18NHmPUkHJRDw==" /><label for="events_list_82_all">Pesquisar Eventos</label><input type="text" name="events_list_82_all" id="events_list_82_all" class=" events-list-search-field input-ajax-submit-form" autocomplete="off" placeholder="Pesquisar Eventos" />
+    <input type="hidden" name="search_text" id="search_text_input" />
+    <input type="hidden" name="category_id" id="category_id_input" />
+    <input type="hidden" name="location_id" id="location_id_input" />
+    <input type="hidden" name="venue_id" id="venue_id_input" />
+    <input type="hidden" name="start_date" id="start_date_input" value="2026-09-11" />
+    <input type="hidden" name="end_date" id="end_date_input" />
+<button name="events_list_82_search_button" type="submit" id="events_list_82_search_button" class="search_button"><span class="sr-only">Pesquisar Eventos</span></button><input type="hidden" name="widget_id" id="widget_id_82_EventsList_xryawhto" value="82" /><input type="hidden" name="widget_type" id="widget_type_82_EventsList_zaiqjmuw" value="EventsList" /><input type="hidden" name="widget_action" id="widget_action_82_EventsList_rloevscx" value="search" /></form></div></div></div>
+    <ul>
+        <li class="pos_1 first" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Exposição &quot;Pintura a Óleo e Azulejaria Contemporânea&quot;" href="/municipe/comunicacao/agenda-cultural/evento/exposicao-pintura-a-oleo-e-azulejaria-contemporanea"><h2 class="linl_hidden">Exposição &quot;Pintura a Óleo e Azulejaria Contemporânea&quot;</h2></a><div class="linl_inner">
+
+
+                      <div class="image widget_field thumbnail"><div class="widget_value"><img data-description="" alt="" src="/imgcrop/cmbatalha/uploads/event/image/120/exposicao_pintura_e_azulejaria_1_600_849_f_0_0.jpg" /></div></div>
+
+
+                  <div class="title widget_field " aria-hidden="true"><div class="widget_value"><h2>Exposição "Pintura a Óleo e Azulejaria Contemporânea"</h2></div></div>
+
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class="dia">28</span> <span class="mes_extenso">Agosto</span> <span class='separador_dias'>a</span> <span class="dia">22</span> <span class="mes_extenso">Setembro</span> <span class="ano">2026</span></div></div></div>
+
+
+
+                  <div class="location widget_field "><div class="widget_label">Local:</div><div class="widget_value"><div class="writer_text">Posto de Informação e Turismo da Batalha<div class="writer_text_clear"></div></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="pos_2" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Festival Polifonias - Ópera no Mosteiro" href="/municipe/comunicacao/agenda-cultural/evento/festival-polifonias-opera-no-mosteiro"><h2 class="linl_hidden">Festival Polifonias - Ópera no Mosteiro</h2></a><div class="linl_inner">
+
+
+                      <div class="image widget_field thumbnail"><div class="widget_value"><img data-description="" alt="" src="/imgcrop/cmbatalha/uploads/event/image/122/af_a3_cartaz__polifonias_26_12set_1_600_849_f_0_0.jpg" /></div></div>
+
+
+                  <div class="title widget_field " aria-hidden="true"><div class="widget_value"><h2>Festival Polifonias - Ópera no Mosteiro</h2></div></div>
+
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class="dia">12</span> <span class="mes_extenso">Setembro</span> <span class="ano">2026</span></div></div></div>
+
+
+
+                  <div class="location widget_field "><div class="widget_label">Local:</div><div class="widget_value"><div class="writer_text">Exterior do Mosteiro de Santa Maria da Vitória, Batalha<div class="writer_text_clear"></div></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="pos_3" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Recriação do Mercado do Século XIX" href="/municipe/comunicacao/agenda-cultural/evento/recriacao-do-mercado-do-seculo-xix"><h2 class="linl_hidden">Recriação do Mercado do Século XIX</h2></a><div class="linl_inner">
+
+
+                      <div class="image widget_field thumbnail"><div class="widget_value"><img data-description="" alt="" src="/imgcrop/cmbatalha/uploads/event/image/121/mercado_sec_xix_feed_1_600_849_f_0_0.png" /></div></div>
+
+
+                  <div class="title widget_field " aria-hidden="true"><div class="widget_value"><h2>Recriação do Mercado do Século XIX</h2></div></div>
+
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class="dia">20</span> <span class="mes_extenso">Setembro</span> <span class="ano">2026</span></div></div></div>
+
+
+
+                  <div class="location widget_field "><div class="widget_label">Local:</div><div class="widget_value"><div class="writer_text">Praça Mouzinho de Albuquerque<div class="writer_text_clear"></div></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+        <li class="pos_4 last" >
+          <div class="event_item_container">
+            <div class="linl_block"><a class="linl_overlay" aria-label="Reunião de Câmara Municipal" href="/municipe/comunicacao/agenda-cultural/evento/reuniao-de-camara-municipal-67"><h2 class="linl_hidden">Reunião de Câmara Municipal</h2></a><div class="linl_inner">
+
+
+                      <div class="image widget_field thumbnail"><div class="widget_value" title="Reunião de Câmara Municipal"><img data-description="" alt="" src="/imgcrop/cmbatalha/uploads/event/image/64/reuniao_camaramunicipal_1_600_849_f_0_0.jpg" /></div></div>
+
+
+                  <div class="title widget_field " aria-hidden="true"><div class="widget_value"><h2>Reunião de Câmara Municipal</h2></div></div>
+
+
+
+                  <div class="dates widget_field "><div class="widget_value"><div><span class="dia">21</span> <span class="mes_extenso">Setembro</span> <span class="ano">2026</span></div></div></div>
+
+
+
+                  <div class="location widget_field "><div class="widget_label">Local:</div><div class="widget_value"><div class="writer_text">Sala de Sessões do Edifício dos Paços de Concelho<div class="writer_text_clear"></div></div></div></div>
+
+
+</div></div>          </div>
+        </li>
+    </ul>
+    
+
+    <div class="map-records" data-records="[{&quot;map_lat&quot;:&quot;39.659612&quot;,&quot;map_icon&quot;:{&quot;url&quot;:null,&quot;thumb&quot;:{&quot;url&quot;:null},&quot;tiny_thumb&quot;:{&quot;url&quot;:null}}}]"></div>
+</div>
+
+
+          </div>
+          <div class="postMenu_AREA"><span class="BO-only shared"></span>  
+  <div id="vertical_menu_9" class="widget vertical_menu no-wm-idx" data-id="9" data-content_type="VerticalMenu"></div>
+
+</div>
+          <div class="bottomButtons">
+            <div class="backButton">
+              <a href="javascript:history.back()">Voltar</a>
+            </div>
+            <button class="ui facebook button share-button" data-platform="facebook" title="Partilhar no Facebook">Partilhar</button>
+            <button class="ui linkedin button share-button" data-platform="linkedin" title="Partilhar no Linkedin">Partilhar</button>
+            <button class="ui whatsapp button share-button" data-platform="whatsapp" title="Partilhar no Whatsapp">Partilhar</button>
+            <button class="ui messeger button share-button" data-platform="messeger" title="Partilhar no Messeger">Partilhar</button>
+            <button class="ui email button share-button" data-platform="email" title="Partilhar no Email">Partilhar</button>
+          </div>
+
+        </section>
+        <div class="clearfix"></div>
+      </div>
+
+      <!-- LAST UPDATE DATE -->
+     <!--<div class="lastUpdateDate"><div><span class="wmPageUpdateTitle">Conteúdo atualizado em</span><span class="wmPageUpdateDate">20 de abril de 2026</span><span class="wmPageUpdateTime">às 15:05</span></div></div> -->
+
+    </main>
+
+  </div>
+  <!--end stickyFooter -->
+
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- FOOTER -->
+  <!-------------------------------------------------------------------------------------------------------------->
+   <footer>
+    <div class="grid-container">
+      <div class="grid-x grid-margin-x align-top">
+        <div class="logoFooter_AREA xxsmall-12 small-12 large-12 cell hidden-post">
+</div>
+        <div class="contactos_AREA xxsmall-12 small-8 large-8 cell hidden-post">  
+  
+<div id="html_block_54" class="widget html_block" data-id="54" data-content_type="HtmlBlock">
+
+  <ul>
+  <li class="contactosMorada">Rua Infante D.Fernando <br> 2440-118 Batalha</li>
+  <li class="contactosTelefone"><strong>Telefone</strong> <a href="tel:244769110">244 769 110</a> <br>(custo de uma chamada para uma linha telefónica geográfica fixa comum)</li>
+  <li class="contactosEmail"><strong>E-mail</strong> <a href="mailto:geral@cm-batalha.pt">geral@cm-batalha.pt</a> <br> <strong>atendimento</strong> 09h00-17h00</li>
+</ul>
+
+</div>
+
+</div>
+        <div class="contactosBotao_AREA xxsmall-12 small-4 large-4 cell hidden-post">  
+  
+<div id="html_block_116" class="widget html_block" data-id="116" data-content_type="HtmlBlock">
+
+  <a class="btnMaisContactos" href="/contactos-uteis" title="Mais contactos">mais contactos e horários</a>
+
+</div>
+
+</div>
+        <div class="footerLinks_AREA xxsmall-12 small-6 large-6 cell hidden-post">  
+  
+<div id="html_block_118" class="widget html_block" data-id="118" data-content_type="HtmlBlock">
+
+  <ul class="linksUteisFooter">
+  <!-- <li><a href="/perguntas-frequentes">Perguntas Frequentes</a></li> -->
+  <li><a href="/newsletters-65">Newsletter</a></li>
+  <li><a href="/sugestoes-reclamacoes-elogios">Fale connosco</a></li>
+  <li><a href="/participar/reportar-ocorrencias">Reportar ocorrência</a></li>
+</ul>
+
+</div>
+
+</div>
+        <div class="footerRedes_AREA xxsmall-12 small-6 large-6 cell hidden-post">  
+  
+<div id="html_block_117" class="widget html_block" data-id="117" data-content_type="HtmlBlock">
+
+  <h2>Siga-nos</h2>
+<ul class="socialButtons">
+  <li><a href="https://www.facebook.com/MunicipioBatalha/" target="_blank"><img src="/cmbatalha/layout/social/facebook_icon.svg" alt="Facebook" /></a></li>
+  <li><a href="https://www.instagram.com/municipiobatalha" target="_blank"><img src="/cmbatalha/layout/social/instagram_icon.svg" alt="Youtube" /></a></li>
+  <!--<li><a href="/pages/775"><img src="/cmbatalha/layout/footer/x_footer.svg" alt="RSS feed" /></a></li>-->
+</ul>
+
+</div>
+
+</div>
+      </div>
+    </div>
+    <div class="linksGovernoWrap grid-container full">
+        <div class="grid-container">
+            <div class="grid-x grid-margin-x">
+                <div class="acessibilidade xxsmall-12 large-10 cell hidden-post">
+                  <div class="acessibilidade_AREA">  
+  
+<div id="html_block_102" class="widget html_block" data-id="102" data-content_type="HtmlBlock">
+
+  <a class="logoReclamacoes" href="https://www.livroreclamacoes.pt/inicio" title="Livro de Reclamações Online" target="_blank">Livro de Reclamações</a>
+<a href="/acessibilidade" class="logoAcessibilidade" title="Acessibilidade do Site">Acessibilidade</a>
+
+</div>
+  
+<div id="html_block_103" class="widget html_block" data-id="103" data-content_type="HtmlBlock">
+
+  <!-- se for redesign, deixar os links todos com # -->
+<ul class="linksPrivacidade">
+  <li><a href="/mapa-do-site">Mapa do Site</a></li>
+  <li><a href="/ficha-tecnica">Ficha Técnica</a></li>
+  <li><a href="/contactos-uteis">Contactos da Autarquia e Serviços</a></li>
+  <li><a href="/rss-feed">Feed RSS</a></li>
+</ul>
+<ul class="linksObrigatorios">
+  <li><a href="/acessibilidade">Acessibilidade</a></li>
+  <li><a href="/conformidade">Conformidade</a></li>
+  <!-- <li><a href="/transparencia-e-dados-abertos">Transparência e Dados Abertos</a></li> -->
+  <li><a href="/avisos-legais">Avisos Legais</a></li>
+</ul>
+
+</div>
+
+</div>
+                </div>
+                <div class="poweredBy xxsmall-12 large-2 cell hidden-post">
+                  <div class="poweredBy_AREA">  
+  
+<div id="html_block_104" class="widget html_block" data-id="104" data-content_type="HtmlBlock">
+
+  <div class="logoWiremaze">
+  <a href="http://www.wiremaze.com" title="Powered by Wiremaze" target="_blank">Wiremaze</a>
+</div>
+
+</div>
+
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- wireChat -->
+   <section class="chatbot_AREA">  
+  <div id="aida_bot_1" class="widget aida_bot" data-id="1" data-content_type="AidaBot">
+
+
+    <div id="aida-mount"></div>
+    <script>
+      $(document).ready(function () {
+        if (typeof AidaClient === "undefined") {
+          return;
+        }
+
+        AidaClient.init({
+          tenant: "cmbatalha",
+          apiUrl: "https://aida.cityfy.pt",
+          botName: "Vitória",
+          imageUrl: "/thumbs/cmbatalha/uploads/aida_bot/image/1/cmb_avantar_plataforma_11_1_1000_1000.jpg",
+          slabHello: "Fale connosco",
+          slabIntro: "Precisa de ajuda?",
+          presentationMsg: "Olá, sou a Vitória a assistente virtual do Município da Batalha. Em que posso ser útil?",
+          hasFileUpload: "false" == "true",
+          currentUserId: "",
+          terms: '{}',
+          openOnFirstTime: 'false' == 'true',
+          appointmentInfo: null
+        });
+      });
+    </script>
+</div>
+
+</section>
+     
+  <!-- NAO APAGAR ISTO --> 
+  <!-- START NICE SCROLL -->
+<script>
+  function doRemove(name) {
+    $(name).getNiceScroll().remove();
+  };
+  
+  var vis = true;
+  
+  function toggleVisibility() {
+    vis = !vis;
+	var ns = $("#boxscroll").getNiceScroll();
+	(vis) ? ns.show() : ns.hide();  
+  }
+  
+  function toggleDiv() {
+	var dv = $("#boxscroll"); 
+  var vv = (dv.css('display')!='none');
+	(vv) ? dv.hide() : dv.show();
+//	var ns = dv.getNiceScroll();
+//	ns.resize();
+  }
+</script>
+<!-- END NICE SCROLL -->
+
+  <script>
+    // please review google_analytics settings
+</script>
+
+  <!-- NAO APAGAR ISTO -->
+  
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SCRIPTS -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/vendor/picturefill-aea404604a.min.js"></script><!-- contain image -->
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/vendor/ofi-d15e158094.browser.min.js"></script><!-- contain image for IE -->
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/vendor/responsiveTables-68f8bdb74f.min.js"></script><!-- Tabelas com scroll em mobile -->
+  <script src="/assets/cmbatalha/cm_batalha/javascripts/wire_forms-083320498e.min.js"></script><!-- Caixa de Contacto-->
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- SHARE FACEBOOK UI -->
+  <!-------------------------------------------------------------------------------------------------------------->
+
+  <script>
+
+      const share_platforms = {
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=[[URL]]&t=[[TITLE]]',
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite?url=[[URL]]',
+        whatsapp: 'https://api.whatsapp.com/send?text=[[TITLE]]\n[[DESCRIPTION]]\n[[URL]]',
+        messeger: 'https://www.facebook.com/sharer/sharer.php?u=[[URL]]&t=[[TITLE]]',
+        email: 'mailto:?subject=[[TITLE]]&body=[[DESCRIPTION]]\n[[URL]]',
+      }
+
+      document.querySelectorAll('.share-button[data-platform]').forEach(share_button => {
+        share_button.addEventListener("click", function(event) {
+          event.preventDefault();
+
+          share_platform_tag = this.dataset.platform;
+          url = window.location.href;
+          title = document.title;
+          meta_description_element = document.querySelector('meta[name="description"]');
+          description = (meta_description_element !== null) ? meta_description_element.content : "";
+
+          share_url = replace_share_url_placeholders(share_platforms[share_platform_tag])
+
+          switch (share_platform_tag) {
+            case "print":
+              window.print();
+              break;
+            case "email":
+            case "sms":
+              window.location.href = share_url;
+              break;
+            default:
+              h = Math.min(480, screen.height - 32);
+              w = Math.min(640, screen.width - 32);
+              t = (window.top.outerHeight / 2) + window.top.screenY - (h / 2);
+              l = (window.top.outerWidth / 2) + window.top.screenX - (w / 2);
+              window_features = `height=${h},width=${w},top=${t},left=${l}`;
+              window.open(share_url, '', window_features);
+              break;
+          }
+
+        });    
+      });
+
+      function replace_share_url_placeholders(share_url, encode = true) {
+        if (!share_url) {
+          return "";
+        }
+        share_url = share_url.replaceAll("[[URL]]", url)
+        share_url = share_url.replaceAll("[[TITLE]]", title)
+        share_url = share_url.replaceAll("[[DESCRIPTION]]", description)
+        if (encode) {
+          share_url = encodeURI(share_url);
+        }
+        return share_url;
+      }
+    </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- OBJECT FIT PARA IE -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+   objectFitImages('img.OF-cover');
+  </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- MOBILE MENU -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  <script>
+    $(function () {
+      resetBoxProperties();
+      if ($(window).width() <= 5000) { // colocar menu "normal" dentro da div do menu na versao mobile
+        $('nav#menu').append($(".widget.horizontal_menu").html());
+        $('nav#menu').mmenu({
+          navbar: {
+            title: ''
+          },
+          navbars: [{
+            position: 'top',
+            content: [
+              'prev',
+              'title'
+            ]
+          }]
+        }, {
+            classNames: {
+              selected: 'selected'
+            }
+          });
+      }
+    });
+  </script>
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- LABELS DAS AREAS - so aparece em backoffice -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- AREA CENTRAL COM ALTURA E AREAS PARTILHADAS A CINZA - so aparece em backoffice -->
+  <!-------------------------------------------------------------------------------------------------------------->
+
+
+  <!-------------------------------------------------------------------------------------------------------------->
+  <!-- WIREFORMS - necessario para que seja feito o render dos formularios -->
+  <!-------------------------------------------------------------------------------------------------------------->
+  
+
+  </body>
+</html>

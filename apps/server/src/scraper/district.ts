@@ -99,6 +99,15 @@ const KNOWN_PARISHES = [
 	"mira de aire",
 	"juncal",
 	"sao jorge",
+	// Caldas da Rainha freguesias that arrive through a neighbour's agenda
+	// card ("Avenida do Mar, Foz do Arelho" — festasearraiais live data;
+	// Salir do Porto appears inside the Tornada union's own name). Without
+	// them the Óbidos source had no way to place the tail and blamed Óbidos
+	// for a venue that sits in the next concelho.
+	"foz do arelho",
+	"salir do porto",
+	"tornada",
+	"carvalhal benfeito",
 	"ordem",
 	"benedita",
 	"ribafria",
@@ -140,6 +149,25 @@ const KNOWN_PARISHES = [
  */
 function mentionsLeiriaName(norm: string): boolean {
 	return /(^|[^a-z])leir/.test(norm);
+}
+
+/**
+ * A locality (freguesia / lugar) of the district that is NOT one of the 14
+ * municipalities. Rosters disagree on this field: viralagenda reports the
+ * worked place ("Ordem", "São Pedro de Moel") while a municipal agenda
+ * reports the concelho ("Marinha Grande") — the same event, two city strings,
+ * one concelho. This is the discriminator the identity layer's vague↔specific
+ * wildcard uses. A municipality name is a deliberate cross-concelho boundary
+ * and never counts as a locality here.
+ */
+export function isDistrictLocality(city: string | null | undefined): boolean {
+	if (!city) return false;
+	const norm = normalizePlace(city);
+	if (norm.length === 0 || norm === "?" || norm === "n/d") return false;
+	if ((LEIRIA_DISTRICT_MUNICIPALITIES as readonly string[]).includes(norm)) {
+		return false;
+	}
+	return (KNOWN_PARISHES as readonly string[]).includes(norm);
 }
 
 /**
