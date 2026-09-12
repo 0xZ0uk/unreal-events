@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 
-import { auth } from "./auth";
+import { auth } from "./auth.js";
 
 /**
  * `/api/auth/*` as a Hono sub-app, shared by the Vercel function and the dev

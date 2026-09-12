@@ -1,8 +1,8 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 
-import { authEnv } from "./env";
-import * as schema from "./schema";
+import { authEnv } from "./env.js";
+import * as schema from "./schema.js";
 
 /**
  * The auth database, on its own libSQL connection.
