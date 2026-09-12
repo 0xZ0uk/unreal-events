@@ -1,3 +1,4 @@
+import { AccountMenu } from "@/components/auth/account-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Agenda } from "@/hooks/use-agenda";
 import { MICRO } from "./layout";
@@ -23,7 +24,10 @@ export function Masthead({ agenda }: { agenda: Agenda }) {
 		<header className="pt-6 sm:pt-10">
 			<div className="flex items-center justify-between gap-4">
 				<Wordmark />
-				<ThemeToggle />
+				<div className="flex items-center gap-2">
+					<AccountMenu />
+					<ThemeToggle />
+				</div>
 			</div>
 
 			<div className="mt-14 sm:mt-20">
