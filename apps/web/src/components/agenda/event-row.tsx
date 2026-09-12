@@ -5,6 +5,12 @@ import { MICRO } from "./layout";
 export type RowProps = {
 	title: string;
 	href: string | null;
+	/**
+	 * This event's own page. When present the row's main target becomes the
+	 * internal page and the source keeps the small link on the right; without
+	 * it (announcements) the row falls back to the source URL.
+	 */
+	detailHref: string | null;
 	imageUrl: string | null;
 	/** `19:30`, a dash, or the source's own date text — decided by the caller. */
 	time: ReactNode;
@@ -26,10 +32,17 @@ export type RowProps = {
  * 44px clock leaves too little for a title the sources write at up to 97
  * characters. From `sm` up the row opens into thumb + clock + text, where the
  * posters earn their space.
+ *
+ * The row is no longer wrapped in a single anchor — an event has two
+ * destinations (its page, and the source) and anchors cannot nest. Instead the
+ * primary target is a stretched link behind the content, and the source link
+ * sits above it on the right (mobile: in the meta line, where the fourth grid
+ * column does not exist).
  */
 export function EventRow({
 	title,
 	href,
+	detailHref,
 	imageUrl,
 	time,
 	dateTime,
@@ -45,6 +58,20 @@ export function EventRow({
 		"col-start-1 row-start-1 pt-0.5 font-mono text-[13px] leading-tight tabular-nums text-muted-foreground sm:col-start-2 sm:text-[14px]";
 	const place = venue && city ? `${venue} · ${city}` : (venue ?? city ?? null);
 	const meta = [note, place].filter((part): part is string => Boolean(part));
+
+	const destination = detailHref ?? href;
+	const external = !detailHref && Boolean(href);
+	const sourceLink = (className: string) => (
+		<a
+			href={href ?? undefined}
+			target="_blank"
+			rel="noopener noreferrer"
+			className={className}
+		>
+			<ExternalLink aria-hidden="true" strokeWidth={1.5} className="size-3.5" />
+			<span className="sr-only">Abrir no site original (novo separador)</span>
+		</a>
+	);
 
 	const body = (
 		<>
@@ -93,37 +120,53 @@ export function EventRow({
 							também às {extraSessions.join(", ")}
 						</span>
 					) : null}
+					{href
+						? sourceLink(
+								"relative z-20 inline-flex shrink-0 items-center sm:hidden",
+							)
+						: null}
 				</p>
 			</div>
 
-			{href ? (
-				<ExternalLink
-					aria-hidden="true"
-					strokeWidth={1.5}
-					className="col-start-4 row-start-1 mt-1 hidden size-3.5 text-muted-foreground/60 group-hover:text-foreground motion-safe:transition-colors sm:block"
-				/>
-			) : null}
+			{href
+				? sourceLink(
+						"relative z-20 col-start-4 row-start-1 mt-1 hidden items-center justify-center text-muted-foreground/60 group-hover:text-foreground motion-safe:transition-colors sm:flex",
+					)
+				: null}
 		</>
 	);
 
 	const shape =
-		"group -mx-2 grid scroll-mt-16 grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem] sm:gap-x-4";
+		"group relative -mx-2 grid scroll-mt-16 grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem] sm:gap-x-4";
+	// Joined, not concatenated: a missing space silently merged two classes and
+	// dropped `relative`, which sent every stretched link to the viewport corner.
+	const rowClass = [
+		shape,
+		destination ? "hover:bg-card" : "",
+		"motion-safe:transition-colors",
+	]
+		.filter(Boolean)
+		.join(" ");
 
 	return (
 		<li>
-			{href ? (
-				<a
-					href={href}
-					target="_blank"
-					rel="noopener noreferrer"
-					className={`${shape} focus-ring hover:bg-card motion-safe:transition-colors`}
-				>
-					{body}
-					<span className="sr-only">(abre num novo separador)</span>
-				</a>
-			) : (
-				<div className={shape}>{body}</div>
-			)}
+			<div className={rowClass}>
+				{destination ? (
+					<a
+						href={destination}
+						aria-label={
+							external
+								? `${title} (abre num novo separador)`
+								: `${title} — ver a página do evento`
+						}
+						{...(external
+							? { target: "_blank", rel: "noopener noreferrer" }
+							: {})}
+						className="focus-ring absolute inset-0 z-10 rounded-[4px]"
+					/>
+				) : null}
+				{body}
+			</div>
 		</li>
 	);
 }

@@ -1,10 +1,15 @@
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { Announcements } from "@/components/agenda/announcements";
 import { PageFooter } from "@/components/agenda/footer";
 import { SHELL } from "@/components/agenda/layout";
 import { AgendaPage } from "@/components/agenda/page";
+import { Analytics } from "@/components/analytics";
+import { EventPage } from "@/components/event/event-page";
+import { EventNotFound } from "@/components/event/not-found";
 import { useAgenda } from "@/hooks/use-agenda";
 import { queryClient } from "@/utils/api";
+import { pathnameToRoute } from "@/utils/route";
 
 /** Sits inside the provider: `useAgenda` needs the query client above it. */
 function AgendaShell() {
@@ -23,10 +28,72 @@ function AgendaShell() {
 	);
 }
 
+/**
+ * One pathname instead of a router dependency.
+ *
+ * Event pages are prerendered to real files by the build step, so a cold load
+ * is crawlable without JS; this only takes over once the app is running.
+ * Clicks are intercepted so a trip into an event and back does not reload the
+ * document — which keeps the agenda's query cache alive and, because the
+ * filters live in `location.search`, worth returning to.
+ */
+function usePathname(): string {
+	const [pathname, setPathname] = useState(() => window.location.pathname);
+
+	useEffect(() => {
+		const sync = () => setPathname(window.location.pathname);
+
+		const onClick = (event: MouseEvent) => {
+			if (event.defaultPrevented || event.button !== 0) return;
+			if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+				return;
+
+			const anchor = (event.target as Element | null)?.closest("a");
+			const href = anchor?.getAttribute("href");
+			if (
+				!anchor ||
+				!href?.startsWith("/") ||
+				anchor.target === "_blank" ||
+				anchor.hasAttribute("download")
+			)
+				return;
+
+			event.preventDefault();
+			// Where we came from, so an event page can offer the way back to the
+			// same filtered agenda instead of a bare home link.
+			window.history.pushState(
+				{ from: window.location.pathname + window.location.search },
+				"",
+				href,
+			);
+			sync();
+			window.scrollTo(0, 0);
+		};
+
+		window.addEventListener("popstate", sync);
+		document.addEventListener("click", onClick);
+		return () => {
+			window.removeEventListener("popstate", sync);
+			document.removeEventListener("click", onClick);
+		};
+	}, []);
+
+	return pathname;
+}
+
+function Routes() {
+	const route = pathnameToRoute(usePathname());
+
+	if (route.kind === "event") return <EventPage slug={route.slug} />;
+	if (route.kind === "notFound") return <EventNotFound />;
+	return <AgendaShell />;
+}
+
 export function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AgendaShell />
+			<Routes />
+			<Analytics />
 		</QueryClientProvider>
 	);
 }

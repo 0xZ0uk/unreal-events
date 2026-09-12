@@ -1,4 +1,5 @@
 import {
+	eventBySlug,
 	eventStats,
 	listEvents,
 	listInput,
@@ -40,6 +41,7 @@ export const queryClient = new QueryClient({
 export type PublicEvent = Awaited<ReturnType<typeof listEvents>>[number];
 export type UndatedEvent = Awaited<ReturnType<typeof undatedEvents>>[number];
 export type EventStats = Awaited<ReturnType<typeof eventStats>>;
+export type EventDetail = Awaited<ReturnType<typeof eventBySlug>>;
 
 export const api = {
 	/** Every event starting inside the window, oldest first. */
@@ -72,6 +74,13 @@ export const api = {
 			queryOptions({
 				queryKey: ["agenda", "stats"],
 				queryFn: () => eventStats(db),
+			}),
+	},
+	event: {
+		queryOptions: (slug: string) =>
+			queryOptions({
+				queryKey: ["event", slug],
+				queryFn: () => eventBySlug(db, slug),
 			}),
 	},
 };

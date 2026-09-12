@@ -27,6 +27,7 @@ const WINDOW_DAYS = 90;
 
 export type AgendaRow = {
 	id: number;
+	slug: string;
 	title: string;
 	url: string | null;
 	imageUrl: string | null;
@@ -147,6 +148,7 @@ function toRow(event: PublicEvent): AgendaRow {
 	const categories = event.categories ?? [];
 	return {
 		id: event.id,
+		slug: event.slug,
 		title: event.title,
 		url: event.url,
 		imageUrl: event.imageUrl,
