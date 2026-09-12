@@ -20,7 +20,6 @@ const eventSelect = {
 	id: schema.events.id,
 	title: schema.events.title,
 	slug: schema.events.slug,
-	description: schema.events.description,
 	start_at: schema.events.start_at,
 	end_at: schema.events.end_at,
 	venue_id: schema.events.venue_id,
@@ -37,7 +36,6 @@ type EventRow = {
 	id: number;
 	title: string;
 	slug: string;
-	description: string | null;
 	start_at: number;
 	end_at: number | null;
 	venue_id: number | null;
@@ -55,7 +53,6 @@ function toPublicEvent(row: EventRow) {
 		id: row.id,
 		title: row.title,
 		slug: row.slug,
-		description: row.description,
 		startAt: row.start_at,
 		endAt: row.end_at,
 		venueId: row.venue_id,
@@ -79,8 +76,24 @@ function toPublicEventList(rows: EventRow[]) {
 	return mergeSameDaySessions(rows.map(toPublicEvent));
 }
 
+/**
+ * Rows returned for a whole agenda window.
+ *
+ * The 90-day window is already bounded by time, so this is a safety valve, not
+ * a page size. It used to be 500, which the live window (492 merged events)
+ * was within 8 events of hitting — at which point the furthest-future events
+ * drop off the end without any failed request, and only the truncation note
+ * hints that they were ever there.
+ *
+ * 2000 restores headroom without a page loop. Rows carry no `description` (the
+ * list renders title/venue/day only), which is measured at ~660B/row: ~325KB
+ * for the live window, ~1.3MB if the cap is ever reached. That size is the
+ * signal to replace this cap with real paging, not to raise it again.
+ */
+export const WINDOW_MAX = 2000;
+
 export const listInput = z.object({
-	limit: z.number().int().min(1).max(500).default(500),
+	limit: z.number().int().min(1).max(WINDOW_MAX).default(WINDOW_MAX),
 	offset: z.number().int().min(0).default(0),
 	venueSlug: z.string().optional(),
 	category: z.string().optional(),
