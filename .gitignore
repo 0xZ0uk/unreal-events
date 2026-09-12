@@ -57,3 +57,6 @@ coverage
 .cache
 tmp
 temp
+
+# local SQLite backups (never shipped)
+.backups/

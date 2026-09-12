@@ -1,8 +1,9 @@
 import { db, schema } from "@events-tracker/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { canonicalizeCategories } from "./categories";
-import { fingerprint, fingerprintUndated } from "./fingerprint";
+import { deleteEvents } from "./event-delete";
+import { fingerprint, fingerprintUndated, lisbonDay } from "./fingerprint";
 import { normalizeVenueName, slugify, venuesMatch } from "./normalize";
 import { purgePastEvents } from "./purge";
 import { reconcileIdentities } from "./reconcile";
@@ -104,9 +105,44 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 			? fingerprint(raw.title, venueRef, raw.startAt)
 			: fingerprintUndated(raw.title, venueRef);
 
-	const existing = await db.query.events.findFirst({
+	let existing = await db.query.events.findFirst({
 		where: eq(schema.events.fingerprint, fp),
 	});
+
+	// Same source item, same Lisbon day, different fingerprint: the source
+	// re-published this event (retitled, moved venue, shifted the time). That is
+	// the SAME occurrence, so reuse its row — a twin minted here is invisible to
+	// the identity pass, which only wildcards across venues inside one
+	// (title, day) group. A different day stays a separate row on purpose:
+	// recurring sources (Região de Leiria, monthly feiras) publish one slug that
+	// legitimately covers several occurrences.
+	if (!existing && raw.startAt != null && raw.slug) {
+		const startAt = raw.startAt;
+		const priors = await db
+			.select({
+				id: schema.events.id,
+				start_at: schema.events.start_at,
+			})
+			.from(schema.eventSources)
+			.innerJoin(
+				schema.events,
+				eq(schema.events.id, schema.eventSources.event_id),
+			)
+			.where(
+				and(
+					eq(schema.eventSources.source, source),
+					eq(schema.eventSources.source_event_id, raw.slug),
+				),
+			);
+		const twin = priors.find(
+			(p) => lisbonDay(p.start_at) === lisbonDay(startAt),
+		);
+		if (twin) {
+			existing = await db.query.events.findFirst({
+				where: eq(schema.events.id, twin.id),
+			});
+		}
+	}
 
 	if (existing) {
 		// Cross-source reconciliation: a second source seeing the same event
@@ -183,13 +219,15 @@ async function upsertEvent(raw: RawEvent, source: string): Promise<EventWrite> {
 	}
 	if (raw.startAt != null) {
 		// Ghost cleanup: an UNDATED twin of this event (same normalized
-		// title + venue) is now superseded by the dated row. event_sources
-		// rows cascade with it.
-		await db
-			.delete(schema.events)
+		// title + venue) is now superseded by the dated row. Its
+		// event_sources rows go with it.
+		const ghosts = await db
+			.select({ id: schema.events.id })
+			.from(schema.events)
 			.where(
 				eq(schema.events.fingerprint, fingerprintUndated(raw.title, venueRef)),
 			);
+		await deleteEvents(ghosts.map((g) => g.id));
 	}
 	await db
 		.insert(schema.eventSources)
