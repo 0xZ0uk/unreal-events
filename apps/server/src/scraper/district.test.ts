@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+	inDistrictScope,
+	isKnownLeiriaVenue,
 	isLeiriaDistrict,
 	LEIRIA_DISTRICT_MUNICIPALITIES,
 	normalizePlace,
@@ -117,5 +119,44 @@ describe("district gate — neighbour freguesias reach us through other agendas"
 	test("still no free pass for places outside the district", () => {
 		expect(isLeiriaDistrict("Arelho")).toBe(false);
 		expect(isLeiriaDistrict("Serra do Bouro")).toBe(false);
+	});
+});
+
+// SLICE_17: some upstreams never localize a venue, so the row has no place to
+// gate on at all. A venue we know by fact is evidence in its own right (O Pica
+// Miolos is a Leiria bar NoCartaz files under Coimbra); a venue we do not know
+// is still refused, however its row is filed.
+describe("inDistrictScope — a known venue places an unlocalized row", () => {
+	test("a curated venue with no locality is in scope", () => {
+		expect(inDistrictScope(null, "O Pica Miolos")).toBe(true);
+		expect(inDistrictScope("", "Baleia Baleia Baleia @ O Pica Miolos")).toBe(
+			true,
+		);
+	});
+
+	test("the resolved place still decides on its own", () => {
+		expect(inDistrictScope("Leiria", null)).toBe(true);
+		expect(inDistrictScope("Óbidos", "O Pica Miolos")).toBe(true);
+	});
+
+	test("the venue is read as a place too — 'Castelo de Leiria' needs no curation", () => {
+		expect(inDistrictScope(null, "Castelo de Leiria")).toBe(true);
+		expect(inDistrictScope(null, "ÁGORA no Castelo de Leiria")).toBe(true);
+	});
+
+	test("an unknown venue never becomes a free pass", () => {
+		expect(inDistrictScope(null, "Casa da Música")).toBe(false);
+		expect(inDistrictScope("Coimbra", "Casa da Música")).toBe(false);
+		expect(inDistrictScope(null, null)).toBe(false);
+		expect(inDistrictScope(null, undefined)).toBe(false);
+		expect(inDistrictScope("", "")).toBe(false);
+	});
+
+	test("isKnownLeiriaVenue is the venue half on its own", () => {
+		expect(isKnownLeiriaVenue("Baleia Baleia Baleia @ O Pica Miolos")).toBe(
+			true,
+		);
+		expect(isKnownLeiriaVenue("Casa da Música")).toBe(false);
+		expect(isKnownLeiriaVenue(null)).toBe(false);
 	});
 });

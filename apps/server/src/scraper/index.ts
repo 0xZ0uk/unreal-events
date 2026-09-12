@@ -7,7 +7,7 @@ import { scrape as scrapeBol } from "./bol";
 import { scrape as scrapeCaldas } from "./caldas";
 import { scrape as scrapeCisterfestas } from "./cisterfestas";
 import { scrape as scrapeCmLeiriarss } from "./cmleiriarss";
-import { isLeiriaDistrict } from "./district";
+import { inDistrictScope, isLeiriaDistrict } from "./district";
 import { scrape as scrapeEventbrite } from "./eventbrite";
 import { scrape as scrapeFestasearraiais } from "./festasearraiais";
 import { scrape as scrapeFigueiro } from "./figueiro";
@@ -49,11 +49,16 @@ const scrapeObidosDistrict = async () =>
 const scrapeCaldasDistrict = async () =>
 	scrapeCaldas(undefined, (place) => isLeiriaDistrict(place));
 
-/** SLICE_10: nocartaz is a venue-hub aggregator. Its Leiria district hub mixes
- * in rows filed from outside the district (Bandsintown/3cket gigs), so the gate
- * runs on the resolved locality, not on the hub route. */
+/** SLICE_10 + SLICE_17: nocartaz is a venue-hub aggregator. Its Leiria district
+ * hub mixes in rows filed from outside the district (Bandsintown/3cket gigs), so
+ * the gate runs on the resolved locality, not on the hub route — and since its
+ * aggregator rows often carry NO locality at all, the gate is the venue-aware
+ * one: a venue we know by fact (O Pica Miolos) places its own events, wherever
+ * the hub filed them. */
 const scrapeNocartazDistrict = async () =>
-	scrapeNocartaz(undefined, (place) => isLeiriaDistrict(place));
+	scrapeNocartaz(undefined, (place, venueEvidence) =>
+		inDistrictScope(place, venueEvidence),
+	);
 
 /** SLICE_10 tier-2 coverage sources. figueiro is a municipal agenda (its city
  * chip is the concelho); turismodocentro gates on the concelho terms of the

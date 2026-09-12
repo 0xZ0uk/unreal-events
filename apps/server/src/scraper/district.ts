@@ -23,6 +23,7 @@
  * source filters identically and the UI copy matches the scraper reality.
  */
 
+import { knownVenueFor } from "@events-tracker/api/known-venues";
 import {
 	DISTRICT_MUNICIPALITIES,
 	DISTRICT_PARISHES,
@@ -192,4 +193,38 @@ export function isLeiriaDistrict(city: string | null | undefined): boolean {
 		return true;
 	}
 	return isKnownParish(norm);
+}
+
+/**
+ * True when the evidence names a venue we know sits in the district, even
+ * though the row carries no place token to gate on. Curated in
+ * @events-tracker/api/known-venues (SLICE_17) — e.g. O Pica Miolos, a Leiria
+ * bar NoCartaz files under Coimbra with no locality on the row. The evidence is
+ * the venue's own name taken from a card title's ` @ ` suffix.
+ */
+export function isKnownLeiriaVenue(
+	evidence: string | null | undefined,
+): boolean {
+	return knownVenueFor(evidence) !== null;
+}
+
+/**
+ * District scope for a row: the resolved place, OR a venue name we know is in
+ * the district. Feeding the venue through the place gate already catches names
+ * that embed a place ("Castelo de Leiria", "ÁGORA no Castelo de Leiria"); the
+ * curated list catches names that carry no place token at all.
+ *
+ * `isLeiriaDistrict` is left exactly as it is — every other caller keeps its
+ * behaviour; the venue-aware variant is used by sources whose rows can be filed
+ * by name alone.
+ */
+export function inDistrictScope(
+	city: string | null | undefined,
+	venueEvidence?: string | null,
+): boolean {
+	return (
+		isLeiriaDistrict(city) ||
+		isLeiriaDistrict(venueEvidence) ||
+		isKnownLeiriaVenue(venueEvidence)
+	);
 }

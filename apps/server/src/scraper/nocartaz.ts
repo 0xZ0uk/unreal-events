@@ -1,4 +1,8 @@
-import { isLeiriaDistrict } from "./district";
+import {
+	knownVenueFor,
+	titlePlaceCity,
+} from "@events-tracker/api/known-venues";
+import { inDistrictScope, isLeiriaDistrict, normalizePlace } from "./district";
 import { errorMessage } from "./errors";
 import { toEpochInLisbon } from "./fingerprint";
 import { defaultFetchText } from "./http";
@@ -50,10 +54,63 @@ import type { RawEvent } from "./types";
  * cached is emitted from the cache (no refetch), so the description/image a
  * second run writes never degrades to card-only data; unseen ids fetch once,
  * and the map is pruned to the ids the page still lists.
+ *
+ * SLICE_17 — rows the hub cannot localize. A row NoCartaz cannot place carries
+ * `data-concelho=""`, an empty `.where` span, a blank Sala/Concelho on its
+ * detail page ("Portugal ()") and an `addressRegion` that is only the
+ * aggregator's guess. The district gate has nothing to gate on, so the event was
+ * dropped. Two things now happen instead:
+ *
+ *   venue evidence  the venue name is taken from the detail, the card, or — for
+ *                   aggregator-fed rows, where it is the only mention — the
+ *                   card title's ` @ ` suffix ("Baleia Baleia Baleia @ O Pica
+ *                   Miolos"). A venue curated in @events-tracker/api/known-venues
+ *                   is in-district evidence by itself, and its concelho becomes
+ *                   the event's city (a Leiria bar must never ship as Coimbra).
+ *   all hubs        the misfiled row lives on the hub of the aggregator's own
+ *                   region guess — O Pica Miolos, a Leiria bar, sits on the
+ *                   COIMBRA hub — so every district hub is scanned, and only
+ *                   allowlist hits are kept from districts other than Leiria.
+ *
+ * Title text is also the last resort for rows that name no venue at all (3cket,
+ * ecultura, ticketline, bol, blueticket, dgartes feeds): when the row has no
+ * locality, a district municipality named in the TITLE places it (see
+ * `titlePlaceCity`).
  */
 
 export const ORIGIN = "https://www.nocartaz.pt";
 export const LISTING = `${ORIGIN}/distrito/leiria/`;
+
+/**
+ * Every district hub the site publishes, Leiria first (SLICE_17). The Leiria
+ * hub is the primary listing and its failure fails the source; the other 19 are
+ * a best-effort scan that keeps ONLY rows whose venue matches the curated
+ * allowlist — never another district's events wholesale.
+ */
+export const DISTRICT_HUBS: readonly string[] = [
+	"leiria",
+	"acores",
+	"aveiro",
+	"beja",
+	"braga",
+	"braganca",
+	"castelo-branco",
+	"coimbra",
+	"evora",
+	"faro",
+	"guarda",
+	"lisboa",
+	"madeira",
+	"portalegre",
+	"porto",
+	"santarem",
+	"setubal",
+	"viana-do-castelo",
+	"vila-real",
+	"viseu",
+];
+
+export const hubUrl = (slug: string): string => `${ORIGIN}/distrito/${slug}/`;
 
 /** Safety net on detail fetches per run; unseen ids are retried next run. */
 export const MAX_DETAIL_REQUESTS = 400;
@@ -107,7 +164,7 @@ export function categoriesFor(genre: string): string[] {
  * words, or it is labelled "agenda".
  */
 export function isFeedVenue(slug: string, venue: string): boolean {
-	const slugTokens = venueTokens(slug.replace(/[-\/]/g, " "));
+	const slugTokens = venueTokens(slug.replace(/[-/]/g, " "));
 	const nameTokens = new Set(venueTokens(venue));
 	if (
 		slugTokens.length > 0 &&
@@ -175,9 +232,15 @@ export interface ScrapeDeps {
 	loadState: () => NocartazState;
 	saveState: (s: NocartazState) => void;
 	now: number;
+	/**
+	 * District hubs to scan, primary (Leiria) first. Defaults to every hub the
+	 * site publishes; tests narrow it so they do not have to stub 20 pages.
+	 */
+	hubs?: readonly string[];
 }
 
-const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+const defaultSleep = (ms: number) =>
+	new Promise<void>((r) => setTimeout(r, ms));
 const randomDelay = () => 350 + Math.floor(Math.random() * 300);
 
 function stripTags(html: string): string {
@@ -217,8 +280,11 @@ export function parseCards(html: string): NocartazCard[] {
 		seen.add(id);
 
 		// `<span class="where"><span>Venue</span><span class="concelho">· City</span></span>`
-		const where = /class="where">([\s\S]*?)<\/span>\s*<div/.exec(body)?.[1] ?? "";
-		const cityChip = /<span class="concelho">([\s\S]*?)<\/span>/.exec(where)?.[1];
+		const where =
+			/class="where">([\s\S]*?)<\/span>\s*<div/.exec(body)?.[1] ?? "";
+		const cityChip = /<span class="concelho">([\s\S]*?)<\/span>/.exec(
+			where,
+		)?.[1];
 		const venue = /<span>([\s\S]*?)<\/span>/.exec(where)?.[1];
 
 		out.push({
@@ -232,18 +298,144 @@ export function parseCards(html: string): NocartazCard[] {
 			startsAt: cardAttr(attrs, "starts-at"),
 			genre: cardAttr(attrs, "genre"),
 			free: cardAttr(attrs, "free") === "1",
-			when: textOf(/class="when"[^>]*>([\s\S]*?)<\/span>/.exec(body)?.[1] ?? ""),
+			when: textOf(
+				/class="when"[^>]*>([\s\S]*?)<\/span>/.exec(body)?.[1] ?? "",
+			),
 			venueSlug: cardAttr(attrs, "venue"),
 			description:
 				textOf(/<p class="pitch-line">([\s\S]*?)<\/p>/.exec(body)?.[1] ?? "") ||
 				null,
 			imageUrl:
-				/<div class="card-thumb">[\s\S]*?<img[^>]+src="([^"]+)"/.exec(body)?.[1] ??
-				null,
+				/<div class="card-thumb">[\s\S]*?<img[^>]+src="([^"]+)"/.exec(
+					body,
+				)?.[1] ?? null,
 			url: `${ORIGIN}/eventos/${id}/`,
 		});
 	}
 	return out;
+}
+
+/**
+ * The venue a card title names, when the markup does not name one (SLICE_17).
+ *
+ * Aggregator-fed rows are titled `<artist> @ <venue>` and carry an EMPTY
+ * `.where` span — "Baleia Baleia Baleia @ O Pica Miolos" is the only place the
+ * venue reaches us. The LAST `@` wins so an artist name containing one cannot
+ * steal the split; a suffix that is empty or implausibly long (prose, not a
+ * room) is refused rather than guessed.
+ */
+export function titleVenue(title: string | null | undefined): string | null {
+	const text = (title ?? "").trim();
+	const at = text.lastIndexOf("@");
+	if (at < 1) {
+		return null;
+	}
+	const left = text.slice(0, at).trim();
+	const venue = text.slice(at + 1).trim();
+	if (left.length === 0 || venue.length === 0 || venue.length > 60) {
+		return null;
+	}
+	return venue;
+}
+
+/**
+ * `location.name` is the room for a normal row and the literal country for an
+ * aggregator-fed one ("Portugal"). A country is not a venue — such a row takes
+ * its venue from the card or the title instead.
+ */
+const COUNTRY_PLACEHOLDERS = new Set([
+	"portugal",
+	"portugal continental",
+	"pt",
+]);
+
+function usableVenueName(name: string | null | undefined): string | null {
+	const value = (name ?? "").trim();
+	if (value.length === 0) {
+		return null;
+	}
+	return COUNTRY_PLACEHOLDERS.has(normalizePlace(value)) ? null : value;
+}
+
+/**
+ * How a card names its venue: the `.where` text when it has one, else the
+ * title's ` @ ` suffix. This is the evidence the allowlist scan matches on, so
+ * it is also what decides whether an off-district hub card is worth a detail
+ * fetch at all.
+ */
+export function cardVenueEvidence(card: NocartazCard): string | null {
+	return usableVenueName(card.venue) ?? titleVenue(card.title);
+}
+
+/** One event link carried by a hub's JSON-LD `ItemList`. */
+export interface ItemListEntry {
+	id: string;
+	name: string;
+}
+
+/**
+ * The hub's `ItemList` — 30 events INCLUDING today, where the card grid starts
+ * tomorrow and stops at its own cap. On the Leiria hub it is a second chance at
+ * rows the grid drops; on every other hub it is where a misfiled row shows up
+ * at all (both O Pica Miolos events are only in the Coimbra hub's list).
+ */
+export function parseItemList(html: string): ItemListEntry[] {
+	const out: ItemListEntry[] = [];
+	const seen = new Set<string>();
+	for (const block of html.matchAll(
+		/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+	)) {
+		let parsed: unknown;
+		try {
+			parsed = JSON.parse(block[1] ?? "");
+		} catch {
+			continue;
+		}
+		const nodes: unknown[] = Array.isArray(parsed) ? parsed : [parsed];
+		for (const node of nodes) {
+			const list = node as { "@type"?: unknown; itemListElement?: unknown[] };
+			if (!list || typeof list !== "object" || list["@type"] !== "ItemList") {
+				continue;
+			}
+			for (const raw of list.itemListElement ?? []) {
+				const item = raw as { name?: unknown; url?: unknown };
+				const url = typeof item?.url === "string" ? item.url : "";
+				const name =
+					typeof item?.name === "string" ? decodeEntities(item.name) : "";
+				const id = /\/eventos\/([0-9a-f]+)\//.exec(url)?.[1] ?? "";
+				if (id.length === 0 || name.trim().length === 0 || seen.has(id)) {
+					continue;
+				}
+				seen.add(id);
+				out.push({ id, name: name.trim() });
+			}
+		}
+	}
+	return out;
+}
+
+/**
+ * An `ItemList` entry as a card: the list gives an id and a title, and nothing
+ * else — the detail page supplies the date the gate needs, so an entry whose
+ * detail cannot be fetched is simply not emitted (and retried next run). The
+ * genre is unknown to the list, so categories stay empty rather than inferred.
+ */
+export function itemListCard(entry: ItemListEntry): NocartazCard {
+	return {
+		id: entry.id,
+		title: entry.name,
+		venue: "",
+		city: "",
+		date: "",
+		startsAt: "",
+		genre: "",
+		free: false,
+		when: "",
+		venueSlug: "",
+		description: null,
+		imageUrl: null,
+		url: `${ORIGIN}/eventos/${entry.id}/`,
+	};
 }
 
 /** The schema.org Event block of a detail page, when the page has one. */
@@ -259,7 +451,7 @@ function eventNode(html: string): Record<string, unknown> | null {
 		}
 		const nodes: unknown[] = Array.isArray(parsed)
 			? parsed
-			: (parsed as { "@graph"?: unknown[] })?.["@graph"] ?? [parsed];
+			: ((parsed as { "@graph"?: unknown[] })?.["@graph"] ?? [parsed]);
 		for (const node of nodes) {
 			if (
 				typeof node === "object" &&
@@ -345,17 +537,53 @@ export function toRawEvent(
 	card: NocartazCard,
 	detail: NocartazDetail | null,
 	now: number,
-	isInScope: (city: string | null | undefined) => boolean,
+	isInScope: (
+		city: string | null | undefined,
+		venueEvidence?: string | null,
+	) => boolean,
 ): RawEvent | null {
 	const title = (detail?.title ?? card.title).replace(/\s+/g, " ").trim();
 	if (!title) {
 		return null;
 	}
 
-	const city = detail?.city ?? card.city ?? null;
-	if (!isInScope(city)) {
+	// Venue evidence, best first: the detail's own room name, the card's, then
+	// the name the title carries — which for an aggregator-fed row is the only
+	// mention of the venue anywhere on the row.
+	const venueEvidence =
+		usableVenueName(detail?.venue) ??
+		usableVenueName(card.venue) ??
+		titleVenue(card.title);
+	const known = knownVenueFor(venueEvidence) ?? knownVenueFor(card.title);
+	const rowCity = ((detail?.city ?? card.city) || "").trim() || null;
+	const rowCityInDistrict = isLeiriaDistrict(rowCity);
+
+	// The row's own locality decides first, then a curated venue, then — only
+	// when the row carries NO locality at all — a district municipality named in
+	// the title. That order is the whole point: a title can never override a
+	// real, out-of-district city.
+	let inScope = isInScope(rowCity, venueEvidence);
+	if (!inScope && known) {
+		inScope = true;
+	}
+	if (!inScope && !rowCity) {
+		inScope =
+			titlePlaceCity(card.title) !== null || titlePlaceCity(title) !== null;
+	}
+	if (!inScope) {
 		return null;
 	}
+
+	// A venue we curated is a fact; the aggregator's region guess is not. A row
+	// filed under Coimbra still ships with its true concelho — an event is never
+	// left placeless or mislabelled because the upstream could not localize it.
+	const city =
+		(rowCityInDistrict ? rowCity : null) ??
+		known?.city ??
+		titlePlaceCity(venueEvidence) ??
+		titlePlaceCity(card.title) ??
+		titlePlaceCity(title) ??
+		rowCity;
 
 	const startAt =
 		epochFromRaw(detail?.startAt) ??
@@ -375,10 +603,13 @@ export function toRawEvent(
 		return null; // already over
 	}
 
-	const venue = (detail?.venue ?? card.venue).trim();
+	const venue = (venueEvidence ?? "").trim();
 	// Feed rows name the feed, not a room (see isFeedVenue): the concelho is
 	// the most specific place such a row actually knows.
-	const venueName = isFeedVenue(card.venueSlug, venue) ? city || venue : venue || city;
+	const cityLabel = city ?? "";
+	const venueName = isFeedVenue(card.venueSlug, venue)
+		? cityLabel || venue
+		: venue || cityLabel;
 
 	return {
 		title,
@@ -407,7 +638,10 @@ export async function scrape(
 		saveState: (s) => saveState("nocartaz", s),
 		now: Math.floor(Date.now() / 1000),
 	},
-	isInScope: (city: string | null | undefined) => boolean = isLeiriaDistrict,
+	isInScope: (
+		city: string | null | undefined,
+		venueEvidence?: string | null,
+	) => boolean = (city, venueEvidence) => inDistrictScope(city, venueEvidence),
 ): Promise<ScrapeResult> {
 	let failures = 0;
 	let firstError: string | null = null;
@@ -418,11 +652,16 @@ export async function scrape(
 	const state = deps.loadState();
 	const cached = state.details;
 
+	// The primary hub comes first and its failure is the source's failure. The
+	// rest are the SLICE_17 scan for rows filed on the wrong district.
+	const hubs = deps.hubs ?? DISTRICT_HUBS;
+	const primary = hubs[0] ?? "leiria";
+
 	let html: string | null = null;
 	for (let attempt = 0; attempt < PAGE_ATTEMPTS; attempt++) {
 		try {
 			await delay();
-			html = await deps.fetchText(LISTING);
+			html = await deps.fetchText(hubUrl(primary));
 			pagesFetched++;
 			break;
 		} catch (err) {
@@ -436,13 +675,64 @@ export async function scrape(
 		return {
 			events: [],
 			failures: failures + 1,
-			firstError: `${LISTING}: ${firstError ?? "unknown error"}`,
+			firstError: `${hubUrl(primary)}: ${firstError ?? "unknown error"}`,
 			pagesFetched,
 			discovered: 0,
 		};
 	}
 
-	const cards = parseCards(html);
+	const candidates: NocartazCard[] = [];
+	const seenIds = new Set<string>();
+	const push = (card: NocartazCard) => {
+		if (seenIds.has(card.id)) {
+			return;
+		}
+		seenIds.add(card.id);
+		candidates.push(card);
+	};
+
+	// On the Leiria hub every card is a candidate — the gate decides later — and
+	// the JSON-LD ItemList joins them, since it carries today's events the card
+	// grid drops at its own cap.
+	for (const card of parseCards(html)) {
+		push(card);
+	}
+	for (const entry of parseItemList(html)) {
+		push(itemListCard(entry));
+	}
+
+	// Then every other district hub, best effort. A row NoCartaz cannot localize
+	// is filed on the hub of the aggregator's own region guess, so a venue we
+	// know by fact can sit on any of them (O Pica Miolos, a Leiria bar, is on
+	// Coimbra). Only allowlist hits are kept — another district's roster is
+	// never ingested wholesale.
+	for (const slug of hubs.slice(1)) {
+		try {
+			await delay();
+			const hubHtml = await deps.fetchText(hubUrl(slug));
+			pagesFetched++;
+			for (const card of parseCards(hubHtml)) {
+				if (
+					knownVenueFor(cardVenueEvidence(card)) ??
+					knownVenueFor(card.title)
+				) {
+					push(card);
+				}
+			}
+			for (const entry of parseItemList(hubHtml)) {
+				if (knownVenueFor(entry.name)) {
+					push(itemListCard(entry));
+				}
+			}
+		} catch (err) {
+			// A hub we could not read costs us possible allowlist hits, not the
+			// day's Leiria scrape: report it and carry on.
+			failures++;
+			firstError ??= `${hubUrl(slug)}: ${errorMessage(err)}`;
+		}
+	}
+
+	const cards = candidates;
 	const events: RawEvent[] = [];
 	// Only ids the page still lists stay cached: the hub drops an event once it
 	// is over, so the map tracks the live roster instead of growing forever.
