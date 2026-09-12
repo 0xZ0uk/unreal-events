@@ -5,6 +5,7 @@ import { PageFooter } from "@/components/agenda/footer";
 import { SHELL } from "@/components/agenda/layout";
 import { AgendaPage } from "@/components/agenda/page";
 import { Analytics } from "@/components/analytics";
+import { SignInPage } from "@/components/auth/sign-in-page";
 import { EventPage } from "@/components/event/event-page";
 import { EventNotFound } from "@/components/event/not-found";
 import { useAgenda } from "@/hooks/use-agenda";
@@ -84,6 +85,7 @@ function usePathname(): string {
 function Routes() {
 	const route = pathnameToRoute(usePathname());
 
+	if (route.kind === "signin") return <SignInPage />;
 	if (route.kind === "event") return <EventPage slug={route.slug} />;
 	if (route.kind === "notFound") return <EventNotFound />;
 	return <AgendaShell />;

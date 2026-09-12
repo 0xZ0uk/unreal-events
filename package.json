@@ -22,8 +22,10 @@
     "db:publish": "turbo run db:publish --filter @events-tracker/db"
   },
   "dependencies": {
+    "@events-tracker/auth": "workspace:*",
     "@events-tracker/env": "workspace:*",
     "dotenv": "catalog:",
+    "hono": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

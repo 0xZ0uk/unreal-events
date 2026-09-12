@@ -1,18 +1,26 @@
 /**
  * Client-side routing for the SPA: no router dependency, just a pathname →
  * route function and a slug → href helper. The agenda owns `/`, an event owns
- * `/evento/<slug>`, and everything else is a 404 rendered in-place.
+ * `/evento/<slug>`, the sign-in page owns `/entrar`, and everything else is a
+ * 404 rendered in-place.
  */
 
-/** One of the two real routes, or a miss. */
+/** One of the three real routes, or a miss. */
 export type Route =
 	| { kind: "agenda" }
 	| { kind: "event"; slug: string }
+	| { kind: "signin" }
 	| { kind: "notFound" };
 
 /** Internal link to an event's page. */
 export function eventHref(slug: string): string {
 	return `/evento/${encodeURIComponent(slug)}`;
+}
+
+/** Internal link to the sign-in page, optionally back to where the reader was. */
+export function signInHref(redirectTo?: string): string {
+	if (!redirectTo || !redirectTo.startsWith("/") || redirectTo.startsWith("//")) return "/entrar";
+	return `/entrar?redirect=${encodeURIComponent(redirectTo)}`;
 }
 
 /**
@@ -24,6 +32,7 @@ export function eventHref(slug: string): string {
  */
 export function pathnameToRoute(pathname: string): Route {
 	if (pathname === "/") return { kind: "agenda" };
+	if (pathname === "/entrar" || pathname === "/entrar/") return { kind: "signin" };
 
 	const match = /^\/evento\/([^/]+)\/?$/.exec(pathname);
 	if (match) {

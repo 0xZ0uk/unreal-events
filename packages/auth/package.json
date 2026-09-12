@@ -1,0 +1,38 @@
+{
+	"name": "@events-tracker/auth",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"scripts": {
+		"auth:generate": "auth generate --config ./src/auth.ts --output ./src/schema.ts --yes",
+		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"test": "bun test",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@better-auth/drizzle-adapter": "1.7.4",
+		"@libsql/client": "0.17.4",
+		"@t3-oss/env-core": "^0.13.11",
+		"better-auth": "1.7.4",
+		"dotenv": "catalog:",
+		"drizzle-orm": "^0.45.2",
+		"hono": "catalog:",
+		"libsql": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@events-tracker/config": "workspace:*",
+		"@types/bun": "catalog:",
+		"drizzle-kit": "^0.31.10",
+		"typescript": "catalog:"
+	}
+}

@@ -16,6 +16,7 @@
 		"ingest:url": "bun run src/ingest-url.ts"
 	},
 	"dependencies": {
+		"@events-tracker/auth": "workspace:*",
 		"@events-tracker/api": "workspace:*",
 		"@events-tracker/db": "workspace:*",
 		"@events-tracker/env": "workspace:*",
