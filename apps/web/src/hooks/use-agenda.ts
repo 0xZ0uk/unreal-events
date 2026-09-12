@@ -4,7 +4,6 @@ import {
 	type PeriodPresetId,
 	presetRange,
 } from "@events-tracker/api/period";
-import { municipalityOf } from "@events-tracker/api/places";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -13,6 +12,7 @@ import {
 	type UndatedEvent,
 	WINDOW_LIMIT,
 } from "@/utils/api";
+import { concelhoOf } from "@/utils/concelho";
 import {
 	dayKey,
 	dayMonth,
@@ -24,6 +24,19 @@ import {
 
 /** How far ahead the page looks. Wide enough for every date the sources publish. */
 const WINDOW_DAYS = 90;
+
+/**
+ * The agenda is one dataset with two readings: the list, and the map. The view
+ * lives in the URL next to the filters (`?vista=mapa`) for the same reason they
+ * do — a link to the map has to open on the map.
+ */
+export type AgendaView = "lista" | "mapa";
+
+const VISTA_PARAM = "vista";
+
+function readView(raw: string | null): AgendaView {
+	return raw === "mapa" ? "mapa" : "lista";
+}
 
 export type AgendaRow = {
 	id: number;
@@ -108,7 +121,11 @@ function readDayKey(raw: string | null): string {
 	return raw && DAY_KEY.test(raw) ? raw : "";
 }
 
-function filtersFromSearch(search: string): { filters: Filters; dia: string } {
+function filtersFromSearch(search: string): {
+	filters: Filters;
+	dia: string;
+	vista: AgendaView;
+} {
 	const params = new URLSearchParams(search);
 	const from = readDayKey(params.get(URL_PARAM.from));
 	const to = readDayKey(params.get(URL_PARAM.to));
@@ -124,16 +141,18 @@ function filtersFromSearch(search: string): { filters: Filters; dia: string } {
 			to,
 		},
 		dia: readDayKey(params.get("dia")),
+		vista: readView(params.get(VISTA_PARAM)),
 	};
 }
 
-function searchFromFilters(filters: Filters, dia: string): string {
+function searchFromFilters(filters: Filters, dia: string, vista: AgendaView): string {
 	const params = new URLSearchParams();
 	for (const key of Object.keys(URL_PARAM) as (keyof Filters)[]) {
 		const value = filters[key];
 		if (value) params.set(URL_PARAM[key], key === "q" ? value.trim() : value);
 	}
 	if (dia) params.set("dia", dia);
+	if (vista === "mapa") params.set(VISTA_PARAM, vista);
 	const query = params.toString();
 	return query ? `?${query}` : "";
 }
@@ -187,17 +206,6 @@ function toAnnouncement(event: UndatedEvent): AnnouncementRow {
 			categories.join(" "),
 		),
 	};
-}
-
-/**
- * The concelho a row belongs to: its município when we can place the city,
- * otherwise the raw city value. Sources report the worked place where a
- * municipal agenda reports the concelho, so without this fold "Gaeiras" and
- * "Óbidos" were two concelhos and Leiria's events sat in ten of them.
- * An unplaceable city keeps its own name — never a guess, never hidden.
- */
-function concelhoOf(city: string | null): string {
-	return municipalityOf(city) ?? city ?? "";
 }
 
 function matches(row: AgendaRow, filters: Filters, needle: string): boolean {
@@ -292,27 +300,30 @@ export function useAgenda() {
 	const initial = useMemo(
 		() =>
 			typeof window === "undefined"
-				? { filters: EMPTY_FILTERS, dia: "" }
+				? { filters: EMPTY_FILTERS, dia: "", vista: "lista" as AgendaView }
 				: filtersFromSearch(window.location.search),
 		[],
 	);
 
 	const [filters, setFilters] = useState<Filters>(initial.filters);
 	const [dia, setDia] = useState<string>(initial.dia);
+	const [vista, setVista] = useState<AgendaView>(initial.vista);
 
 	// Setters work off the refs so two changes in one tick can't clobber each
 	// other, and so every change writes the URL exactly once.
 	const filtersRef = useRef(filters);
 	const diaRef = useRef(dia);
+	const vistaRef = useRef(vista);
 	useEffect(() => {
 		filtersRef.current = filters;
 		diaRef.current = dia;
-	}, [filters, dia]);
+		vistaRef.current = vista;
+	}, [filters, dia, vista]);
 
 	const syncUrl = useCallback(
-		(next: Filters, nextDia: string, mode: "push" | "replace") => {
+		(next: Filters, nextDia: string, nextVista: AgendaView, mode: "push" | "replace") => {
 			if (typeof window === "undefined") return;
-			const url = `${window.location.pathname}${searchFromFilters(next, nextDia)}`;
+			const url = `${window.location.pathname}${searchFromFilters(next, nextDia, nextVista)}`;
 			if (mode === "push") window.history.pushState(null, "", url);
 			else window.history.replaceState(null, "", url);
 		},
@@ -324,7 +335,23 @@ export function useAgenda() {
 			const next = { ...filtersRef.current, ...patch };
 			filtersRef.current = next;
 			setFilters(next);
-			syncUrl(next, diaRef.current, mode);
+			syncUrl(next, diaRef.current, vistaRef.current, mode);
+		},
+		[syncUrl],
+	);
+
+	/**
+	 * Switching between the list and the map is a view change, not a filter, so
+	 * it never counts towards `activeCount` and never clears anything: the same
+	 * window, in the other reading. It still pushes history — back returns to the
+	 * list you came from.
+	 */
+	const setView = useCallback(
+		(next: AgendaView) => {
+			if (next === vistaRef.current) return;
+			vistaRef.current = next;
+			setVista(next);
+			syncUrl(filtersRef.current, diaRef.current, next, "push");
 		},
 		[syncUrl],
 	);
@@ -336,8 +363,10 @@ export function useAgenda() {
 			const parsed = filtersFromSearch(window.location.search);
 			filtersRef.current = parsed.filters;
 			diaRef.current = parsed.dia;
+			vistaRef.current = parsed.vista;
 			setFilters(parsed.filters);
 			setDia(parsed.dia);
+			setVista(parsed.vista);
 		};
 		window.addEventListener("popstate", onPopState);
 		return () => window.removeEventListener("popstate", onPopState);
@@ -365,6 +394,20 @@ export function useAgenda() {
 			hasFacet ? rows.filter((row) => matches(row, filters, needle)) : rows,
 		[rows, hasFacet, filters, needle],
 	);
+
+	/**
+	 * The rows the map paints.
+	 *
+	 * Every filter except the concelho itself: if the map honoured its own
+	 * selection it would draw one lit shape on an empty district, and there would
+	 * be no way to see what the neighbouring concelhos hold under the same
+	 * window — which is the entire point of picking a different one. The
+	 * selection is drawn, not applied.
+	 */
+	const mapRows = useMemo(() => {
+		if (!hasFacet || !filters.city) return visible;
+		return rows.filter((row) => matches(row, { ...filters, city: "" }, needle));
+	}, [rows, visible, hasFacet, filters, needle]);
 
 	const groups = useMemo(
 		() => groupByDay(visible, range.todayKey, range.tomorrowKey),
@@ -460,6 +503,7 @@ export function useAgenda() {
 		window: range,
 		rows,
 		visible,
+		mapRows,
 		groups,
 		facets: available,
 		filters,
@@ -467,6 +511,8 @@ export function useAgenda() {
 		applyFilters,
 		clearFilters,
 		setPeriod,
+		vista,
+		setView,
 		preset,
 		activeCount,
 		isFiltered: activeCount > 0,

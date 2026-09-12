@@ -1,5 +1,5 @@
 import { PERIOD_PRESETS } from "@events-tracker/api/period";
-import { Check, ChevronDown, Copy, Search, X } from "lucide-react";
+import { Check, ChevronDown, Copy, List, Map, Search, X } from "lucide-react";
 import { useCallback, useId, useState } from "react";
 import type { Agenda, Facet } from "@/hooks/use-agenda";
 import { BUTTON, FIELD, LABEL, MICRO } from "./layout";
@@ -173,6 +173,48 @@ function CopyLinkButton({ className }: { className?: string }) {
 }
 
 /**
+ * List or map: the same window, read two ways.
+ *
+ * A real segmented control rather than a link, because it is a view of the data
+ * already on screen — and its state is in the URL with the filters, so the map
+ * is as shareable as a filtered list.
+ */
+function ViewToggle({ agenda }: { agenda: Agenda }) {
+	const views = [
+		{ id: "lista", label: "Lista", Icon: List },
+		{ id: "mapa", label: "Mapa", Icon: Map },
+	] as const;
+
+	return (
+		<div
+			role="group"
+			aria-label="Vista"
+			className="inline-flex h-11 shrink-0 items-center gap-0.5 rounded-[4px] border border-muted-foreground/60 p-0.5 sm:h-10"
+		>
+			{views.map(({ id, label, Icon }) => {
+				const active = agenda.vista === id;
+				return (
+					<button
+						key={id}
+						type="button"
+						onClick={() => agenda.setView(id)}
+						aria-pressed={active}
+						className={`inline-flex h-full items-center gap-1.5 rounded-[3px] px-2.5 text-[14px] font-medium focus-ring motion-safe:transition-colors ${
+							active
+								? "bg-primary text-primary-foreground"
+								: "text-foreground hover:text-primary"
+						}`}
+					>
+						<Icon aria-hidden="true" strokeWidth={1.5} className="size-4" />
+						{label}
+					</button>
+				);
+			})}
+		</div>
+	);
+}
+
+/**
  * Filters, always visible from `sm` up and folded behind one labelled button on
  * a phone. Facet options come from the loaded window and carry their counts, so
  * no option is a dead end and the pickers are the same list as the agenda.
@@ -244,6 +286,12 @@ export function FilterBar({ agenda }: { agenda: Agenda }) {
 						className={`size-4 motion-safe:transition-transform motion-safe:duration-150 ${open ? "rotate-180" : ""}`}
 					/>
 				</button>
+
+				{/* Top-right, and outside the fold on a phone: the list/map switch is
+				    the one control that changes what the page is, not what is in it. */}
+				<div className="ml-auto">
+					<ViewToggle agenda={agenda} />
+				</div>
 			</div>
 
 			<PeriodChips agenda={agenda} />
