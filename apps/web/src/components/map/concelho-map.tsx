@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import concelhosGeo from "@/assets/concelhos.json";
 import { heatOpacity, SELECTED_OPACITY } from "@/utils/concelho";
+import { type Pin, pinRadius } from "@/utils/pins";
 import "./concelho-map.css";
 
 /**
@@ -24,9 +25,21 @@ export type ConcelhoMapProps = {
 	/** Concelho name, or "" for none. */
 	selected: string;
 	onSelect: (name: string) => void;
+	/** Every place the window can honestly draw, busiest first (Layer 2). */
+	pins: Pin[];
+	/** The venue slug picked in the filter bar or the list, or "". */
+	selectedVenue: string;
+	onSelectVenue: (slug: string) => void;
 };
 
-type Palette = { heat: string; line: string; ink: string; quiet: string };
+type Palette = {
+	heat: string;
+	line: string;
+	ink: string;
+	quiet: string;
+	/** The page surface: what a pin's ring is cut out of. */
+	surface: string;
+};
 
 /**
  * The theme lives in CSS custom properties, and the map is the one surface that
@@ -52,6 +65,7 @@ function readPalette(): Palette {
 		line: readToken("--border", "#2a2a2a"),
 		ink: readToken("--foreground", "#e5e5e5"),
 		quiet: readToken("--muted-foreground", "#a3a3a3"),
+		surface: readToken("--background", "#0b0b0b"),
 	};
 }
 
@@ -74,6 +88,35 @@ function usePalette(): Palette {
 const label = (name: string, count: number) =>
 	`<span class="concelho-label__name">${name}</span>` +
 	(count > 0 ? `<span class="concelho-label__count">${count}</span>` : "");
+
+/**
+ * Leaflet writes tooltip content as HTML, and a venue name is text a scraper
+ * copied off a stranger's page. Everything that reaches a tooltip goes through
+ * here first — the concelho names happen to be our own, the venue names are
+ * not.
+ */
+function escapeHtml(value: string): string {
+	return value
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;");
+}
+
+/**
+ * A pin's tooltip: what the place is, how much is on there. The count is the
+ * pin's own — one place's window — and never a concelho's, which is the number
+ * the shading already carries.
+ */
+function pinLabel(pin: Pin): string {
+	const where =
+		pin.scope === "lugar" ? `povoação · ${pin.concelho}` : pin.concelho;
+	return (
+		`<span class="pin-label__name">${escapeHtml(pin.name)}</span>` +
+		`<span class="pin-label__meta">${escapeHtml(where)} · ${pin.count} ` +
+		`${pin.count === 1 ? "evento" : "eventos"}</span>`
+	);
+}
 
 /** How many names a map this wide can carry before they pile up. */
 function labelBudget(width: number): number {
@@ -165,15 +208,25 @@ function arrangeLabels(
  * how much is on, and where — so the shapes are the map. Leaflet still does the
  * projection, the panning and the hit-testing, which is the part worth having.
  *
+ * Layer 2 puts the placed venues on top of the same canvas: a dot per place,
+ * sized by its own count. No tiles are wanted for it either — the district's
+ * own outlines are the reference, and a vendor basemap would add a key, a bill
+ * and a second visual language to a page that already draws the geography it
+ * needs.
+ *
  * Leaflet's vector paths are not focusable (only its markers are), so the map is
- * a pointer affordance: the ranked list beside it is the same numbers as real
- * buttons, and is the route for keyboard and screen-reader users.
+ * a pointer affordance: the ranked lists beside it — concelhos and places — are
+ * the same numbers as real buttons, and are the route for keyboard and
+ * screen-reader users.
  */
 export default function ConcelhoMap({
 	counts,
 	max,
 	selected,
 	onSelect,
+	pins,
+	selectedVenue,
+	onSelectVenue,
 }: ConcelhoMapProps) {
 	const holder = useRef<HTMLDivElement | null>(null);
 	const mapRef = useRef<L.Map | null>(null);
@@ -184,7 +237,10 @@ export default function ConcelhoMap({
 	onSelectRef.current = onSelect;
 	const selectedRef = useRef(selected);
 	selectedRef.current = selected;
+	const onSelectVenueRef = useRef(onSelectVenue);
+	onSelectVenueRef.current = onSelectVenue;
 	const palette = usePalette();
+	const [mounted, setMounted] = useState(false);
 
 	const features = useMemo(
 		() => ({ type: "FeatureCollection" as const, features: GEO.features }),
@@ -210,6 +266,12 @@ export default function ConcelhoMap({
 			fadeAnimation: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
 		});
 		mapRef.current = map;
+		// Pins get their own pane above the shapes: `bringToFront()` on a picked
+		// concelho reorders within the overlay pane only, so a dot can never end
+		// up hidden under the shape it sits in.
+		const pinPane = map.createPane("map-pins");
+		pinPane.style.zIndex = "460";
+		setMounted(true);
 
 		const layer = L.geoJSON(features as never, {
 			attribution:
@@ -227,7 +289,9 @@ export default function ConcelhoMap({
 				// Tooltips are positioned by the polygon's centre, which for a
 				// concave concelho can sit outside it — the generated anchor is a
 				// point known to be inside, so pin the tooltip there instead.
-				(path as L.Path).getTooltip()?.setLatLng(L.latLng(anchor[1], anchor[0]));
+				(path as L.Path)
+					.getTooltip()
+					?.setLatLng(L.latLng(anchor[1], anchor[0]));
 				path.on("click", () => onSelectRef.current(name));
 
 				// A shape whose name was spent out of the label budget still says
@@ -286,6 +350,76 @@ export default function ConcelhoMap({
 	};
 	arrange.current = paintLabels;
 
+	/**
+	 * The pins, redrawn whenever the window or the pick changes.
+	 *
+	 * A hundred circles is nothing to Leaflet, so there is no diffing here: the
+	 * pane is emptied and drawn again. One code path for "these are the pins"
+	 * beats an add/update/remove triple that has to agree with itself.
+	 */
+	useEffect(() => {
+		const map = mapRef.current;
+		if (!map || !mounted) return;
+
+		const busiest = pins.reduce(
+			(top, pin) => (pin.count > top ? pin.count : top),
+			0,
+		);
+		const layer = L.layerGroup();
+		const drawn: { slug: string; marker: L.CircleMarker }[] = [];
+
+		// Quiet places first, so the busy ones are the ones that survive an
+		// overlap — Leiria city alone holds fourteen of them.
+		for (const pin of [...pins].sort((a, b) => a.count - b.count)) {
+			const picked = pin.slug === selectedVenue;
+			const settlement = pin.scope === "lugar";
+			const quiet = settlement ? 0.14 : 0.78;
+			const marker = L.circleMarker([pin.lat, pin.lng], {
+				pane: "map-pins",
+				radius: pinRadius(pin.count, busiest) + (picked ? 2 : 0),
+				fillColor: palette.heat,
+				fillOpacity: picked ? (settlement ? 0.5 : 1) : quiet,
+				// A building is a solid dot cut out of the page; a settlement is
+				// a dashed ring, which is all its coordinate claims to be.
+				color: picked || settlement ? palette.heat : palette.surface,
+				weight: picked ? 2 : settlement ? 1.25 : 1.5,
+				dashArray: settlement ? "2 3" : undefined,
+				opacity: 1,
+			});
+			marker.bindTooltip(pinLabel(pin), {
+				className: "pin-label",
+				direction: "top",
+				offset: [0, -2],
+			});
+			marker.on("click", () => onSelectVenueRef.current(pin.slug));
+			marker.on("mouseover", () =>
+				marker.setStyle({ fillOpacity: settlement ? 0.4 : 1 }),
+			);
+			marker.on("mouseout", () =>
+				marker.setStyle({
+					fillOpacity: picked ? (settlement ? 0.5 : 1) : quiet,
+				}),
+			);
+			if (picked) marker.bringToFront();
+			layer.addLayer(marker);
+			drawn.push({ slug: pin.slug, marker });
+		}
+
+		layer.addTo(map);
+		for (const { slug, marker } of drawn) {
+			// A name on the DOM element, so a test (or a stylesheet) can find a
+			// pin without going through Leaflet's internals.
+			(marker.getElement() as Element | undefined)?.setAttribute(
+				"data-venue",
+				slug,
+			);
+		}
+
+		return () => {
+			layer.remove();
+		};
+	}, [pins, selectedVenue, palette, mounted]);
+
 	// Paint: heat by count, amber solid for the pick, and each tooltip's number.
 	useEffect(() => {
 		for (const [name, path] of paths.current) {
@@ -323,7 +457,7 @@ export default function ConcelhoMap({
 			ref={holder}
 			className="concelho-map h-[58svh] min-h-[320px] w-full sm:h-[520px]"
 			role="img"
-			aria-label="Mapa do distrito de Leiria: eventos por concelho. A lista de focos ao lado tem os mesmos números."
+			aria-label="Mapa do distrito de Leiria: eventos por concelho e por local. As listas ao lado têm os mesmos números."
 		/>
 	);
 }
