@@ -1,5 +1,7 @@
 import { db, schema } from "@events-tracker/db";
 import { and, eq, isNull } from "drizzle-orm";
+
+import { deleteEvents } from "./event-delete";
 import { fingerprint } from "./fingerprint";
 import { planComponents, planMerge } from "./identity";
 
@@ -36,16 +38,30 @@ export async function reconcileIdentities(): Promise<number> {
 		.select({
 			event_id: schema.eventSources.event_id,
 			source: schema.eventSources.source,
+			source_event_id: schema.eventSources.source_event_id,
 		})
 		.from(schema.eventSources);
 	const sourcesByEvent = new Map<number, string[]>();
+	const itemsByEvent = new Map<number, Set<string>>();
 	for (const a of attributions) {
 		const list = sourcesByEvent.get(a.event_id) ?? [];
 		list.push(a.source);
 		sourcesByEvent.set(a.event_id, list);
+		if (a.source_event_id) {
+			const items = itemsByEvent.get(a.event_id) ?? new Set<string>();
+			items.add(`${a.source}:${a.source_event_id}`);
+			itemsByEvent.set(a.event_id, items);
+		}
 	}
+	/** The one source item owning the row, when exactly one does. */
+	const itemKeyOf = (id: number): string | null => {
+		const items = itemsByEvent.get(id);
+		return items && items.size === 1 ? [...items][0] ?? null : null;
+	};
 
-	const components = planComponents(rows);
+	const components = planComponents(
+		rows.map((r) => ({ ...r, itemKey: itemKeyOf(r.id) })),
+	);
 
 	let merged = 0;
 	for (const group of components) {
@@ -57,6 +73,8 @@ export async function reconcileIdentities(): Promise<number> {
 			id: r.id,
 			title: r.title,
 			start_at: r.start_at,
+			end_at: r.end_at,
+			itemKey: r.itemKey ?? null,
 			sources: sourcesByEvent.get(r.id) ?? [],
 		}));
 		const plan = planMerge(withSources);
@@ -109,18 +127,21 @@ export async function reconcileIdentities(): Promise<number> {
 							.where(eq(schema.eventSources.id, s.id));
 					}
 				}
-				await db.delete(schema.events).where(eq(schema.events.id, absorbedId));
+				await deleteEvents([absorbedId]);
 			}
 		}
 
 		// Keepers: re-fingerprint (identity has converged) and store the
-		// unioned categories. Times stay untouched — canonical tier decides.
+		// unioned categories. Times stay untouched — canonical tier decides —
+		// except an end the merge itself implies (day pages of one item).
 		for (const k of keepers) {
+			const end = plan.endByKeeper?.get(k.id);
 			await db
 				.update(schema.events)
 				.set({
 					categories: [...catSet].sort(),
 					fingerprint: fingerprint(k.title, k.venue ?? "", k.start_at),
+					...(end != null && end !== k.end_at ? { end_at: end } : {}),
 					updated_at: now,
 				})
 				.where(eq(schema.events.id, k.id));
