@@ -30,6 +30,20 @@ const eventSelect = {
 	venueName: schema.venues.name,
 	venueCity: schema.venues.city,
 	venueSlug: schema.venues.slug,
+	/**
+	 * The map's three fields (SLICE_14, Layer 2). Coordinates stay nullable on
+	 * purpose: a venue the geocoder could not place inside its own concelho is
+	 * refused at the pipeline, so an event here always ships its own honest
+	 * location — and a null means "not placeable", which the pins layer reads
+	 * rather than guesses around.
+	 *
+	 * `scope` decides how a place may be drawn: a `concelho` row is the
+	 * município's own name and is never a pin, `lugar` is a settlement, `venue`
+	 * is a building. ~40 bytes/row on a ~600-row window.
+	 */
+	venueLat: schema.venues.lat,
+	venueLng: schema.venues.lng,
+	venueScope: schema.venues.scope,
 };
 
 type EventRow = {
@@ -46,6 +60,9 @@ type EventRow = {
 	venueName: string | null;
 	venueCity: string | null;
 	venueSlug: string | null;
+	venueLat: number | null;
+	venueLng: number | null;
+	venueScope: string | null;
 };
 
 function toPublicEvent(row: EventRow) {
@@ -59,6 +76,9 @@ function toPublicEvent(row: EventRow) {
 		venueName: row.venueName,
 		venueCity: row.venueCity,
 		venueSlug: row.venueSlug,
+		venueLat: row.venueLat,
+		venueLng: row.venueLng,
+		venueScope: row.venueScope,
 		imageUrl: row.image_url,
 		url: row.url,
 		categories: row.categories ?? [],

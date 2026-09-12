@@ -47,6 +47,11 @@ export type AgendaRow = {
 	venueName: string | null;
 	venueCity: string | null;
 	venueSlug: string | null;
+	/** Null when the pipeline could not place this venue honestly. */
+	venueLat: number | null;
+	venueLng: number | null;
+	/** `venue` | `lugar` | `concelho` — how the map may draw it (SLICE_14). */
+	venueScope: string | null;
 	categories: string[];
 	startAt: number;
 	endAt: number | null;
@@ -174,6 +179,9 @@ function toRow(event: PublicEvent): AgendaRow {
 		venueName: event.venueName,
 		venueCity: event.venueCity,
 		venueSlug: event.venueSlug,
+		venueLat: event.venueLat,
+		venueLng: event.venueLng,
+		venueScope: event.venueScope,
 		categories,
 		startAt: event.startAt,
 		endAt: event.endAt,
@@ -398,15 +406,18 @@ export function useAgenda() {
 	/**
 	 * The rows the map paints.
 	 *
-	 * Every filter except the concelho itself: if the map honoured its own
-	 * selection it would draw one lit shape on an empty district, and there would
-	 * be no way to see what the neighbouring concelhos hold under the same
-	 * window — which is the entire point of picking a different one. The
-	 * selection is drawn, not applied.
+	 * Every filter except the map's own two: if the map honoured its own
+	 * selections it would draw one lit shape and one pin on an empty district,
+	 * and there would be no way to see what the neighbouring concelhos hold
+	 * under the same window — which is the entire point of picking a different
+	 * one. A picked concelho and a picked venue are drawn (selected), not
+	 * applied.
 	 */
 	const mapRows = useMemo(() => {
-		if (!hasFacet || !filters.city) return visible;
-		return rows.filter((row) => matches(row, { ...filters, city: "" }, needle));
+		if (!hasFacet || (!filters.city && !filters.venue)) return visible;
+		return rows.filter((row) =>
+			matches(row, { ...filters, city: "", venue: "" }, needle),
+		);
 	}, [rows, visible, hasFacet, filters, needle]);
 
 	const groups = useMemo(

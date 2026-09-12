@@ -74,6 +74,9 @@ const detailRow = {
 	venueName: "Teatro José Lúcio da Silva",
 	venueCity: "Leiria",
 	venueSlug: "teatro-jose-lucio-da-silva",
+	venueLat: 39.7467,
+	venueLng: -8.8039,
+	venueScope: "venue",
 	description: "Uma noite de música no centro da cidade.",
 	updated_at: 1_789_000_000,
 };
@@ -117,6 +120,44 @@ describe("eventBySlug", () => {
 		expect(event).toBeDefined();
 		expect("description" in (event as object)).toBe(false);
 		expect("updatedAt" in (event as object)).toBe(false);
+	});
+});
+
+/**
+ * The map's three fields (SLICE_14, Layer 2).
+ *
+ * The pins layer decides what it may draw from these, so the contract worth
+ * pinning down is the negative one: a venue the pipeline could not place ships
+ * `null` — never `0`, which is a real coordinate off the coast of Africa, and
+ * never `undefined`, which quietly disappears through JSON.
+ */
+describe("the map's fields", () => {
+	test("the list payload carries the coordinates and the scope", async () => {
+		const [event] = await listEvents(stubDb([detailRow]), listInput.parse({}));
+
+		expect(event).toMatchObject({
+			venueLat: 39.7467,
+			venueLng: -8.8039,
+			venueScope: "venue",
+		});
+	});
+
+	test("an unplaced venue is null, not zero", async () => {
+		const [event] = await listEvents(
+			stubDb([
+				{
+					...detailRow,
+					venueLat: null,
+					venueLng: null,
+					venueScope: "concelho",
+				},
+			]),
+			listInput.parse({}),
+		);
+
+		expect(event?.venueLat).toBeNull();
+		expect(event?.venueLng).toBeNull();
+		expect(event?.venueScope).toBe("concelho");
 	});
 });
 

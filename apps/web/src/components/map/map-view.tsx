@@ -1,13 +1,29 @@
 import { lazy, Suspense, useMemo } from "react";
 import { MICRO } from "@/components/agenda/layout";
 import type { Agenda } from "@/hooks/use-agenda";
-import { districtRoster, heatOpacity, isDistrictConcelho, peak, tallyConcelhos } from "@/utils/concelho";
+import {
+	districtRoster,
+	heatOpacity,
+	isDistrictConcelho,
+	peak,
+	tallyConcelhos,
+} from "@/utils/concelho";
+import { pinCoverage, pinTallies } from "@/utils/pins";
 
 /**
  * Leaflet is ~150 kB and only the map view needs it, so the chunk is fetched
  * with the view rather than with the agenda everybody lands on.
  */
 const ConcelhoMap = lazy(() => import("./concelho-map"));
+
+/**
+ * How many places the side list names before it starts counting the rest.
+ *
+ * The map draws every one of them; a list that listed all 90 would be a scroll
+ * nobody finishes. The remainder is stated rather than implied, so the list is
+ * never mistaken for the full set.
+ */
+const PLACES_SHOWN = 12;
 
 /**
  * The map reading of the agenda.
@@ -17,21 +33,40 @@ const ConcelhoMap = lazy(() => import("./concelho-map"));
  * density field would invent a gradient between two towns, and the venues are
  * far too sparse for that (SLICE_14).
  *
+ * Layer 2 adds the places themselves: the 109 venues the pipeline could place
+ * inside their own concelho draw as dots, sized by their own event count, and
+ * the ones it refused (no coordinates, or a município's own name) simply are
+ * not dots. The two layers carry different denominators on purpose, and the
+ * coverage line says so out loud.
+ *
  * The numbers beside it are the same tallies as real buttons: the map is the
- * fast read, the list is the accessible one, and neither is a second source of
- * truth.
+ * fast read, the lists are the accessible one, and neither is a second source
+ * of truth.
  */
 export function MapView({ agenda }: { agenda: Agenda }) {
-	const tallies = useMemo(() => tallyConcelhos(agenda.mapRows), [agenda.mapRows]);
+	const tallies = useMemo(
+		() => tallyConcelhos(agenda.mapRows),
+		[agenda.mapRows],
+	);
 	const busiest = useMemo(() => peak(tallies), [tallies]);
 	const counts = useMemo(
-		() => new Map(tallies.filter((tally) => tally.mappable).map((t) => [t.name, t.count])),
+		() =>
+			new Map(
+				tallies.filter((tally) => tally.mappable).map((t) => [t.name, t.count]),
+			),
 		[tallies],
 	);
 	const drawable = districtRoster(tallies);
 	const outside = tallies.filter((tally) => !tally.mappable);
-	const selected = isDistrictConcelho(agenda.filters.city) ? agenda.filters.city : "";
+	const selected = isDistrictConcelho(agenda.filters.city)
+		? agenda.filters.city
+		: "";
 	const placed = agenda.mapRows.length;
+
+	const pins = useMemo(() => pinTallies(agenda.mapRows), [agenda.mapRows]);
+	const coverage = useMemo(() => pinCoverage(agenda.mapRows), [agenda.mapRows]);
+	const selectedVenue = agenda.filters.venue;
+	const listed = pins.slice(0, PLACES_SHOWN);
 
 	/**
 	 * One sentence, and it says which denominator it is using. With a concelho
@@ -48,10 +83,14 @@ export function MapView({ agenda }: { agenda: Agenda }) {
 		agenda.setFilter("city", selected === name ? "" : name);
 	};
 
+	const toggleVenue = (slug: string) => {
+		agenda.setFilter("venue", selectedVenue === slug ? "" : slug);
+	};
+
 	return (
 		<section aria-labelledby="mapa-heading" className="mt-6">
 			<h2 id="mapa-heading" className="sr-only">
-				Atividade por concelho
+				Atividade por concelho e por local
 			</h2>
 
 			<div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
@@ -66,31 +105,60 @@ export function MapView({ agenda }: { agenda: Agenda }) {
 							max={busiest}
 							selected={selected}
 							onSelect={toggle}
+							pins={pins}
+							selectedVenue={selectedVenue}
+							onSelectVenue={toggleVenue}
 						/>
 					</Suspense>
 
 					<div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-						<p className="flex items-center gap-2">
-							<span className={`${MICRO} text-muted-foreground`}>Menos</span>
-							{[0, 0.25, 0.6, 1].map((step) => (
+						<div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+							<p className="flex items-center gap-2">
+								<span className={`${MICRO} text-muted-foreground`}>Menos</span>
+								{[0, 0.25, 0.6, 1].map((step) => (
+									<span
+										key={step}
+										aria-hidden="true"
+										className="block size-3.5 rounded-[2px] bg-primary"
+										style={{ opacity: heatOpacity(step * busiest, busiest) }}
+									/>
+								))}
+								<span className={`${MICRO} text-muted-foreground`}>Mais</span>
+							</p>
+							<p className="flex items-center gap-2">
 								<span
-									key={step}
 									aria-hidden="true"
-									className="block size-3.5 rounded-[2px] bg-primary"
-									style={{ opacity: heatOpacity(step * busiest, busiest) }}
+									className="block size-3.5 rounded-full border-2 border-background bg-primary"
 								/>
-							))}
-							<span className={`${MICRO} text-muted-foreground`}>Mais</span>
-						</p>
+								<span className={`${MICRO} text-muted-foreground`}>Local</span>
+								<span
+									aria-hidden="true"
+									className="block size-3.5 rounded-full border border-primary border-dashed bg-primary/15"
+								/>
+								<span className={`${MICRO} text-muted-foreground`}>
+									Povoação
+								</span>
+							</p>
+						</div>
 						<p className="font-mono text-[12px] text-muted-foreground tabular-nums">
 							{status}
 						</p>
 					</div>
 
 					<p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
-						Cada evento conta no concelho do seu local. O mapa ignora o filtro de
-						concelho — clicar num muda o filtro, e voltar a clicar liberta-o — para
-						os concelhos vizinhos continuarem comparáveis.
+						Cada evento conta no concelho do seu local. O mapa ignora os seus
+						próprios filtros — clicar num concelho ou num ponto muda o filtro, e
+						voltar a clicar liberta-o — para os concelhos vizinhos continuarem
+						comparáveis.
+					</p>
+					<p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+						Só os locais com coordenadas verificadas dentro do seu concelho são
+						pontos: {coverage.pinned} eventos desta janela
+						{coverage.settlements > 0
+							? `, mais ${coverage.settlements} em povoações`
+							: ""}{" "}
+						de {coverage.total}. Os restantes contam no concelho, onde o número
+						não depende de adivinhar um ponto.
 					</p>
 				</div>
 
@@ -136,6 +204,56 @@ export function MapView({ agenda }: { agenda: Agenda }) {
 							);
 						})}
 					</ol>
+
+					{pins.length > 0 ? (
+						<div className="mt-5">
+							<h3 className={`${MICRO} text-muted-foreground`}>
+								Locais no mapa
+							</h3>
+							<ul className="mt-2 flex flex-col gap-1">
+								{listed.map((pin) => {
+									const isSelected = selectedVenue === pin.slug;
+									return (
+										<li key={pin.slug}>
+											<button
+												type="button"
+												onClick={() => toggleVenue(pin.slug)}
+												aria-pressed={isSelected}
+												className={`group flex w-full items-baseline justify-between gap-3 rounded-[4px] border px-3 py-1.5 text-left focus-ring motion-safe:transition-colors ${
+													isSelected
+														? "border-primary bg-primary/10"
+														: "border-transparent hover:border-border hover:bg-card"
+												}`}
+											>
+												<span className="min-w-0">
+													<span
+														className={`block truncate text-[14px] ${
+															isSelected ? "text-primary" : "text-foreground"
+														}`}
+													>
+														{pin.name}
+													</span>
+													<span className="block truncate text-[12px] text-muted-foreground">
+														{pin.scope === "lugar"
+															? `povoação · ${pin.concelho}`
+															: pin.concelho}
+													</span>
+												</span>
+												<span className="font-mono text-[13px] text-muted-foreground tabular-nums">
+													{pin.count}
+												</span>
+											</button>
+										</li>
+									);
+								})}
+							</ul>
+							<p className="mt-2 px-3 text-[13px] leading-relaxed text-muted-foreground">
+								{pins.length > listed.length
+									? `${listed.length} de ${pins.length} locais com coordenadas — os restantes estão no mapa e não nesta lista. O mapa desenha todos.`
+									: `${pins.length} ${pins.length === 1 ? "local" : "locais"} com coordenadas. Cada ponto é um local verificado dentro do seu concelho.`}
+							</p>
+						</div>
+					) : null}
 
 					{outside.length > 0 ? (
 						<div className="mt-5">
