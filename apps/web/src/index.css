@@ -7,6 +7,48 @@
 @source "./**/*.{ts,tsx}";
 
 /* Porta443: dark is the DEFAULT canvas; the theme toggle adds `.light`
-   (mapped in globals.css). No .dark variant needed — all `dark:*` utility
-   usage is being removed from routes in this redesign. */
+   (mapped in globals.css). No .dark variant needed. */
 @custom-variant light (&:is(.light *));
+
+/* The one label shape on the page: uppercase mono for captions, counts, chips
+   and field labels. Color is left to the caller so the same shape can be
+   amber when it marks something. */
+@utility micro {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* The focus ring, defined once.
+   Tailwind's `outline-none` + `focus-visible:outline-2` combination does not
+   work: `outline-2` only sets `outline-style: var(--tw-outline-style)`, so a
+   sibling `outline-none` leaves the ring at `outline-style: none`. Spelling the
+   whole ring out here keeps it measurable (2px, full-token color, 2px offset)
+   on every control, including the ones that reset the UA outline. */
+@utility focus-ring {
+  &:focus-visible {
+    outline-color: var(--ring);
+    outline-offset: 2px;
+    outline-style: solid;
+    outline-width: 2px;
+  }
+}
+
+@layer base {
+  /* Body carries the color tokens; html carries the overscroll gutter and the
+     native-control scheme (date pickers and selects follow it). */
+  html {
+    background-color: var(--background);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+}

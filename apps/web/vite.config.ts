@@ -1,8 +1,8 @@
 import tailwindcss from "@tailwindcss/vite";
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
+// One page, no routes: no router plugin, no generated route tree.
 export default defineConfig({
 	server: {
 		port: 3300,
@@ -10,12 +10,5 @@ export default defineConfig({
 	resolve: {
 		tsconfigPaths: true,
 	},
-	plugins: [
-		tailwindcss(),
-		tanstackRouter({
-			target: "react",
-			autoCodeSplitting: true,
-		}),
-		react(),
-	],
+	plugins: [tailwindcss(), react()],
 });

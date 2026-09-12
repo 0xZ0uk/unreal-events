@@ -1,5 +1,6 @@
 import { createContext } from "@events-tracker/api/context";
 import { appRouter } from "@events-tracker/api/routers/index";
+import { db } from "@events-tracker/db";
 import { env } from "@events-tracker/env/server";
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
@@ -22,9 +23,7 @@ app.use(
 	"/trpc/*",
 	trpcServer({
 		router: appRouter,
-		createContext: (_opts, context) => {
-			return createContext({ context });
-		},
+		createContext: () => createContext(db),
 	}),
 );
 

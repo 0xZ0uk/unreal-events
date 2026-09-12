@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-
+import { municipalityOf } from "@events-tracker/api/places";
+import { isLeiriaDistrict } from "./district";
+import { toEpochInLisbon } from "./fingerprint";
 import {
 	categoryForTitle,
 	parseDate,
@@ -10,8 +12,6 @@ import {
 	slugFor,
 	toRawEvent,
 } from "./obidos";
-import { toEpochInLisbon } from "./fingerprint";
-import { isLeiriaDistrict } from "./district";
 
 const sitemapXml = readFileSync(
 	new URL("./__fixtures__/obidos-sitemap.xml", import.meta.url),
@@ -63,7 +63,9 @@ describe("parseDetail (real detail-page fixtures)", () => {
 		expect(d.title).toBe("FÓLIO – Festival Literário Internacional de Óbidos");
 		expect(d.dateText).toBe("8 de Outubro, 2026 - 18 de Outubro, 2026");
 		expect(d.venue).toBe("Vila de Óbidos");
-		expect(d.imageUrl).toMatch(/^https:\/\/agenda\.obidos\.pt\/wp-content\/uploads\//);
+		expect(d.imageUrl).toMatch(
+			/^https:\/\/agenda\.obidos\.pt\/wp-content\/uploads\//,
+		);
 		expect(d.description?.length).toBeGreaterThan(40);
 		expect(d.description).toMatch(/literatura/);
 	});
@@ -142,11 +144,21 @@ describe("resolveVenue", () => {
 		});
 	});
 
-	test("Óbidos freguesia city (recognition gap) keeps Óbidos", () => {
+	test("Óbidos freguesia city becomes the city (recognition gap closed)", () => {
 		const r = resolveVenue("Largo de São Marcos, Gaeiras");
 		expect(r.venueName).toBe("Largo de São Marcos, Gaeiras");
-		expect(r.city).toBe("Óbidos");
+		// Gaeiras is an Óbidos freguesia and the shared place table knows it, so
+		// the specific place wins as before — the concelho facet folds it back.
+		expect(r.city).toBe("Gaeiras");
+		expect(municipalityOf(r.city)).toBe("Óbidos");
 		expect(isLeiriaDistrict(r.city)).toBe(true);
+	});
+
+	test("a freguesia the place table cannot place keeps the concelho", () => {
+		// Amoreira is an Óbidos freguesia whose name repeats across municípios,
+		// so the table leaves it unplaced and Óbidos stands.
+		const r = resolveVenue("Adro, Amoreira");
+		expect(r.city).toBe("Óbidos");
 	});
 
 	test("recognized concelho after comma becomes the city", () => {
@@ -164,13 +176,17 @@ describe("toRawEvent", () => {
 	test("FOLIO (future) → dated, in-district RawEvent, ob- slug", () => {
 		const raw = toRawEvent(parseDetail(folioHtml), folioUrl(), NOW);
 		expect(raw).not.toBeNull();
-		expect(raw?.title).toBe("FÓLIO – Festival Literário Internacional de Óbidos");
+		expect(raw?.title).toBe(
+			"FÓLIO – Festival Literário Internacional de Óbidos",
+		);
 		expect(raw?.startAt).toBe(toEpochInLisbon(2026, 10, 8));
 		expect(raw?.endAt).toBe(toEpochInLisbon(2026, 10, 18, 23, 59));
 		expect(raw?.dateText).toBeNull();
 		expect(raw?.venueName).toBe("Vila de Óbidos");
 		expect(raw?.city).toBe("Óbidos");
-		expect(raw?.slug).toBe("ob-folio-festival-literario-internacional-de-obidos");
+		expect(raw?.slug).toBe(
+			"ob-folio-festival-literario-internacional-de-obidos",
+		);
 		expect(raw?.categories).toEqual(["Festivais"]);
 		expect(raw?.description).toBeTruthy();
 		expect(raw?.imageUrl).toMatch(/^https:\/\//);
@@ -242,7 +258,9 @@ describe("gate (tests run via a mock isInScope like production wiring)", () => {
 describe("slugFor", () => {
 	test("ob- prefix from the event slug", () => {
 		expect(
-			slugFor("https://agenda.obidos.pt/evento/folio-festival-literario-internacional-de-obidos/"),
+			slugFor(
+				"https://agenda.obidos.pt/evento/folio-festival-literario-internacional-de-obidos/",
+			),
 		).toBe("ob-folio-festival-literario-internacional-de-obidos");
 	});
 });

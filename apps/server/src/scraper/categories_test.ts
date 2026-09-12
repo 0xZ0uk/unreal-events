@@ -95,3 +95,62 @@ describe("unknownCategory", () => {
 		expect(unknownCategory("Queijo")).toBe("Queijo");
 	});
 });
+
+/**
+ * Drift guard (SLICE_10).
+ *
+ * The live database carried these labels, and both tables were missing them, so
+ * each one became its own option in the Tipo filter — 12 labels, ~95 events,
+ * next to the 21 curated categories. Nothing failed: unknown labels pass through
+ * by design (we never drop data), so the dropdown silently grew instead.
+ *
+ * The counts are what production held when this was written; the point of
+ * pinning the labels is that the next synonym fails here instead of shipping.
+ */
+const LIVE_DB_LABELS = [
+	["Festas", 51],
+	["Atividades ao Ar Livre", 27],
+	["Oficina / workshop", 5],
+	["Evento ao ar livre", 3],
+	["Educação", 3],
+	["Saúde", 1],
+	["Mais Novos", 1],
+	["Feiras", 1],
+	["Espetáculo", 1],
+	["Corrida", 1],
+	["Caminhada", 1],
+	["Ambiente", 1],
+] as const;
+
+describe("labels the live database actually carried", () => {
+	test("none of them is reported as unknown", () => {
+		const still_unknown = LIVE_DB_LABELS.map(([label]) =>
+			unknownCategory(label),
+		).filter((label): label is string => label !== null);
+		expect(still_unknown).toEqual([]);
+	});
+
+	test("each resolves to one canonical category", () => {
+		const wrong: string[] = [];
+		for (const [label] of LIVE_DB_LABELS) {
+			const resolved = canonicalizeCategories([label]);
+			const [only] = resolved;
+			if (
+				resolved.length !== 1 ||
+				only === undefined ||
+				!(CANONICAL_CATEGORIES as readonly string[]).includes(only)
+			) {
+				wrong.push(`${label} → ${JSON.stringify(resolved)}`);
+			}
+		}
+		expect(wrong).toEqual([]);
+	});
+
+	test("the two buckets that were missing are canonical now", () => {
+		// Festas (51) and Atividades ao Ar Livre (27) were 78 of those events.
+		expect(canonicalizeCategories(["Festas"])).toEqual(["Festas"]);
+		expect(canonicalizeCategories(["Atividades ao Ar Livre"])).toEqual([
+			"Atividades ao Ar Livre",
+		]);
+	});
+});

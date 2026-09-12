@@ -1,7 +1,7 @@
 # events-tracker
 
 Personal events tracker for Leiria, Portugal. Scrapes local event sources into
-one deduplicated calendar with a web UI, ICS feed, and a daily Discord digest.
+one deduplicated calendar with a web UI and a daily Discord digest.
 
 **Status:** SLICE_1–4 complete (2026-09-01). Sources: leiriagenda (160 events),
 cm-leiria RSS (30, stale-since-2023 feed — kept for when it revives), BOL
@@ -87,10 +87,6 @@ DIGEST_KEYWORDS=tattoo,jazz pnpm --filter server digest -- --new 24
 
 - `--new N` limits to events ingested in the last N hours
 - `DIGEST_KEYWORDS` ⭐-marks watchlist hits in the output
-- ICS feed: start the server, then
-  http://localhost:3301/events.ics (add `?keyword=a,b` to filter, or
-  `?scope=undated` for undated events as text). Subscribe from any calendar
-  app.
 - Paste-a-link ingest:
   `pnpm --filter server ingest:url -- https://leiriagenda.cm-leiria.pt/pt/agenda/<slug>`
 
@@ -113,17 +109,41 @@ cd apps/server && bun test    # 52 offline tests (fixtures, no network)
 bunx biome check .            # lint/format
 ```
 
+### 9. Deploy (Vercel + Turso, no server)
+
+Production is a **static SPA that reads Turso directly from the browser**. There
+is no Hono process in production; the local daily scraper is the only writer.
+
+```bash
+turso db create unreal-events
+export DATABASE_URL="$(turso db show unreal-events --url)"
+export TURSO_AUTH_TOKEN="$(turso db tokens create unreal-events)"
+(cd packages/db && bunx drizzle-kit migrate)     # then import/dump existing rows
+turso db tokens create unreal-events --read-only # token for the browser
+```
+
+Vercel: import the repo with **Root Directory = repo root** — `vercel.json` owns
+install/build/output, so no framework preset is needed. Env:
+
+- `VITE_TURSO_URL` — the `libsql://` URL (the client upgrades it to HTTPS)
+- `VITE_TURSO_AUTH_TOKEN` — the **read-only** token
+
+Both are inlined into the bundle. That is acceptable here because the events are
+public data and a read-only token cannot write (Turso answers writes with
+`BLOCKED`). The scraper/runner gets the full token via `TURSO_AUTH_TOKEN` in
+`apps/server/.env`, alongside `DATABASE_URL=libsql://…`.
+
 ## Stack
 
-better-t-stack monorepo · pnpm + Bun · Hono (server, :3301) · React + TanStack
-Router (web, :3300) · tRPC · Drizzle + SQLite (libsql, `local.db` at repo root)
-· Turborepo + Biome.
+better-t-stack monorepo · pnpm + Bun · React + TanStack Router (web, :3300) ·
+Drizzle + libSQL (`local.db` in dev, remote Turso in production) · Hono + tRPC
+survive as a **local-dev only** surface · Turborepo + Biome.
 
 ```
-apps/server/     Hono API + scraper (src/scraper/) + digest (src/digest*.ts)
-apps/web/        TanStack Router UI (/ = agenda, /admin = runs dashboard)
-packages/api/    tRPC routers (events, admin)
-packages/db/     Drizzle schema, migrations, seeds
+apps/server/     scraper (src/scraper/) + digest CLI; Hono API for dev only
+apps/web/        static SPA (single view: / = the agenda)
+packages/api/    query functions (src/queries/) + tRPC routers wrapping them
+packages/db/     Drizzle schema, migrations, seeds (src/browser.ts = browser client)
 ```
 
 ## Commands
@@ -153,14 +173,13 @@ leiriagenda | cmleiriarss | bol | eventbrite.
 3. **Ingest** — venue resolve-or-create, event upsert by fingerprint,
    `event_sources` attribution rows, ghost cleanup when an undated event
    gains a date.
-4. **Serve** — tRPC `events.list` (venue/category/city/date filters +
-   includeUndated) / `byDay` / `undated` / `venues` / `stats`; `admin.runs`.
-   Plain endpoints: `/digest` (JSON), `/events.ics` (RFC 5545 calendar,
-   keyword filter, `scope=undated` text list).
+4. **Serve** — the SPA reads Turso directly with `events.list`
+   (venue/category/city/date filters + includeUndated) / `byDay` / `undated` /
+   `venues` / `stats`. The dev-only Hono server exposes the same queries over
+   tRPC plus `/digest` (JSON).
 5. **Cron (Hermes)** — daily scrape 07:00 (all sources; 0-found×2 days =
    broken-selector alert), daily Discord digest 09:00 (`DIGEST_KEYWORDS`
-   watchlist → ⭐ lines, rest compressed). Webapp: subscribe via
-   http://localhost:3301/events.ics.
+   watchlist → ⭐ lines, rest compressed).
 
 ## Data model
 
@@ -176,7 +195,6 @@ leiriagenda | cmleiriarss | bol | eventbrite.
 
 - Visite Leiria (JS-rendered dates) + Ticketline (bot-walled) — need the
   Playwright pipeline; parked.
-- Calendar month view on the web UI (data model + filters ready for it).
 
 Plan: `/root/.plans/SLICE_EVENTS_TRACKER.md`
 

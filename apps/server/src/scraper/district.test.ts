@@ -15,7 +15,7 @@ describe("normalizePlace", () => {
 	});
 });
 
-describe("isLeiriaDistrict (the 14 municipalities)", () => {
+describe("isLeiriaDistrict (the 16 municipalities)", () => {
 	test("accepts every district municipality in any spelling", () => {
 		expect(isLeiriaDistrict("Leiria")).toBe(true);
 		expect(isLeiriaDistrict("Marinha Grande")).toBe(true);
@@ -33,8 +33,19 @@ describe("isLeiriaDistrict (the 14 municipalities)", () => {
 		expect(isLeiriaDistrict("Figueiró dos Vinhos")).toBe(true);
 	});
 
-	test("list is exactly the 14 district municipalities", () => {
-		expect(LEIRIA_DISTRICT_MUNICIPALITIES.length).toBe(14);
+	test("accepts Ansião and Peniche (roster shipped without them)", () => {
+		// Both have a configured municipal source; while they were missing from
+		// the roster, every event they parsed was gated out on `city`.
+		expect(isLeiriaDistrict("Ansião")).toBe(true);
+		expect(isLeiriaDistrict("Peniche")).toBe(true);
+		expect(isLeiriaDistrict("Atouguia da Baleia")).toBe(true);
+		expect(isLeiriaDistrict("Avelar")).toBe(true);
+	});
+
+	test("list is exactly the 16 district municipalities", () => {
+		expect(LEIRIA_DISTRICT_MUNICIPALITIES.length).toBe(16);
+		expect(LEIRIA_DISTRICT_MUNICIPALITIES).toContain("ansiao");
+		expect(LEIRIA_DISTRICT_MUNICIPALITIES).toContain("peniche");
 	});
 });
 
