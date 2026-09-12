@@ -168,8 +168,13 @@ if (args.includes("--verify")) {
 
 const pendingAll = await db.query.venues.findMany({
 	where: isNull(schema.venues.lat),
-	orderBy: (venues, { asc }) => [asc(venues.name)],
+	orderBy: (venues, { desc }) => [desc(venues.id)],
 });
+// Newest first, on purpose. The corpus grows at the edge — today's sources bring
+// today's venues — while the venues that never resolve (a source's own
+// "VÁRIOS LOCAIS", a club OSM has never heard of) never leave the queue at all.
+// Oldest-first would spend the daily budget on the names that will never be
+// placed and let the new ones wait behind them.
 
 /**
  * `--only=<text>` is for the second look: one venue the gate refused because
