@@ -1,8 +1,26 @@
 import { normalizeEventTitle } from "@events-tracker/api/grouping";
+import {
+	activePreset,
+	type PeriodPresetId,
+	presetRange,
+} from "@events-tracker/api/period";
+import { municipalityOf } from "@events-tracker/api/places";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
-import { api, type PublicEvent, type UndatedEvent, WINDOW_LIMIT } from "@/utils/api";
-import { dayKey, dayMonth, lastRunLabel, shiftDayKey, startOfLisbonDay, weekday } from "@/utils/format";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+	api,
+	type PublicEvent,
+	type UndatedEvent,
+	WINDOW_LIMIT,
+} from "@/utils/api";
+import {
+	dayKey,
+	dayMonth,
+	lastRunLabel,
+	shiftDayKey,
+	startOfLisbonDay,
+	weekday,
+} from "@/utils/format";
 
 /** How far ahead the page looks. Wide enough for every date the sources publish. */
 const WINDOW_DAYS = 90;
@@ -55,10 +73,74 @@ export type Filters = {
 
 export type AgendaStatus = "loading" | "error" | "ready";
 
-const EMPTY_FILTERS: Filters = { q: "", city: "", category: "", venue: "", from: "", to: "" };
+const EMPTY_FILTERS: Filters = {
+	q: "",
+	city: "",
+	category: "",
+	venue: "",
+	from: "",
+	to: "",
+};
+
+const DAY_KEY = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The five filters live in the query string, so a view is a URL you can send:
+ *
+ *   ?concelho=Óbidos&de=2026-09-18&ate=2026-09-20   — the weekend in Óbidos
+ *   ?q=maria&tipo=Concertos                          — search + category
+ *   ?local=sociedade-filarmonica                      — one venue
+ *
+ * `dia` is a day anchor, not a filter: it scrolls to that day and survives every
+ * other change, so "here's the 20th" is one link.
+ */
+const URL_PARAM: Record<keyof Filters, string> = {
+	q: "q",
+	city: "concelho",
+	category: "tipo",
+	venue: "local",
+	from: "de",
+	to: "ate",
+};
+
+function readDayKey(raw: string | null): string {
+	return raw && DAY_KEY.test(raw) ? raw : "";
+}
+
+function filtersFromSearch(search: string): { filters: Filters; dia: string } {
+	const params = new URLSearchParams(search);
+	const from = readDayKey(params.get(URL_PARAM.from));
+	const to = readDayKey(params.get(URL_PARAM.to));
+	return {
+		filters: {
+			q: params.get(URL_PARAM.q) ?? "",
+			city: params.get(URL_PARAM.city) ?? "",
+			category: params.get(URL_PARAM.category) ?? "",
+			venue: params.get(URL_PARAM.venue) ?? "",
+			// A backwards range is a typo, not a view: drop the bound instead of
+			// showing an empty agenda that looks like "there is nothing on".
+			from: to && from > to ? "" : from,
+			to,
+		},
+		dia: readDayKey(params.get("dia")),
+	};
+}
+
+function searchFromFilters(filters: Filters, dia: string): string {
+	const params = new URLSearchParams();
+	for (const key of Object.keys(URL_PARAM) as (keyof Filters)[]) {
+		const value = filters[key];
+		if (value) params.set(URL_PARAM[key], key === "q" ? value.trim() : value);
+	}
+	if (dia) params.set("dia", dia);
+	const query = params.toString();
+	return query ? `?${query}` : "";
+}
 
 function searchable(...parts: (string | null | undefined)[]): string {
-	return normalizeEventTitle(parts.filter((part): part is string => Boolean(part)).join(" "));
+	return normalizeEventTitle(
+		parts.filter((part): part is string => Boolean(part)).join(" "),
+	);
 }
 
 function toRow(event: PublicEvent): AgendaRow {
@@ -75,7 +157,12 @@ function toRow(event: PublicEvent): AgendaRow {
 		startAt: event.startAt,
 		endAt: event.endAt,
 		sessionStarts: event.sessionStarts ?? [],
-		haystack: searchable(event.title, event.venueName, event.venueCity, categories.join(" ")),
+		haystack: searchable(
+			event.title,
+			event.venueName,
+			event.venueCity,
+			categories.join(" "),
+		),
 	};
 }
 
@@ -90,14 +177,32 @@ function toAnnouncement(event: UndatedEvent): AnnouncementRow {
 		venueCity: event.venueCity,
 		categories,
 		dateText: event.dateText ?? "Data por marcar",
-		haystack: searchable(event.title, event.venueName, event.venueCity, event.dateText, categories.join(" ")),
+		haystack: searchable(
+			event.title,
+			event.venueName,
+			event.venueCity,
+			event.dateText,
+			categories.join(" "),
+		),
 	};
+}
+
+/**
+ * The concelho a row belongs to: its município when we can place the city,
+ * otherwise the raw city value. Sources report the worked place where a
+ * municipal agenda reports the concelho, so without this fold "Gaeiras" and
+ * "Óbidos" were two concelhos and Leiria's events sat in ten of them.
+ * An unplaceable city keeps its own name — never a guess, never hidden.
+ */
+function concelhoOf(city: string | null): string {
+	return municipalityOf(city) ?? city ?? "";
 }
 
 function matches(row: AgendaRow, filters: Filters, needle: string): boolean {
 	if (needle && !row.haystack.includes(needle)) return false;
-	if (filters.city && row.venueCity !== filters.city) return false;
-	if (filters.category && !row.categories.includes(filters.category)) return false;
+	if (filters.city && concelhoOf(row.venueCity) !== filters.city) return false;
+	if (filters.category && !row.categories.includes(filters.category))
+		return false;
 	if (filters.venue && row.venueSlug !== filters.venue) return false;
 	// Range bounds are day keys, so an event on the `to` day is included whole.
 	const key = dayKey(row.startAt);
@@ -106,7 +211,11 @@ function matches(row: AgendaRow, filters: Filters, needle: string): boolean {
 	return true;
 }
 
-function groupByDay(rows: AgendaRow[], todayKey: string, tomorrowKey: string): DayGroup[] {
+function groupByDay(
+	rows: AgendaRow[],
+	todayKey: string,
+	tomorrowKey: string,
+): DayGroup[] {
 	const days = new Map<string, AgendaRow[]>();
 	for (const row of rows) {
 		const key = dayKey(row.startAt);
@@ -121,7 +230,12 @@ function groupByDay(rows: AgendaRow[], todayKey: string, tomorrowKey: string): D
 		if (!first) continue;
 		groups.push({
 			key,
-			label: key === todayKey ? "Hoje" : key === tomorrowKey ? "Amanhã" : weekday(first.startAt),
+			label:
+				key === todayKey
+					? "Hoje"
+					: key === tomorrowKey
+						? "Amanhã"
+						: weekday(first.startAt),
 			date: dayMonth(first.startAt),
 			events,
 		});
@@ -130,7 +244,10 @@ function groupByDay(rows: AgendaRow[], todayKey: string, tomorrowKey: string): D
 }
 
 /** Tally facet values across every row — a multi-category event counts in each. */
-function tally(rows: AgendaRow[], take: (row: AgendaRow) => { value: string; label: string }[]): Facet[] {
+function tally(
+	rows: AgendaRow[],
+	take: (row: AgendaRow) => { value: string; label: string }[],
+): Facet[] {
 	const counts = new Map<string, Facet>();
 	for (const row of rows) {
 		for (const item of take(row)) {
@@ -139,7 +256,9 @@ function tally(rows: AgendaRow[], take: (row: AgendaRow) => { value: string; lab
 			else counts.set(item.value, { ...item, count: 1 });
 		}
 	}
-	return [...counts.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "pt"));
+	return [...counts.values()].sort(
+		(a, b) => b.count - a.count || a.label.localeCompare(b.label, "pt"),
+	);
 }
 
 /**
@@ -150,65 +269,220 @@ function tally(rows: AgendaRow[], take: (row: AgendaRow) => { value: string; lab
  * server would drop a facet's own options the moment you picked one.
  */
 export function useAgenda() {
-	const window = useMemo(() => {
+	const range = useMemo(() => {
 		const from = startOfLisbonDay();
 		const todayKey = dayKey(from);
-		return { from, to: from + WINDOW_DAYS * 86_400, days: WINDOW_DAYS, todayKey, tomorrowKey: shiftDayKey(todayKey, 1) };
+		return {
+			from,
+			to: from + WINDOW_DAYS * 86_400,
+			days: WINDOW_DAYS,
+			todayKey,
+			tomorrowKey: shiftDayKey(todayKey, 1),
+		};
 	}, []);
 
-	const agendaQuery = useQuery(api.window.queryOptions(window.from, window.to));
+	const agendaQuery = useQuery(api.window.queryOptions(range.from, range.to));
 	const undatedQuery = useQuery(api.undated.queryOptions());
 	const statsQuery = useQuery(api.stats.queryOptions());
 
-	const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+	// The URL is the initial state, not a mirror of it: a shared link opens on
+	// exactly the view it was copied from.
+	const initial = useMemo(
+		() =>
+			typeof window === "undefined"
+				? { filters: EMPTY_FILTERS, dia: "" }
+				: filtersFromSearch(window.location.search),
+		[],
+	);
 
-	const rows = useMemo(() => (agendaQuery.data ?? []).map(toRow), [agendaQuery.data]);
-	const needle = useMemo(() => normalizeEventTitle(filters.q.trim()), [filters.q]);
+	const [filters, setFilters] = useState<Filters>(initial.filters);
+	const [dia, setDia] = useState<string>(initial.dia);
 
-	const hasFacet = Boolean(needle || filters.city || filters.category || filters.venue || filters.from || filters.to);
-	const visible = useMemo(() => (hasFacet ? rows.filter((row) => matches(row, filters, needle)) : rows), [rows, hasFacet, filters, needle]);
+	// Setters work off the refs so two changes in one tick can't clobber each
+	// other, and so every change writes the URL exactly once.
+	const filtersRef = useRef(filters);
+	const diaRef = useRef(dia);
+	useEffect(() => {
+		filtersRef.current = filters;
+		diaRef.current = dia;
+	}, [filters, dia]);
 
-	const groups = useMemo(() => groupByDay(visible, window.todayKey, window.tomorrowKey), [visible, window]);
+	const syncUrl = useCallback(
+		(next: Filters, nextDia: string, mode: "push" | "replace") => {
+			if (typeof window === "undefined") return;
+			const url = `${window.location.pathname}${searchFromFilters(next, nextDia)}`;
+			if (mode === "push") window.history.pushState(null, "", url);
+			else window.history.replaceState(null, "", url);
+		},
+		[],
+	);
+
+	const applyFilters = useCallback(
+		(patch: Partial<Filters>, mode: "push" | "replace" = "push") => {
+			const next = { ...filtersRef.current, ...patch };
+			filtersRef.current = next;
+			setFilters(next);
+			syncUrl(next, diaRef.current, mode);
+		},
+		[syncUrl],
+	);
+
+	// Back/forward walks the filter history instead of leaving the page.
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		const onPopState = () => {
+			const parsed = filtersFromSearch(window.location.search);
+			filtersRef.current = parsed.filters;
+			diaRef.current = parsed.dia;
+			setFilters(parsed.filters);
+			setDia(parsed.dia);
+		};
+		window.addEventListener("popstate", onPopState);
+		return () => window.removeEventListener("popstate", onPopState);
+	}, []);
+
+	const rows = useMemo(
+		() => (agendaQuery.data ?? []).map(toRow),
+		[agendaQuery.data],
+	);
+	const needle = useMemo(
+		() => normalizeEventTitle(filters.q.trim()),
+		[filters.q],
+	);
+
+	const hasFacet = Boolean(
+		needle ||
+			filters.city ||
+			filters.category ||
+			filters.venue ||
+			filters.from ||
+			filters.to,
+	);
+	const visible = useMemo(
+		() =>
+			hasFacet ? rows.filter((row) => matches(row, filters, needle)) : rows,
+		[rows, hasFacet, filters, needle],
+	);
+
+	const groups = useMemo(
+		() => groupByDay(visible, range.todayKey, range.tomorrowKey),
+		[visible, range],
+	);
 
 	const available = useMemo(
 		() => ({
-			cities: tally(rows, (row) => (row.venueCity ? [{ value: row.venueCity, label: row.venueCity }] : [])),
-			categories: tally(rows, (row) => row.categories.map((category) => ({ value: category, label: category }))),
-			venues: tally(rows, (row) => (row.venueSlug && row.venueName ? [{ value: row.venueSlug, label: row.venueName }] : [])),
+			cities: tally(rows, (row) => {
+				const concelho = concelhoOf(row.venueCity);
+				return concelho ? [{ value: concelho, label: concelho }] : [];
+			}),
+			categories: tally(rows, (row) =>
+				row.categories.map((category) => ({
+					value: category,
+					label: category,
+				})),
+			),
+			venues: tally(rows, (row) =>
+				row.venueSlug && row.venueName
+					? [{ value: row.venueSlug, label: row.venueName }]
+					: [],
+			),
 		}),
 		[rows],
 	);
 
-	const announcements = useMemo(() => (undatedQuery.data ?? []).map(toAnnouncement), [undatedQuery.data]);
+	const announcements = useMemo(
+		() => (undatedQuery.data ?? []).map(toAnnouncement),
+		[undatedQuery.data],
+	);
 
-	const setFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
-		setFilters((current) => ({ ...current, [key]: value }));
-	}, []);
+	/**
+	 * `?dia=` scrolls once, after the day groups exist. Re-scrolling on every
+	 * filter change would fight the reader, so each anchor fires once.
+	 */
+	const anchoredRef = useRef("");
+	useEffect(() => {
+		if (!dia || groups.length === 0 || anchoredRef.current === dia) return;
+		const target = document.getElementById(`dia-${dia}`);
+		if (!target) return;
+		anchoredRef.current = dia;
+		target.scrollIntoView({ block: "start" });
+	}, [dia, groups]);
 
-	const clearFilters = useCallback(() => setFilters(EMPTY_FILTERS), []);
+	const setFilter = useCallback(
+		<K extends keyof Filters>(
+			key: K,
+			value: Filters[K],
+			mode: "push" | "replace" = "push",
+		) => {
+			applyFilters(
+				{ [key]: value } as Partial<Filters>,
+				key === "q" ? "replace" : mode,
+			);
+		},
+		[applyFilters],
+	);
 
-	const activeCount = useMemo(() => Object.values(filters).filter((value) => value !== "").length, [filters]);
+	const clearFilters = useCallback(
+		() => applyFilters(EMPTY_FILTERS),
+		[applyFilters],
+	);
+
+	/** A preset chip sets both bounds at once; passing null clears the range. */
+	const setPeriod = useCallback(
+		(id: PeriodPresetId | null) => {
+			if (id === null) {
+				applyFilters({ from: "", to: "" });
+				return;
+			}
+			const preset = presetRange(id, range.todayKey);
+			applyFilters({ from: preset.from, to: preset.to });
+		},
+		[applyFilters, range.todayKey],
+	);
+
+	const preset = useMemo(
+		() => activePreset(filters.from, filters.to, range.todayKey),
+		[filters.from, filters.to, range.todayKey],
+	);
+
+	const activeCount = useMemo(
+		() => Object.values(filters).filter((value) => value !== "").length,
+		[filters],
+	);
 
 	// Bounds come from the data, not from the window, so the pickers can never
 	// offer a day the agenda has nothing on.
 	const lastRow = rows[rows.length - 1];
 
 	return {
-		window,
+		window: range,
 		rows,
 		visible,
 		groups,
 		facets: available,
 		filters,
 		setFilter,
+		applyFilters,
 		clearFilters,
+		setPeriod,
+		preset,
 		activeCount,
 		isFiltered: activeCount > 0,
-		rangeBounds: { min: window.todayKey, max: lastRow ? dayKey(lastRow.startAt) : window.todayKey },
+		dia,
+		rangeBounds: {
+			min: range.todayKey,
+			max: lastRow ? dayKey(lastRow.startAt) : range.todayKey,
+		},
 		announcements,
-		lastRunLabel: statsQuery.data?.lastRunAt ? lastRunLabel(statsQuery.data.lastRunAt) : null,
+		lastRunLabel: statsQuery.data?.lastRunAt
+			? lastRunLabel(statsQuery.data.lastRunAt)
+			: null,
 		lastRunAt: statsQuery.data?.lastRunAt ?? null,
-		status: (agendaQuery.isPending ? "loading" : agendaQuery.isError ? "error" : "ready") as AgendaStatus,
+		status: (agendaQuery.isPending
+			? "loading"
+			: agendaQuery.isError
+				? "error"
+				: "ready") as AgendaStatus,
 		error: agendaQuery.error,
 		refetch: agendaQuery.refetch,
 		truncated: rows.length >= WINDOW_LIMIT,

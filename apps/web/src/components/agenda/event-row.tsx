@@ -27,16 +27,28 @@ export type RowProps = {
  * characters. From `sm` up the row opens into thumb + clock + text, where the
  * posters earn their space.
  */
-export function EventRow({ title, href, imageUrl, time, dateTime, note, venue, city, chips, extraSessions }: RowProps) {
+export function EventRow({
+	title,
+	href,
+	imageUrl,
+	time,
+	dateTime,
+	note,
+	venue,
+	city,
+	chips,
+	extraSessions,
+}: RowProps) {
 	const [broken, setBroken] = useState(false);
 
-	const timeClass = "col-start-1 row-start-1 pt-0.5 font-mono text-[13px] leading-tight tabular-nums text-muted-foreground sm:col-start-2 sm:text-[14px]";
+	const timeClass =
+		"col-start-1 row-start-1 pt-0.5 font-mono text-[13px] leading-tight tabular-nums text-muted-foreground sm:col-start-2 sm:text-[14px]";
 	const place = venue && city ? `${venue} · ${city}` : (venue ?? city ?? null);
 	const meta = [note, place].filter((part): part is string => Boolean(part));
 
 	const body = (
 		<>
-			<span className="col-start-1 row-start-1 hidden size-16 overflow-hidden rounded-[4px] bg-card outline-1 -outline-offset-1 outline-border sm:block">
+			<span className="col-start-1 row-start-1 hidden size-16 overflow-hidden rounded-[4px] bg-card outline-1 outline-border -outline-offset-1 sm:block">
 				{imageUrl && !broken ? (
 					<img
 						src={imageUrl}
@@ -58,8 +70,10 @@ export function EventRow({ title, href, imageUrl, time, dateTime, note, venue, c
 			)}
 
 			<div className="col-start-2 row-start-1 min-w-0 sm:col-start-3">
-				<h3 className="line-clamp-3 text-[17px] font-semibold leading-snug sm:line-clamp-2">{title}</h3>
-				<p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+				<h3 className="line-clamp-3 font-semibold text-[17px] leading-snug sm:line-clamp-2">
+					{title}
+				</h3>
+				<p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground text-sm">
 					{meta.map((part, index) => (
 						<Fragment key={part}>
 							{index > 0 ? <span aria-hidden="true">·</span> : null}
@@ -67,12 +81,17 @@ export function EventRow({ title, href, imageUrl, time, dateTime, note, venue, c
 						</Fragment>
 					))}
 					{chips.map((chip) => (
-						<span key={chip} className={`${MICRO} shrink-0 rounded-[2px] border border-border px-1.5 py-0.5`}>
+						<span
+							key={chip}
+							className={`${MICRO} shrink-0 rounded-[2px] border border-border px-1.5 py-0.5`}
+						>
 							{chip}
 						</span>
 					))}
 					{extraSessions.length > 0 ? (
-						<span className="shrink-0 font-mono text-[12px] tabular-nums">também às {extraSessions.join(", ")}</span>
+						<span className="shrink-0 font-mono text-[12px] tabular-nums">
+							também às {extraSessions.join(", ")}
+						</span>
 					) : null}
 				</p>
 			</div>
@@ -81,14 +100,14 @@ export function EventRow({ title, href, imageUrl, time, dateTime, note, venue, c
 				<ExternalLink
 					aria-hidden="true"
 					strokeWidth={1.5}
-					className="col-start-4 row-start-1 mt-1 hidden size-3.5 text-muted-foreground/60 sm:block motion-safe:transition-colors group-hover:text-foreground"
+					className="col-start-4 row-start-1 mt-1 hidden size-3.5 text-muted-foreground/60 group-hover:text-foreground motion-safe:transition-colors sm:block"
 				/>
 			) : null}
 		</>
 	);
 
 	const shape =
-		"group -mx-2 grid grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem] sm:gap-x-4";
+		"group -mx-2 grid scroll-mt-16 grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3 rounded-[4px] px-2 py-3 sm:grid-cols-[4rem_3.5rem_minmax(0,1fr)_1rem] sm:gap-x-4";
 
 	return (
 		<li>
@@ -97,7 +116,7 @@ export function EventRow({ title, href, imageUrl, time, dateTime, note, venue, c
 					href={href}
 					target="_blank"
 					rel="noopener noreferrer"
-					className={`${shape} focus-ring motion-safe:transition-colors hover:bg-card`}
+					className={`${shape} focus-ring hover:bg-card motion-safe:transition-colors`}
 				>
 					{body}
 					<span className="sr-only">(abre num novo separador)</span>

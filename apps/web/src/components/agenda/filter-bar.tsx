@@ -1,10 +1,21 @@
-import { ChevronDown, Search, X } from "lucide-react";
-import { useId, useState } from "react";
+import { PERIOD_PRESETS } from "@events-tracker/api/period";
+import { Check, ChevronDown, Copy, Search, X } from "lucide-react";
+import { useCallback, useId, useState } from "react";
 import type { Agenda, Facet } from "@/hooks/use-agenda";
 import { BUTTON, FIELD, LABEL, MICRO } from "./layout";
 import { EventCount } from "./states";
 
-const CHEVRON = "pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground";
+const CHEVRON =
+	"pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground";
+
+/**
+ * Period chips are a toggle, not a radio: clicking the lit one clears the range,
+ * so the fastest way out of "Hoje" is the same control that got you in.
+ */
+const CHIP_OFF =
+	"inline-flex h-9 shrink-0 items-center rounded-[4px] border border-muted-foreground/60 bg-card px-3 text-[14px] font-medium text-foreground focus-ring motion-safe:transition-colors hover:border-primary/60 hover:text-primary";
+const CHIP_ON =
+	"inline-flex h-9 shrink-0 items-center rounded-[4px] border border-primary bg-primary px-3 text-[14px] font-medium text-primary-foreground focus-ring motion-safe:transition-colors";
 
 function FacetSelect({
 	id,
@@ -27,7 +38,12 @@ function FacetSelect({
 				{label}
 			</label>
 			<div className="relative">
-				<select id={id} value={value} onChange={(event) => onChange(event.target.value)} className={`${FIELD} appearance-none pr-9`}>
+				<select
+					id={id}
+					value={value}
+					onChange={(event) => onChange(event.target.value)}
+					className={`${FIELD} appearance-none pr-9`}
+				>
 					<option value="">{all}</option>
 					{options.map((option) => (
 						<option key={option.value} value={option.value}>
@@ -61,8 +77,98 @@ function DateRange({
 			<label htmlFor={id} className={LABEL}>
 				{label}
 			</label>
-			<input id={id} type="date" value={value} min={min} max={max} onChange={(event) => onChange(event.target.value)} className={FIELD} />
+			<input
+				id={id}
+				type="date"
+				value={value}
+				min={min}
+				max={max}
+				onChange={(event) => onChange(event.target.value)}
+				className={FIELD}
+			/>
 		</div>
+	);
+}
+
+/**
+ * One row of common ranges. The five facets below need two clicks and a date
+ * picker each; "what's on tonight" is one click and that is most of the traffic.
+ * The date inputs stay the precise path — a chip just fills them in.
+ */
+function PeriodChips({ agenda }: { agenda: Agenda }) {
+	return (
+		<fieldset className="m-0 mt-3 flex min-w-0 flex-wrap items-center gap-2 border-0 p-0">
+			{/* The visible caption is decorative; the legend names the group for
+			    assistive tech without adding a line to the layout. */}
+			<legend className="sr-only">Período</legend>
+			<span
+				aria-hidden="true"
+				className={`${MICRO} mr-1 text-muted-foreground`}
+			>
+				Período
+			</span>
+			{PERIOD_PRESETS.map((preset) => {
+				const lit = agenda.preset === preset.id;
+				return (
+					<button
+						key={preset.id}
+						type="button"
+						aria-pressed={lit}
+						onClick={() => agenda.setPeriod(lit ? null : preset.id)}
+						className={lit ? CHIP_ON : CHIP_OFF}
+					>
+						{preset.label}
+						{lit ? (
+							<span className="sr-only"> (clique para limpar)</span>
+						) : null}
+					</button>
+				);
+			})}
+		</fieldset>
+	);
+}
+
+/**
+ * Copy the current view's URL. Every filter change already writes the query
+ * string, so this only has to hand it over — and it is the affordance that makes
+ * the URL state discoverable instead of a hidden implementation detail.
+ */
+function CopyLinkButton({ className }: { className?: string }) {
+	const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+
+	const copy = useCallback(async () => {
+		try {
+			await navigator.clipboard.writeText(window.location.href);
+			setState("copied");
+		} catch {
+			setState("failed");
+		}
+		window.setTimeout(() => setState("idle"), 1600);
+	}, []);
+
+	return (
+		<button
+			type="button"
+			onClick={() => void copy()}
+			className={className ?? BUTTON}
+		>
+			{state === "copied" ? (
+				<Check
+					aria-hidden="true"
+					strokeWidth={1.5}
+					className="size-4 text-primary"
+				/>
+			) : (
+				<Copy aria-hidden="true" strokeWidth={1.5} className="size-4" />
+			)}
+			<span aria-live="polite">
+				{state === "copied"
+					? "Link copiado"
+					: state === "failed"
+						? "Não foi possível copiar"
+						: "Copiar link"}
+			</span>
+		</button>
 	);
 }
 
@@ -73,6 +179,8 @@ function DateRange({
  *
  * One grid holds the search and all five facets, so every control shares a
  * column edge at `lg` instead of the search floating over an unrelated row.
+ * The period chips sit outside that fold on purpose: on a phone they are the
+ * one control worth reaching without opening anything.
  */
 export function FilterBar({ agenda }: { agenda: Agenda }) {
 	const [open, setOpen] = useState(false);
@@ -97,8 +205,10 @@ export function FilterBar({ agenda }: { agenda: Agenda }) {
 						<Search
 							aria-hidden="true"
 							strokeWidth={1.5}
-							className={`pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground motion-safe:transition-[opacity,transform,filter] motion-safe:duration-150 ${
-								filters.q ? "opacity-100" : "opacity-0 scale-75 blur-[2px] group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:blur-0"
+							className={`pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground motion-safe:transition-[opacity,transform,filter] motion-safe:duration-150 ${
+								filters.q
+									? "opacity-100"
+									: "scale-75 opacity-0 blur-[2px] group-focus-within:scale-100 group-focus-within:opacity-100 group-focus-within:blur-0"
 							}`}
 						/>
 						<input
@@ -123,7 +233,11 @@ export function FilterBar({ agenda }: { agenda: Agenda }) {
 					className={`${BUTTON} sm:hidden`}
 				>
 					Filtros
-					{agenda.activeCount > 0 ? <span className={`${MICRO} text-primary`}>{agenda.activeCount}</span> : null}
+					{agenda.activeCount > 0 ? (
+						<span className={`${MICRO} text-primary`}>
+							{agenda.activeCount}
+						</span>
+					) : null}
 					<ChevronDown
 						aria-hidden="true"
 						strokeWidth={1.5}
@@ -131,6 +245,8 @@ export function FilterBar({ agenda }: { agenda: Agenda }) {
 					/>
 				</button>
 			</div>
+
+			<PeriodChips agenda={agenda} />
 
 			<div
 				id={facetsId}
@@ -178,16 +294,30 @@ export function FilterBar({ agenda }: { agenda: Agenda }) {
 				/>
 			</div>
 
-			<div className="mt-4 flex items-center justify-between gap-3">
-				<p role="status" className="font-mono text-[12px] tabular-nums text-muted-foreground">
-					<EventCount total={agenda.rows.length} shown={agenda.visible.length} days={agenda.window.days} />
+			<div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+				<p
+					role="status"
+					className="font-mono text-[12px] text-muted-foreground tabular-nums"
+				>
+					<EventCount
+						total={agenda.rows.length}
+						shown={agenda.visible.length}
+						days={agenda.window.days}
+					/>
 				</p>
-				{agenda.isFiltered ? (
-					<button type="button" onClick={agenda.clearFilters} className={BUTTON}>
-						<X aria-hidden="true" strokeWidth={1.5} className="size-4" />
-						Limpar filtros
-					</button>
-				) : null}
+				<div className="flex flex-wrap items-center gap-2">
+					<CopyLinkButton />
+					{agenda.isFiltered ? (
+						<button
+							type="button"
+							onClick={agenda.clearFilters}
+							className={BUTTON}
+						>
+							<X aria-hidden="true" strokeWidth={1.5} className="size-4" />
+							Limpar filtros
+						</button>
+					) : null}
+				</div>
 			</div>
 		</section>
 	);
