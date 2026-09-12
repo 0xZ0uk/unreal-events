@@ -74,6 +74,9 @@ const PARISHES_BY_MUNICIPALITY: Record<DistrictMunicipality, string[]> = {
 		"Maiorga",
 		"Pataias",
 		"São Martinho do Porto",
+		// Cister FM files its events under the worked place ("Tremoceira",
+		// "Vestiaria") rather than the concelho.
+		"Tremoceira",
 		"Turquel",
 		"Vestiaria",
 	],
@@ -127,7 +130,9 @@ const PARISHES_BY_MUNICIPALITY: Record<DistrictMunicipality, string[]> = {
 		"Santa Eufémia",
 	],
 	"Marinha Grande": ["Ordem", "São Pedro de Moel", "Vieira de Leiria"],
-	Nazaré: [],
+	// Valado dos Frades is the one Nazaré freguesia that turns up in live data
+	// (the Nazaré municipal agenda files events under it).
+	Nazaré: ["Valado dos Frades"],
 	// "Amoreira" is deliberately absent: it is an Óbidos freguesia but the name
 	// repeats across municípios, and this table never guesses.
 	Óbidos: [
@@ -149,10 +154,15 @@ const PARISHES_BY_MUNICIPALITY: Record<DistrictMunicipality, string[]> = {
 		"Alvados",
 		"Arrimal",
 		"Calvaria de Cima",
+		// Juncal is a vila/freguesia of Porto de Mós; São Jorge is the povoação
+		// of Calvaria de Cima where the CIBA (Aljubarrota interpretation centre)
+		// stands — the venue name arrives with the povoação, not the concelho.
+		"Juncal",
 		"Mendiga",
 		"Mira d'Aire",
 		"Mira de Aire",
 		"São Bento",
+		"São Jorge",
 		"Serro Ventoso",
 	],
 };
@@ -160,6 +170,19 @@ const PARISHES_BY_MUNICIPALITY: Record<DistrictMunicipality, string[]> = {
 const municipalityByNorm = new Map(
 	DISTRICT_MUNICIPALITIES.map((name) => [normalizePlace(name), name]),
 );
+
+/**
+ * Spellings of a município that sources emit instead of its name: the
+ * leiriagenda typo "Leira" (the same one the district gate forgives) and
+ * "Leiria e arredores", the catch-all a source uses when it cannot place a row
+ * in one concelho. Both fold onto Leiria here, so neither ever shows up as a
+ * 17th concelho in the facet — which is what they did while only the *gate*
+ * knew about them ("Leira") and the fold table did not.
+ */
+const MUNICIPALITY_ALIASES: Record<string, DistrictMunicipality> = {
+	leira: "Leiria",
+	"leiria e arredores": "Leiria",
+};
 
 const parishMunicipalityByNorm = new Map<string, DistrictMunicipality>();
 for (const [municipality, parishes] of Object.entries(
@@ -197,7 +220,10 @@ export function municipalityOf(
 	const norm = normalizePlace(city);
 	if (!norm) return null;
 	return (
-		municipalityByNorm.get(norm) ?? parishMunicipalityByNorm.get(norm) ?? null
+		municipalityByNorm.get(norm) ??
+		MUNICIPALITY_ALIASES[norm] ??
+		parishMunicipalityByNorm.get(norm) ??
+		null
 	);
 }
 
@@ -249,7 +275,9 @@ export function scopeOfName(name: string): PlaceScope {
 		?.replace(/\s*\([^)]*\)\s*$/, "")
 		.trim();
 	const norm = normalizePlace(cleaned ?? "");
-	if (municipalityByNorm.has(norm)) return "concelho";
+	if (municipalityByNorm.has(norm) || MUNICIPALITY_ALIASES[norm]) {
+		return "concelho";
+	}
 	if (parishMunicipalityByNorm.has(norm)) return "lugar";
 	return "venue";
 }

@@ -113,7 +113,25 @@ const LIVE_CITY_VALUES: readonly string[] = [
 	"Arrimal",
 	"Alvados",
 	"Alfeizerão",
+	// Second pass (2026-09-12): labels live VENUE rows carried, which the first
+	// list missed. Every one of these showed up as a 17th concelho in the facet
+	// because the gate knew about some of them ("Leira") and the fold table did
+	// not. Verified against the município that owns each place.
+	"Juncal", // vila/freguesia of Porto de Mós
+	"São Jorge", // povoação of Calvaria de Cima, Porto de Mós (the CIBA)
+	"Valado dos Frades", // Nazaré
+	"Tremoceira", // Alcobaça (Cister FM files by worked place)
+	"Leira", // the leiriagenda typo for Leiria
+	"Leiria e arredores", // a source's district-level catch-all
 ];
+
+/**
+ * Labels that are NOT the district's, kept visible on purpose. "Oleiros" is a
+ * concelho in Castelo Branco that a source attached to one venue ("Mosteiro,
+ * Mosteiro") — the fold must not claim it, and the event it carried is a source
+ * leak to report, not a place to relabel.
+ */
+const OUTSIDE_CITY_VALUES: readonly string[] = ["Oleiros", "Mafra", "Oeiras"];
 
 describe("the concelho facet", () => {
 	test("every city value in the live database folds onto a município", () => {
@@ -145,6 +163,12 @@ describe("the concelho facet", () => {
 		expect(leiria).toContain("Carvide");
 		expect(leiria.length).toBeGreaterThan(1);
 	});
+
+	test("labels that are not the district's never fold into it", () => {
+		for (const city of OUTSIDE_CITY_VALUES) {
+			expect(municipalityOf(city)).toBeNull();
+		}
+	});
 });
 
 /**
@@ -163,7 +187,9 @@ describe("scopeOfName", () => {
 		expect(scopeOfName("Leiria")).toBe("concelho");
 		expect(scopeOfName("Alcobaça (cidade)")).toBe("concelho");
 		expect(scopeOfName("Marinha Grande, Marinha Grande")).toBe("concelho");
-		expect(scopeOfName("Marinha Grande &#x2F; Marinha Grande")).toBe("concelho");
+		expect(scopeOfName("Marinha Grande &#x2F; Marinha Grande")).toBe(
+			"concelho",
+		);
 		// The source's spelling, without the circumflex, still folds.
 		expect(scopeOfName("Castanheira de Pera")).toBe("concelho");
 	});
@@ -201,5 +227,11 @@ describe("scopeOfName", () => {
 		// building, which is the only place that judgement can honestly be
 		// made.
 		expect(scopeOfName("Moleanos (Alcobaça)")).toBe("venue");
+	});
+
+	test("the district catch-all and the typo read as areas, not as rooms", () => {
+		expect(scopeOfName("Leiria e arredores")).toBe("concelho");
+		expect(scopeOfName("Leira")).toBe("concelho");
+		expect(scopeOfName("Juncal (Porto de Mós)")).toBe("lugar");
 	});
 });
