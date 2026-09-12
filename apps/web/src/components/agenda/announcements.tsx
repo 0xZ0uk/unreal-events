@@ -30,6 +30,7 @@ export function Announcements({ agenda }: { agenda: Agenda }) {
 						detailHref={null}
 						href={event.url}
 						imageUrl={event.imageUrl}
+						seed={String(event.id)}
 						time="sem data"
 						note={event.dateText}
 						venue={event.venueName}

@@ -90,6 +90,7 @@ export function AgendaList({ agenda }: { agenda: Agenda }) {
 								detailHref={eventHref(event.slug)}
 								href={event.url}
 								imageUrl={event.imageUrl}
+								seed={event.slug}
 								time={timeOf(event)}
 								dateTime={new Date(event.startAt * 1000).toISOString()}
 								venue={event.venueName}
