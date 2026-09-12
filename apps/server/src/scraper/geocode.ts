@@ -215,8 +215,23 @@ for (const venue of work) {
 	const shape = expected ? byName.get(expected) : undefined;
 	const viewbox = shape ? boundsOf(shape) : districtBox;
 
-	// Three questions, most specific first. The bounded one is what rescues a
-	// venue name that means nothing outside its own concelho.
+	// Questions, most specific first. The bounded one is what rescues a venue
+	// name that means nothing outside its own concelho. Names arrive with the
+	// source's own qualifiers still attached, so the last two ask again about
+	// the same name with less of it: the parenthetical a source appended
+	// ("The Lighthouse Meeting Centre (Igreja Verbo da Vida Leiria)"), and the
+	// city the name ends with ("TEXAS Club Leiria", filed under Leiria). Both
+	// candidates face the same point-in-polygon test as the full name, so a
+	// shortcut that lands in the wrong concelho buys nothing.
+	const bare = venue.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+	const withoutCity =
+		city && bare.toLowerCase().endsWith(city.toLowerCase())
+			? bare
+					.slice(0, -city.length)
+					.replace(/[\s,–—-]+$/, "")
+					.trim()
+			: "";
+
 	const attempts: { label: string; query: string; viewbox?: typeof viewbox }[] =
 		[
 			...(city
@@ -224,6 +239,18 @@ for (const venue of work) {
 				: []),
 			{ label: "bounded", query: `${venue.name}, Portugal`, viewbox },
 			{ label: "plain", query: `${venue.name}, Portugal` },
+			...(bare && bare !== venue.name
+				? [{ label: "no-qualifier", query: `${bare}, Portugal`, viewbox }]
+				: []),
+			...(withoutCity
+				? [
+						{
+							label: "no-city",
+							query: `${withoutCity}, ${city}, Portugal`,
+							viewbox,
+						},
+					]
+				: []),
 		];
 
 	let landed: Outcome | null = null;
